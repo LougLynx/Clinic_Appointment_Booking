@@ -1,0 +1,183 @@
+@{
+    ViewData["Title"] = "About Us";
+    Layout = "_LayoutMediClinic";
+}
+
+<!-- Hero Section -->
+<div class="w-full py-8 px-4">
+    <div class="w-full">
+        <div class="flex min-h-[480px] flex-col gap-6 bg-cover bg-center bg-no-repeat rounded-xl items-center justify-center p-4 relative overflow-hidden" 
+             style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuDTQ4eKKiKQ0eKD9q2yNPe5xBIT2_5RvT8kKwQMQistrQqjqqumPkSP5nt3Hb5jzua482_p-yK9dd_HsMwSRin7x4A0ZuJ3w6V9NFZOqwot3-Td5BuqvS9e_wuuOeMbAw17Vpz_ckuHR2KCCeEKn4lkrxjojITfu3-SYksMlXkeo5hA4lpJk_Sb60pvX28RVUSo8h_Mke_pWoHZ_k9kbm7LniE_dNn_j0wkeaJ4_c4DNZLrkCMhcjBCZ1SrekSLl2EbK8hi3DpB74ls");'>
+            <!-- Dark Overlay -->
+            <div class="absolute inset-0 bg-slate-900/60 z-0"></div>
+            
+            <div class="relative z-10 flex flex-col gap-4 text-center max-w-3xl mx-auto">
+                <h1 class="text-white text-4xl font-black leading-tight tracking-tight md:text-5xl lg:text-6xl">
+                    About MediClinic
+                </h1>
+                <p class="text-slate-100 text-base font-medium leading-relaxed md:text-lg lg:text-xl">
+                    Providing exceptional healthcare with compassion since 1998. We believe in accessible, high-quality medical care for everyone.
+                </p>
+            </div>
+            
+            <a asp-area="" asp-controller="Appointment" asp-action="Book" 
+               class="relative z-10 mt-6 flex min-w-[120px] cursor-pointer items-center justify-center overflow-hidden rounded-lg h-12 px-6 bg-primary text-white text-base font-bold leading-normal hover:bg-primary/90 transition-transform hover:scale-105 shadow-lg no-underline">
+                <span class="truncate">Schedule a Visit</span>
+            </a>
+        </div>
+    </div>
+</div>
+
+<!-- Our Mission Section -->
+<section class="py-12 md:py-16 px-4 md:px-8 max-w-4xl mx-auto text-center">
+    <h2 class="text-3xl md:text-4xl font-bold leading-tight tracking-tight mb-6 text-slate-900 dark:text-slate-100">Our Mission</h2>
+    <p class="text-lg md:text-xl font-normal leading-relaxed text-slate-700 dark:text-slate-300">
+        Our mission is to deliver high-quality, patient-centered healthcare with compassion, respect, and integrity. We strive to improve the health and well-being of our community by providing comprehensive and preventative medical services in a welcoming environment.
+    </p>
+    <div class="mt-8 flex justify-center gap-4 text-primary">
+        <span class="material-symbols-outlined text-[48px]">favorite</span>
+        <span class="material-symbols-outlined text-[48px]">health_and_safety</span>
+        <span class="material-symbols-outlined text-[48px]">groups</span>
+    </div>
+</section>
+
+<!-- Our Story Section -->
+<section class="py-12 md:py-16 px-4 md:px-8 bg-slate-50 dark:bg-slate-900/50 rounded-2xl my-8 max-w-6xl mx-auto">
+    <div class="max-w-4xl mx-auto">
+        <h2 class="text-3xl md:text-4xl font-bold leading-tight tracking-tight mb-10 text-center text-slate-900 dark:text-slate-100">Our Story</h2>
+        
+        <div class="space-y-8">
+            <!-- Timeline Item 1 -->
+            <div class="flex flex-col md:flex-row gap-6 items-start">
+                <div class="w-full md:w-1/4 pt-2">
+                    <h3 class="text-2xl font-bold text-primary">1998</h3>
+                </div>
+                <div class="w-full md:w-3/4 pl-0 md:pl-8 border-l-4 border-slate-200 dark:border-slate-700">
+                    <h4 class="text-xl font-bold mb-2 text-slate-900 dark:text-slate-100">The Beginning</h4>
+                    <p class="text-slate-700 dark:text-slate-300 leading-relaxed">
+                        MediClinic was founded by Dr. Sarah Jenkins with a single consultation room and a vision to provide affordable community healthcare.
+                    </p>
+                </div>
+            </div>
+
+            <!-- Timeline Item 2 -->
+            <div class="flex flex-col md:flex-row gap-6 items-start">
+                <div class="w-full md:w-1/4 pt-2">
+                    <h3 class="text-2xl font-bold text-primary">2010</h3>
+                </div>
+                <div class="w-full md:w-3/4 pl-0 md:pl-8 border-l-4 border-slate-200 dark:border-slate-700">
+                    <h4 class="text-xl font-bold mb-2 text-slate-900 dark:text-slate-100">Expansion &amp; Specialization</h4>
+                    <p class="text-slate-700 dark:text-slate-300 leading-relaxed">
+                        Moved to our current facility, expanding to 15 consultation rooms and introducing specialized departments in pediatrics and cardiology.
+                    </p>
+                </div>
+            </div>
+
+            <!-- Timeline Item 3 -->
+            <div class="flex flex-col md:flex-row gap-6 items-start">
+                <div class="w-full md:w-1/4 pt-2">
+                    <h3 class="text-2xl font-bold text-primary">Today</h3>
+                </div>
+                <div class="w-full md:w-3/4 pl-0 md:pl-8 border-l-4 border-primary">
+                    <h4 class="text-xl font-bold mb-2 text-slate-900 dark:text-slate-100">Modern Healthcare Hub</h4>
+                    <p class="text-slate-700 dark:text-slate-300 leading-relaxed">
+                        Serving over 50,000 patients annually with a team of 40+ medical professionals and state-of-the-art diagnostic equipment.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Our Values Section -->
+<section class="py-12 md:py-16 px-4 md:px-8 max-w-6xl mx-auto">
+    <h2 class="text-3xl md:text-4xl font-bold leading-tight tracking-tight mb-10 text-center text-slate-900 dark:text-slate-100">Our Core Values</h2>
+    
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+        <!-- Value 1 -->
+        <div class="flex flex-col items-center text-center p-6 bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm hover:shadow-md transition-shadow">
+            <div class="w-16 h-16 rounded-full bg-primary/10 dark:bg-primary/20 flex items-center justify-center text-primary mb-4">
+                <span class="material-symbols-outlined text-3xl">volunteer_activism</span>
+            </div>
+            <h3 class="text-xl font-bold text-slate-900 dark:text-slate-100 mb-3">Compassion</h3>
+            <p class="text-slate-600 dark:text-slate-400 leading-relaxed">
+                We treat every patient with empathy, understanding, and genuine care for their well-being.
+            </p>
+        </div>
+
+        <!-- Value 2 -->
+        <div class="flex flex-col items-center text-center p-6 bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm hover:shadow-md transition-shadow">
+            <div class="w-16 h-16 rounded-full bg-primary/10 dark:bg-primary/20 flex items-center justify-center text-primary mb-4">
+                <span class="material-symbols-outlined text-3xl">workspace_premium</span>
+            </div>
+            <h3 class="text-xl font-bold text-slate-900 dark:text-slate-100 mb-3">Excellence</h3>
+            <p class="text-slate-600 dark:text-slate-400 leading-relaxed">
+                We maintain the highest standards of medical practice and continuously improve our services.
+            </p>
+        </div>
+
+        <!-- Value 3 -->
+        <div class="flex flex-col items-center text-center p-6 bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm hover:shadow-md transition-shadow">
+            <div class="w-16 h-16 rounded-full bg-primary/10 dark:bg-primary/20 flex items-center justify-center text-primary mb-4">
+                <span class="material-symbols-outlined text-3xl">verified_user</span>
+            </div>
+            <h3 class="text-xl font-bold text-slate-900 dark:text-slate-100 mb-3">Integrity</h3>
+            <p class="text-slate-600 dark:text-slate-400 leading-relaxed">
+                We operate with honesty, transparency, and ethical principles in all our interactions.
+            </p>
+        </div>
+    </div>
+</section>
+
+<!-- Statistics Section -->
+<section class="py-12 md:py-16 px-4 md:px-8 bg-primary/5 dark:bg-primary/10 rounded-2xl my-8 max-w-6xl mx-auto">
+    <h2 class="text-3xl md:text-4xl font-bold leading-tight tracking-tight mb-10 text-center text-slate-900 dark:text-slate-100">By The Numbers</h2>
+    
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+        <!-- Stat 1 -->
+        <div class="flex flex-col items-center text-center">
+            <div class="text-5xl font-black text-primary mb-2">50K+</div>
+            <p class="text-slate-700 dark:text-slate-300 font-medium">Patients Served Annually</p>
+        </div>
+
+        <!-- Stat 2 -->
+        <div class="flex flex-col items-center text-center">
+            <div class="text-5xl font-black text-primary mb-2">40+</div>
+            <p class="text-slate-700 dark:text-slate-300 font-medium">Medical Professionals</p>
+        </div>
+
+        <!-- Stat 3 -->
+        <div class="flex flex-col items-center text-center">
+            <div class="text-5xl font-black text-primary mb-2">25+</div>
+            <p class="text-slate-700 dark:text-slate-300 font-medium">Years of Experience</p>
+        </div>
+
+        <!-- Stat 4 -->
+        <div class="flex flex-col items-center text-center">
+            <div class="text-5xl font-black text-primary mb-2">15</div>
+            <p class="text-slate-700 dark:text-slate-300 font-medium">Specialized Departments</p>
+        </div>
+    </div>
+</section>
+
+<!-- Call to Action -->
+<section class="py-12 md:py-16 px-4 md:px-8 max-w-4xl mx-auto text-center">
+    <div class="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-lg p-8 md:p-12">
+        <h2 class="text-3xl md:text-4xl font-bold leading-tight tracking-tight mb-4 text-slate-900 dark:text-slate-100">
+            Ready to Experience Quality Healthcare?
+        </h2>
+        <p class="text-lg text-slate-600 dark:text-slate-400 mb-8">
+            Join thousands of satisfied patients who trust MediClinic for their healthcare needs.
+        </p>
+        <div class="flex flex-col sm:flex-row gap-4 justify-center">
+            <a asp-area="" asp-controller="Appointment" asp-action="Book" 
+               class="flex items-center justify-center rounded-lg h-12 px-8 bg-primary text-white text-base font-bold hover:bg-primary/90 transition-colors shadow-md no-underline">
+                Book an Appointment
+            </a>
+            <a asp-area="" asp-controller="Doctors" asp-action="Index" 
+               class="flex items-center justify-center rounded-lg h-12 px-8 bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 text-base font-bold hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors no-underline">
+                Meet Our Doctors
+            </a>
+        </div>
+    </div>
+</section>

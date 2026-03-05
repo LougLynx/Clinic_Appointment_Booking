@@ -1,0 +1,206 @@
+@{
+    ViewData["Title"] = "Register";
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - MediClinic</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    
+    <!-- Material Symbols -->
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet" />
+    
+    <!-- Inter Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&display=swap" rel="stylesheet" />
+    
+    <!-- Tailwind Config -->
+    <script>
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#13b6ec",
+                        "background-light": "#f6f8f8",
+                        "background-dark": "#101d22",
+                    },
+                    fontFamily: {
+                        "display": ["Inter", "Noto Sans", "sans-serif"]
+                    },
+                    borderRadius: { "DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px" },
+                },
+            },
+        }
+    </script>
+</head>
+<body class="bg-background-light dark:bg-background-dark font-display text-slate-900 dark:text-slate-100 min-h-screen antialiased">
+    <div class="relative flex min-h-screen w-full flex-col overflow-x-hidden">
+        <!-- Header -->
+        <header class="flex items-center justify-between whitespace-nowrap border-b border-solid border-slate-200 dark:border-slate-800 px-10 py-4 bg-white dark:bg-slate-900 sticky top-0 z-10 shadow-sm">
+            <div class="flex items-center gap-4 text-primary">
+                <span class="material-symbols-outlined text-3xl">local_hospital</span>
+                <h2 class="text-slate-900 dark:text-slate-100 text-xl font-bold leading-tight tracking-tight">
+                    <a asp-area="" asp-controller="Home" asp-action="Index" class="no-underline text-slate-900 dark:text-slate-100">MediClinic</a>
+                </h2>
+            </div>
+            <div class="flex flex-1 justify-end gap-8">
+                <nav class="hidden md:flex items-center gap-8">
+                    <a class="text-slate-700 dark:text-slate-300 text-sm font-semibold hover:text-primary transition-colors" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
+                    <a class="text-slate-700 dark:text-slate-300 text-sm font-semibold hover:text-primary transition-colors" asp-area="" asp-controller="Doctors" asp-action="Index">Doctors</a>
+                    <a class="text-slate-700 dark:text-slate-300 text-sm font-semibold hover:text-primary transition-colors" asp-area="" asp-controller="Home" asp-action="About">About Us</a>
+                </nav>
+                <a asp-area="" asp-controller="Account" asp-action="Login" class="flex min-w-[84px] cursor-pointer items-center justify-center overflow-hidden rounded-lg h-10 px-6 bg-primary/10 hover:bg-primary/20 text-primary transition-colors text-sm font-bold leading-normal no-underline">
+                    <span class="truncate">Login</span>
+                </a>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <div class="flex-1 flex flex-col md:flex-row">
+            <!-- Left Side - Info Section -->
+            <div class="hidden md:flex flex-1 relative bg-slate-800 items-center justify-center p-12 overflow-hidden">
+                <div class="absolute inset-0 bg-cover bg-center opacity-30" 
+                     style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuCIOjTA8wtcxKQiYxLnQAQxmwqTCQmjygog9ZZQcNqCpXFU9hmqORZoN1J1b2-XdMG21Jij2kcuQzCYTbdwVfa6nR-M38WFEtunA8Tu2FvWT40V7ikYAVT7YefAHbWRkyfzPjQRLxTppH3P3a_3tIqWHIYKBCFhdvnHlznvOKez_VLlBQ8ik62sdDsJHVWtdjqCm7j_rLP09vpBPDlv7B2HNLj55BSAtZTtvfDpepEq6MWVFWxcdsbcFozfUkGRwQ4Zqwzx8p5AhH2s");'></div>
+                <div class="absolute inset-0 bg-slate-900/70"></div>
+                
+                <div class="relative z-10 max-w-lg text-white">
+                    <span class="material-symbols-outlined text-primary text-6xl mb-6 block">medical_services</span>
+                    <h2 class="text-4xl font-bold mb-4 leading-tight">Your Health, Our Priority.</h2>
+                    <p class="text-lg text-slate-200 leading-relaxed mb-8">
+                        Join thousands of patients who trust MediClinic for seamless appointment scheduling and top-tier medical care.
+                    </p>
+                    <ul class="space-y-4">
+                        <li class="flex items-center gap-3">
+                            <span class="material-symbols-outlined text-primary">check_circle</span>
+                            <span class="text-slate-100">Access to 500+ certified specialists</span>
+                        </li>
+                        <li class="flex items-center gap-3">
+                            <span class="material-symbols-outlined text-primary">check_circle</span>
+                            <span class="text-slate-100">Easy online booking &amp; reminders</span>
+                        </li>
+                        <li class="flex items-center gap-3">
+                            <span class="material-symbols-outlined text-primary">check_circle</span>
+                            <span class="text-slate-100">Secure health records management</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Right Side - Registration Form -->
+            <div class="flex-1 flex flex-col justify-center px-6 py-12 md:px-16 lg:px-24 bg-white dark:bg-slate-900">
+                <div class="max-w-md w-full mx-auto">
+                    <div class="mb-8">
+                        <h1 class="text-3xl font-black leading-tight tracking-tight mb-2 text-slate-900 dark:text-slate-100">Create an Account</h1>
+                        <p class="text-slate-600 dark:text-slate-400 text-base font-normal leading-normal">
+                            Register to book appointments with our doctors
+                        </p>
+                    </div>
+
+                    <form asp-area="" asp-controller="Account" asp-action="Register" method="post" class="space-y-5">
+                        <div asp-validation-summary="ModelOnly" class="text-red-600 text-sm"></div>
+
+                        <!-- Full Name -->
+                        <div class="flex flex-col">
+                            <label class="text-slate-700 dark:text-slate-300 text-sm font-semibold leading-normal pb-1.5" for="fullName">Full Name</label>
+                            <input name="FullName" 
+                                   class="form-input w-full rounded-lg bg-slate-50 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 focus:border-primary focus:ring-2 focus:ring-primary/50 h-12 px-4 text-base placeholder:text-slate-400 text-slate-900 dark:text-slate-100 transition-all" 
+                                   id="fullName" 
+                                   placeholder="John Doe" 
+                                   type="text" 
+                                   required />
+                            @* <span asp-validation-for="FullName" class="text-red-600 text-xs mt-1"></span> *@
+                        </div>
+
+                        <!-- Email Address -->
+                        <div class="flex flex-col">
+                            <label class="text-slate-700 dark:text-slate-300 text-sm font-semibold leading-normal pb-1.5" for="email">Email Address</label>
+                            <input name="Email" 
+                                   class="form-input w-full rounded-lg bg-slate-50 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 focus:border-primary focus:ring-2 focus:ring-primary/50 h-12 px-4 text-base placeholder:text-slate-400 text-slate-900 dark:text-slate-100 transition-all" 
+                                   id="email" 
+                                   placeholder="john@example.com" 
+                                   type="email" 
+                                   required />
+                            @* <span asp-validation-for="Email" class="text-red-600 text-xs mt-1"></span> *@
+                        </div>
+
+                        <!-- Phone Number -->
+                        <div class="flex flex-col">
+                            <label class="text-slate-700 dark:text-slate-300 text-sm font-semibold leading-normal pb-1.5" for="phone">Phone Number</label>
+                            <input name="PhoneNumber" 
+                                   class="form-input w-full rounded-lg bg-slate-50 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 focus:border-primary focus:ring-2 focus:ring-primary/50 h-12 px-4 text-base placeholder:text-slate-400 text-slate-900 dark:text-slate-100 transition-all" 
+                                   id="phone" 
+                                   placeholder="+1 (555) 000-0000" 
+                                   type="tel" 
+                                   required />
+                            @* <span asp-validation-for="PhoneNumber" class="text-red-600 text-xs mt-1"></span> *@
+                        </div>
+
+                        <!-- Password Fields -->
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+                            <div class="flex flex-col">
+                                <label class="text-slate-700 dark:text-slate-300 text-sm font-semibold leading-normal pb-1.5" for="password">Password</label>
+                                <input name="Password" 
+                                       class="form-input w-full rounded-lg bg-slate-50 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 focus:border-primary focus:ring-2 focus:ring-primary/50 h-12 px-4 text-base placeholder:text-slate-400 text-slate-900 dark:text-slate-100 transition-all" 
+                                       id="password" 
+                                       placeholder="••••••••" 
+                                       type="password" 
+                                       required />
+                                @* <span asp-validation-for="Password" class="text-red-600 text-xs mt-1"></span> *@
+                            </div>
+                            <div class="flex flex-col">
+                                <label class="text-slate-700 dark:text-slate-300 text-sm font-semibold leading-normal pb-1.5" for="confirmPassword">Confirm Password</label>
+                                <input name="ConfirmPassword" 
+                                       class="form-input w-full rounded-lg bg-slate-50 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 focus:border-primary focus:ring-2 focus:ring-primary/50 h-12 px-4 text-base placeholder:text-slate-400 text-slate-900 dark:text-slate-100 transition-all" 
+                                       id="confirmPassword" 
+                                       placeholder="••••••••" 
+                                       type="password" 
+                                       required />
+                                @* <span asp-validation-for="ConfirmPassword" class="text-red-600 text-xs mt-1"></span> *@
+                            </div>
+                        </div>
+
+                        <!-- Terms and Conditions -->
+                        <div class="flex items-start gap-3 pt-2">
+                            <div class="flex items-center h-5">
+                                <input name="AcceptTerms" 
+                                       class="form-checkbox w-4 h-4 rounded border-slate-300 dark:border-slate-700 text-primary focus:ring-primary bg-slate-50 dark:bg-slate-800 cursor-pointer" 
+                                       id="terms" 
+                                       type="checkbox" 
+                                       required />
+                            </div>
+                            <label class="text-sm text-slate-600 dark:text-slate-400 cursor-pointer leading-tight" for="terms">
+                                I agree to the <a class="text-primary hover:underline" href="#terms">Terms and Conditions</a> and <a class="text-primary hover:underline" href="#privacy">Privacy Policy</a>.
+                            </label>
+                        </div>
+
+                        <!-- Submit Button -->
+                        <div class="pt-4">
+                            <button class="w-full flex items-center justify-center rounded-lg h-12 px-4 bg-primary text-white text-base font-bold leading-normal hover:bg-primary/90 transition-colors shadow-md" 
+                                    type="submit">
+                                Create Account
+                            </button>
+                        </div>
+
+                        <!-- Login Link -->
+                        <div class="text-center pt-4">
+                            <p class="text-sm text-slate-600 dark:text-slate-400">
+                                Already have an account? <a class="text-primary font-semibold hover:underline" asp-area="" asp-controller="Account" asp-action="Login">Log in here</a>
+                            </p>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    @section Scripts {
+        @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    }
+</body>
+</html>

@@ -1,0 +1,219 @@
+@{
+    ViewData["Title"] = "Doctor Profile";
+    Layout = "_LayoutMediClinic";
+}
+
+<!-- Back Button -->
+<div class="mb-8 px-4">
+    <a asp-area="" asp-controller="Doctors" asp-action="Index" class="inline-flex items-center gap-2 text-sm text-slate-500 hover:text-primary transition-colors no-underline">
+        <span class="material-symbols-outlined text-[18px]">arrow_back</span>
+        Back to Directory
+    </a>
+</div>
+
+<!-- Main Content -->
+<div class="flex flex-col lg:flex-row gap-8 px-4">
+    <!-- Left Column - Doctor Info -->
+    <div class="flex-1 flex flex-col gap-8">
+        <!-- Doctor Header Card -->
+        <div class="bg-white dark:bg-slate-900 rounded-xl overflow-hidden border border-slate-200 dark:border-slate-700 shadow-sm p-6 lg:p-8 flex flex-col md:flex-row gap-8 items-start">
+            <div class="w-full md:w-48 h-48 md:h-auto shrink-0 bg-slate-200 dark:bg-slate-800 rounded-lg overflow-hidden relative">
+                <img alt="Dr. Emily Chen, Cardiologist" class="w-full h-full object-cover aspect-square" src="https://lh3.googleusercontent.com/aida-public/AB6AXuA6wrTt341E3yA-wcu7p1aezUUzdiU1W6-T8VcCSRJDUz30gdlsrDhEkuQ81u3wwgHfpxjPy8qPB4Vs67aLJOmkK9fxlE09vNYcwPv82Z0wAPTVv3FU43V2XurmRI90S5d_WpTxuti53EFIOo1TVob_7CzaY8-egib308iyVTAfuKpsfCH_zq1rxrZpmZAuA8qXs0teRnfvMPOYnJleqCFK6gPIeS9EJQ42w4zNrXgEEKuRKrqSSNwUwWmWtTSEf2_nuTPWKE0Q2CSB" />
+            </div>
+            <div class="flex-1">
+                <div class="flex justify-between items-start mb-2">
+                    <div>
+                        <h1 class="text-3xl font-black text-slate-900 dark:text-white leading-tight mb-1">Dr. Emily Chen</h1>
+                        <p class="text-primary text-lg font-medium mb-3">Cardiology</p>
+                    </div>
+                    <div class="flex items-center gap-1 bg-primary/10 dark:bg-primary/20 px-3 py-1.5 rounded-lg text-primary font-bold">
+                        <span class="material-symbols-outlined text-[20px]">star</span>
+                        4.9 <span class="text-slate-500 dark:text-slate-400 font-normal text-sm ml-1">(128 reviews)</span>
+                    </div>
+                </div>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-6">
+                    <div class="flex items-center gap-3 text-slate-600 dark:text-slate-400">
+                        <span class="material-symbols-outlined text-primary/80">work</span>
+                        <span>15 Years Experience</span>
+                    </div>
+                    <div class="flex items-center gap-3 text-slate-600 dark:text-slate-400">
+                        <span class="material-symbols-outlined text-primary/80">location_on</span>
+                        <span>Main Campus, Wing A</span>
+                    </div>
+                    <div class="flex items-center gap-3 text-slate-600 dark:text-slate-400">
+                        <span class="material-symbols-outlined text-primary/80">language</span>
+                        <span>English, Mandarin</span>
+                    </div>
+                    <div class="flex items-center gap-3 text-slate-600 dark:text-slate-400">
+                        <span class="material-symbols-outlined text-primary/80">school</span>
+                        <span>Harvard Medical School</span>
+                    </div>
+                </div>
+                <div class="flex gap-3">
+                    <button class="flex items-center justify-center gap-2 rounded-lg h-10 px-4 bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 text-sm font-semibold hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors">
+                        <span class="material-symbols-outlined text-[18px]">favorite_border</span>
+                        Save
+                    </button>
+                    <button class="flex items-center justify-center gap-2 rounded-lg h-10 px-4 bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 text-sm font-semibold hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors">
+                        <span class="material-symbols-outlined text-[18px]">share</span>
+                        Share
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- About Me Section -->
+        <div class="bg-white dark:bg-slate-900 rounded-xl p-6 lg:p-8 border border-slate-200 dark:border-slate-700 shadow-sm">
+            <h2 class="text-xl font-bold text-slate-900 dark:text-white mb-4 border-b border-slate-100 dark:border-slate-800 pb-2">About Me</h2>
+            <p class="text-slate-600 dark:text-slate-400 leading-relaxed mb-4">
+                Dr. Emily Chen is a board-certified cardiologist with over 15 years of experience in diagnosing and treating cardiovascular diseases. She specializes in preventive cardiology, heart failure management, and non-invasive cardiac imaging. Dr. Chen is dedicated to providing personalized, compassionate care to her patients, focusing on lifestyle modifications and advanced therapies to optimize heart health.
+            </p>
+            <p class="text-slate-600 dark:text-slate-400 leading-relaxed">
+                Before joining MediClinic, she served as the Director of Echocardiography at City General Hospital. She is an active member of the American College of Cardiology and regularly contributes to peer-reviewed medical journals.
+            </p>
+        </div>
+
+        <!-- Education & Experience Section -->
+        <div class="bg-white dark:bg-slate-900 rounded-xl p-6 lg:p-8 border border-slate-200 dark:border-slate-700 shadow-sm">
+            <h2 class="text-xl font-bold text-slate-900 dark:text-white mb-4 border-b border-slate-100 dark:border-slate-800 pb-2">Education &amp; Experience</h2>
+            <div class="space-y-6">
+                <div class="flex gap-4">
+                    <div class="w-12 h-12 rounded-full bg-primary/10 dark:bg-primary/20 flex items-center justify-center shrink-0">
+                        <span class="material-symbols-outlined text-primary text-xl">school</span>
+                    </div>
+                    <div>
+                        <h3 class="font-bold text-slate-900 dark:text-white">MD, Cardiovascular Disease Fellowship</h3>
+                        <p class="text-primary text-sm mb-1">Harvard Medical School</p>
+                        <p class="text-slate-500 dark:text-slate-400 text-sm">2005 - 2008</p>
+                    </div>
+                </div>
+                <div class="flex gap-4">
+                    <div class="w-12 h-12 rounded-full bg-primary/10 dark:bg-primary/20 flex items-center justify-center shrink-0">
+                        <span class="material-symbols-outlined text-primary text-xl">work</span>
+                    </div>
+                    <div>
+                        <h3 class="font-bold text-slate-900 dark:text-white">Senior Cardiologist</h3>
+                        <p class="text-primary text-sm mb-1">City General Hospital</p>
+                        <p class="text-slate-500 dark:text-slate-400 text-sm">2010 - 2020</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Specializations Section -->
+        <div class="bg-white dark:bg-slate-900 rounded-xl p-6 lg:p-8 border border-slate-200 dark:border-slate-700 shadow-sm">
+            <h2 class="text-xl font-bold text-slate-900 dark:text-white mb-4 border-b border-slate-100 dark:border-slate-800 pb-2">Specializations</h2>
+            <div class="flex flex-wrap gap-2">
+                <span class="px-3 py-1.5 bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 rounded-full text-sm font-medium">Preventive Cardiology</span>
+                <span class="px-3 py-1.5 bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 rounded-full text-sm font-medium">Echocardiography</span>
+                <span class="px-3 py-1.5 bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 rounded-full text-sm font-medium">Heart Failure</span>
+                <span class="px-3 py-1.5 bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 rounded-full text-sm font-medium">Hypertension Management</span>
+                <span class="px-3 py-1.5 bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 rounded-full text-sm font-medium">Cholesterol Management</span>
+            </div>
+        </div>
+
+        <!-- Patient Reviews Section -->
+        <div class="bg-white dark:bg-slate-900 rounded-xl p-6 lg:p-8 border border-slate-200 dark:border-slate-700 shadow-sm">
+            <div class="flex justify-between items-center mb-4 border-b border-slate-100 dark:border-slate-800 pb-2">
+                <h2 class="text-xl font-bold text-slate-900 dark:text-white">Patient Reviews</h2>
+                <a href="#" class="text-primary text-sm font-medium hover:underline">View All</a>
+            </div>
+            <div class="space-y-6">
+                <div class="border-b border-slate-100 dark:border-slate-800 pb-6 last:border-0 last:pb-0">
+                    <div class="flex justify-between items-start mb-2">
+                        <div>
+                            <h4 class="font-bold text-slate-900 dark:text-white">Sarah Jenkins</h4>
+                            <p class="text-slate-500 dark:text-slate-400 text-xs">2 weeks ago</p>
+                        </div>
+                        <div class="flex text-primary">
+                            <span class="material-symbols-outlined text-[16px]" style="font-variation-settings: 'FILL' 1;">star</span>
+                            <span class="material-symbols-outlined text-[16px]" style="font-variation-settings: 'FILL' 1;">star</span>
+                            <span class="material-symbols-outlined text-[16px]" style="font-variation-settings: 'FILL' 1;">star</span>
+                            <span class="material-symbols-outlined text-[16px]" style="font-variation-settings: 'FILL' 1;">star</span>
+                            <span class="material-symbols-outlined text-[16px]" style="font-variation-settings: 'FILL' 1;">star</span>
+                        </div>
+                    </div>
+                    <p class="text-slate-600 dark:text-slate-400 text-sm leading-relaxed">
+                        "Dr. Chen is fantastic. She took the time to explain my condition in a way I could easily understand. Very thorough and compassionate. Highly recommend her to anyone needing a cardiologist."
+                    </p>
+                </div>
+                <div class="border-b border-slate-100 dark:border-slate-800 pb-6 last:border-0 last:pb-0">
+                    <div class="flex justify-between items-start mb-2">
+                        <div>
+                            <h4 class="font-bold text-slate-900 dark:text-white">Michael R.</h4>
+                            <p class="text-slate-500 dark:text-slate-400 text-xs">1 month ago</p>
+                        </div>
+                        <div class="flex text-primary">
+                            <span class="material-symbols-outlined text-[16px]" style="font-variation-settings: 'FILL' 1;">star</span>
+                            <span class="material-symbols-outlined text-[16px]" style="font-variation-settings: 'FILL' 1;">star</span>
+                            <span class="material-symbols-outlined text-[16px]" style="font-variation-settings: 'FILL' 1;">star</span>
+                            <span class="material-symbols-outlined text-[16px]" style="font-variation-settings: 'FILL' 1;">star</span>
+                            <span class="material-symbols-outlined text-[16px]">star_half</span>
+                        </div>
+                    </div>
+                    <p class="text-slate-600 dark:text-slate-400 text-sm leading-relaxed">
+                        "Very professional and knowledgeable. The clinic staff was also very friendly. Wait time was a bit longer than expected, but the care received was top-notch."
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Right Column - Booking Sidebar -->
+    <aside class="w-full lg:w-80 shrink-0 relative">
+        <div class="sticky top-24 bg-white dark:bg-slate-900 rounded-xl p-6 border border-primary/30 shadow-md">
+            <h3 class="font-bold text-xl text-slate-900 dark:text-white mb-4">Book Appointment</h3>
+            
+            <!-- Quick Date Selection -->
+            <div class="mb-4">
+                <label class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">Select Date</label>
+                <div class="flex gap-2 overflow-x-auto pb-2">
+                    <div class="flex flex-col items-center justify-center w-14 h-16 rounded-lg border border-primary bg-primary/10 dark:bg-primary/20 text-primary cursor-pointer shrink-0">
+                        <span class="text-xs font-medium uppercase">Mon</span>
+                        <span class="text-lg font-bold">12</span>
+                    </div>
+                    <div class="flex flex-col items-center justify-center w-14 h-16 rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-600 dark:text-slate-400 hover:border-primary/50 cursor-pointer shrink-0 transition-colors">
+                        <span class="text-xs font-medium uppercase">Tue</span>
+                        <span class="text-lg font-bold">13</span>
+                    </div>
+                    <div class="flex flex-col items-center justify-center w-14 h-16 rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-600 dark:text-slate-400 hover:border-primary/50 cursor-pointer shrink-0 transition-colors">
+                        <span class="text-xs font-medium uppercase">Wed</span>
+                        <span class="text-lg font-bold">14</span>
+                    </div>
+                    <div class="flex flex-col items-center justify-center w-14 h-16 rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-600 dark:text-slate-400 hover:border-primary/50 cursor-pointer shrink-0 transition-colors">
+                        <span class="text-xs font-medium uppercase">Thu</span>
+                        <span class="text-lg font-bold">15</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Quick Time Selection -->
+            <div class="mb-6">
+                <label class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">Select Time</label>
+                <div class="grid grid-cols-3 gap-2">
+                    <button class="py-2 px-1 text-sm rounded-md border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-600 dark:text-slate-400 hover:border-primary/50 transition-colors">09:00 AM</button>
+                    <button class="py-2 px-1 text-sm rounded-md border border-primary bg-primary/10 dark:bg-primary/20 text-primary font-medium transition-colors">09:30 AM</button>
+                    <button class="py-2 px-1 text-sm rounded-md border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-600 dark:text-slate-400 hover:border-primary/50 transition-colors">10:00 AM</button>
+                    <button class="py-2 px-1 text-sm rounded-md border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800/50 text-slate-400 dark:text-slate-600 cursor-not-allowed">10:30 AM</button>
+                    <button class="py-2 px-1 text-sm rounded-md border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-600 dark:text-slate-400 hover:border-primary/50 transition-colors">11:00 AM</button>
+                    <button class="py-2 px-1 text-sm rounded-md border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-600 dark:text-slate-400 hover:border-primary/50 transition-colors">11:30 AM</button>
+                </div>
+            </div>
+
+            <!-- Fee Information -->
+            <div class="border-t border-slate-100 dark:border-slate-800 pt-4 mb-6">
+                <div class="flex justify-between items-center mb-2">
+                    <span class="text-slate-600 dark:text-slate-400">Consultation Fee</span>
+                    <span class="font-bold text-slate-900 dark:text-white">$150</span>
+                </div>
+                <p class="text-xs text-slate-500 dark:text-slate-500">* Insurance may cover partial or full amount</p>
+            </div>
+
+            <!-- Book Button -->
+            <a asp-area="" asp-controller="Appointment" asp-action="Book" asp-route-doctorId="1" 
+               class="w-full flex items-center justify-center rounded-lg h-12 px-4 bg-primary text-white text-base font-bold hover:bg-primary/90 transition-colors shadow-md no-underline">
+                Book Appointment
+            </a>
+        </div>
+    </aside>
+</div>

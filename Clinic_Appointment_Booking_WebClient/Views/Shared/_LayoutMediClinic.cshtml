@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - MediClinic</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    
+    <!-- Material Symbols -->
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet" />
+    
+    <!-- Tailwind Config -->
+    <script>
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#13b6ec",
+                        "background-light": "#f6f8f8",
+                        "background-dark": "#101d22",
+                    },
+                    fontFamily: {
+                        "display": ["Inter", "Noto Sans", "sans-serif"]
+                    },
+                    borderRadius: { "DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px" },
+                },
+            },
+        }
+    </script>
+    
+    @await RenderSectionAsync("Styles", required: false)
+</head>
+<body class="bg-background-light dark:bg-background-dark text-slate-900 dark:text-slate-100 font-display">
+    <div class="relative flex min-h-screen w-full flex-col overflow-x-hidden group/design-root">
+        <div class="layout-container flex h-full grow flex-col">
+            <!-- Header -->
+            <header class="flex items-center justify-between whitespace-nowrap border-b border-solid border-slate-200 dark:border-slate-800 px-4 sm:px-6 lg:px-10 py-4 bg-white dark:bg-slate-900 shadow-sm sticky top-0 z-50">
+                <!-- Logo -->
+                <div class="flex items-center gap-4 text-primary">
+                    <span class="material-symbols-outlined text-2xl sm:text-3xl">local_hospital</span>
+                    <h2 class="text-lg sm:text-xl font-bold leading-tight tracking-tight text-slate-900 dark:text-slate-100">
+                        <a asp-area="" asp-controller="Home" asp-action="Index" class="no-underline text-slate-900 dark:text-slate-100 hover:text-primary transition-colors">MediClinic</a>
+                    </h2>
+                </div>
+
+                <!-- Desktop Navigation -->
+                <div class="hidden lg:flex flex-1 justify-end gap-8 items-center">
+                    <nav class="flex items-center gap-8">
+                        <a class="@(ViewContext.RouteData.Values["controller"]?.ToString() == "Home" && ViewContext.RouteData.Values["action"]?.ToString() == "Index" ? "text-primary font-bold border-b-2 border-primary pb-1" : "text-slate-700 dark:text-slate-300") text-sm font-semibold hover:text-primary transition-colors" 
+                           asp-area="" asp-controller="Home" asp-action="Index">Home</a>
+                        <a class="@(ViewContext.RouteData.Values["controller"]?.ToString() == "Doctors" ? "text-primary font-bold border-b-2 border-primary pb-1" : "text-slate-700 dark:text-slate-300") text-sm font-semibold hover:text-primary transition-colors" 
+                           asp-area="" asp-controller="Doctors" asp-action="Index">Doctors</a>
+                        <a class="@(ViewContext.RouteData.Values["controller"]?.ToString() == "Specialties" ? "text-primary font-bold border-b-2 border-primary pb-1" : "text-slate-700 dark:text-slate-300") text-sm font-semibold hover:text-primary transition-colors" 
+                           asp-area="" asp-controller="Specialties" asp-action="Index">Specialties</a>
+                        <a class="@(ViewContext.RouteData.Values["action"]?.ToString() == "About" ? "text-primary font-bold border-b-2 border-primary pb-1" : "text-slate-700 dark:text-slate-300") text-sm font-semibold hover:text-primary transition-colors" 
+                           asp-area="" asp-controller="Home" asp-action="About">About Us</a>
+                        <a class="@(ViewContext.RouteData.Values["action"]?.ToString() == "Contact" ? "text-primary font-bold border-b-2 border-primary pb-1" : "text-slate-700 dark:text-slate-300") text-sm font-semibold hover:text-primary transition-colors" 
+                           asp-area="" asp-controller="Home" asp-action="Contact">Contact</a>
+                    </nav>
+
+                    <!-- Auth Buttons (when not logged in) -->
+                    <div class="flex gap-2 items-center">
+                        <a asp-area="" asp-controller="Account" asp-action="Login" 
+                           class="flex min-w-[84px] cursor-pointer items-center justify-center overflow-hidden rounded-lg h-10 px-4 bg-primary text-white text-sm font-bold hover:bg-primary/90 transition-colors no-underline">
+                            <span class="truncate">Login</span>
+                        </a>
+                        <a asp-area="" asp-controller="Account" asp-action="Register" 
+                           class="flex min-w-[84px] cursor-pointer items-center justify-center overflow-hidden rounded-lg h-10 px-4 bg-primary/10 hover:bg-primary/20 text-primary text-sm font-bold transition-colors no-underline">
+                            <span class="truncate">Sign Up</span>
+                        </a>
+                    </div>
+
+                    <!-- User Profile (when logged in - hidden by default, show with backend logic) -->
+                    <div class="hidden items-center gap-3">
+                        <a asp-area="" asp-controller="Appointment" asp-action="Book" 
+                           class="flex cursor-pointer items-center justify-center overflow-hidden rounded-lg h-10 px-5 bg-primary text-white text-sm font-bold shadow-md hover:bg-primary/90 transition-colors no-underline">
+                            <span>Book Appointment</span>
+                        </a>
+                        <div class="relative group">
+                            <button class="flex items-center gap-2 text-slate-600 dark:text-slate-300 hover:text-primary transition-colors">
+                                <span class="material-symbols-outlined text-[32px]">account_circle</span>
+                                <span class="text-sm font-medium hidden xl:inline">John Doe</span>
+                            </button>
+                            <!-- Dropdown Menu -->
+                            <div class="hidden group-hover:block absolute right-0 mt-2 w-48 bg-white dark:bg-slate-800 rounded-lg shadow-lg border border-slate-200 dark:border-slate-700 py-2">
+                                <a href="#" class="block px-4 py-2 text-sm text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700">My Profile</a>
+                                <a asp-area="" asp-controller="Appointment" asp-action="MyAppointments" class="block px-4 py-2 text-sm text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700">My Appointments</a>
+                                <a href="#" class="block px-4 py-2 text-sm text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700">Settings</a>
+                                <hr class="my-2 border-slate-200 dark:border-slate-700" />
+                                <a asp-area="" asp-controller="Account" asp-action="Logout" class="block px-4 py-2 text-sm text-red-600 hover:bg-slate-100 dark:hover:bg-slate-700">Logout</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Mobile Menu Button -->
+                <button class="lg:hidden flex items-center justify-center p-2 text-slate-900 dark:text-slate-100 hover:text-primary transition-colors" 
+                        onclick="toggleMobileMenu()">
+                    <span class="material-symbols-outlined text-[28px]">menu</span>
+                </button>
+            </header>
+
+            <!-- Mobile Menu (Hidden by default) -->
+            <div id="mobileMenu" class="hidden lg:hidden bg-white dark:bg-slate-900 border-b border-slate-200 dark:border-slate-800 shadow-lg">
+                <nav class="flex flex-col px-4 py-4 gap-2">
+                    <a class="px-4 py-3 text-sm font-semibold text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 hover:text-primary rounded-lg transition-colors" 
+                       asp-area="" asp-controller="Home" asp-action="Index">Home</a>
+                    <a class="px-4 py-3 text-sm font-semibold text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 hover:text-primary rounded-lg transition-colors" 
+                       asp-area="" asp-controller="Doctors" asp-action="Index">Doctors</a>
+                    <a class="px-4 py-3 text-sm font-semibold text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 hover:text-primary rounded-lg transition-colors" 
+                       asp-area="" asp-controller="Specialties" asp-action="Index">Specialties</a>
+                    <a class="px-4 py-3 text-sm font-semibold text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 hover:text-primary rounded-lg transition-colors" 
+                       asp-area="" asp-controller="Home" asp-action="About">About Us</a>
+                    <a class="px-4 py-3 text-sm font-semibold text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 hover:text-primary rounded-lg transition-colors" 
+                       asp-area="" asp-controller="Home" asp-action="Contact">Contact</a>
+                    <hr class="my-2 border-slate-200 dark:border-slate-700" />
+                    <a asp-area="" asp-controller="Account" asp-action="Login" 
+                       class="px-4 py-3 text-sm font-bold text-center bg-primary text-white rounded-lg hover:bg-primary/90 transition-colors no-underline">
+                        Login
+                    </a>
+                    <a asp-area="" asp-controller="Account" asp-action="Register" 
+                       class="px-4 py-3 text-sm font-bold text-center bg-primary/10 text-primary rounded-lg hover:bg-primary/20 transition-colors no-underline">
+                        Sign Up
+                    </a>
+                </nav>
+            </div>
+
+            <!-- Main Content -->
+            <main class="flex-1 w-full max-w-[1200px] mx-auto flex flex-col pt-8 pb-16">
+                @RenderBody()
+            </main>
+
+            <!-- Footer -->
+            <footer class="mt-auto border-t border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 py-10 px-6">
+                <div class="max-w-[1200px] mx-auto flex flex-col gap-6">
+                    <div class="flex flex-wrap items-center justify-center gap-8">
+                        <a class="text-slate-500 dark:text-slate-400 hover:text-primary transition-colors text-base font-medium no-underline" 
+                           asp-area="" asp-controller="Home" asp-action="Privacy">Privacy Policy</a>
+                        <a class="text-slate-500 dark:text-slate-400 hover:text-primary transition-colors text-base font-medium no-underline" 
+                           href="#terms">Terms of Service</a>
+                        <a class="text-slate-500 dark:text-slate-400 hover:text-primary transition-colors text-base font-medium no-underline" 
+                           href="#faq">FAQ</a>
+                    </div>
+                    <p class="text-slate-500 dark:text-slate-500 text-sm text-center">© @DateTime.Now.Year MediClinic. All rights reserved.</p>
+                </div>
+            </footer>
+        </div>
+    </div>
+
+    <!-- Mobile Menu Toggle Script -->
+    <script>
+        function toggleMobileMenu() {
+            const menu = document.getElementById('mobileMenu');
+            menu.classList.toggle('hidden');
+        }
+
+        // Close mobile menu when clicking outside
+        document.addEventListener('click', function(event) {
+            const menu = document.getElementById('mobileMenu');
+            const menuButton = event.target.closest('button[onclick="toggleMobileMenu()"]');
+            
+            if (!menu.contains(event.target) && !menuButton && !menu.classList.contains('hidden')) {
+                menu.classList.add('hidden');
+            }
+        });
+    </script>
+
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>
