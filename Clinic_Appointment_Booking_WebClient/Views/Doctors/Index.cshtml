@@ -1,0 +1,331 @@
+@{
+    ViewData["Title"] = "Our Doctors Directory";
+    Layout = "_LayoutMediClinic";
+}
+
+<!-- Page Header -->
+<div class="mb-8 px-4">
+    <h1 class="text-4xl font-black leading-tight tracking-tight mb-2 text-slate-900 dark:text-white">Our Doctors Directory</h1>
+    <p class="text-slate-500 dark:text-slate-400 text-base font-normal leading-normal">Find and book appointments with our top-rated medical professionals.</p>
+</div>
+
+<!-- Main Content with Sidebar -->
+<div class="flex flex-col lg:flex-row gap-8 px-4">
+    <!-- Sidebar Filters -->
+    <aside class="w-full lg:w-64 shrink-0 flex flex-col gap-6">
+        <!-- Search Box -->
+        <div>
+            <label class="flex flex-col w-full h-12">
+                <div class="flex w-full flex-1 items-stretch rounded-lg h-full border border-slate-200 dark:border-slate-700 overflow-hidden bg-white dark:bg-slate-900 focus-within:ring-2 focus-within:ring-primary focus-within:border-primary">
+                    <div class="text-slate-400 dark:text-slate-500 flex items-center justify-center pl-4 bg-transparent">
+                        <span class="material-symbols-outlined text-[20px]">search</span>
+                    </div>
+                    <input class="form-input flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-r-lg text-slate-900 dark:text-white focus:outline-0 focus:ring-0 border-none bg-transparent h-full placeholder:text-slate-400 dark:placeholder:text-slate-500 px-3 text-sm font-normal leading-normal" 
+                           placeholder="Search by name..." 
+                           type="text" />
+                </div>
+            </label>
+        </div>
+
+        <!-- Filters Panel -->
+        <div class="bg-white dark:bg-slate-900 rounded-xl p-5 border border-slate-200 dark:border-slate-700 shadow-sm">
+            <h3 class="font-bold text-slate-900 dark:text-white mb-4">Filters</h3>
+
+            <!-- Specialty Filter -->
+            <div class="mb-5">
+                <h4 class="text-sm font-semibold text-slate-700 dark:text-slate-300 mb-3 flex items-center justify-between">
+                    Specialty
+                    <span class="material-symbols-outlined text-[18px]">expand_more</span>
+                </h4>
+                <div class="flex flex-col gap-2">
+                    <label class="flex items-center gap-3">
+                        <input checked class="form-checkbox h-4 w-4 rounded border-slate-300 text-primary focus:ring-primary dark:border-slate-600 dark:bg-slate-800" type="checkbox" />
+                        <span class="text-sm text-slate-600 dark:text-slate-400">All Specialties</span>
+                    </label>
+                    <label class="flex items-center gap-3">
+                        <input class="form-checkbox h-4 w-4 rounded border-slate-300 text-primary focus:ring-primary dark:border-slate-600 dark:bg-slate-800" type="checkbox" />
+                        <span class="text-sm text-slate-600 dark:text-slate-400">Cardiology</span>
+                    </label>
+                    <label class="flex items-center gap-3">
+                        <input class="form-checkbox h-4 w-4 rounded border-slate-300 text-primary focus:ring-primary dark:border-slate-600 dark:bg-slate-800" type="checkbox" />
+                        <span class="text-sm text-slate-600 dark:text-slate-400">Dermatology</span>
+                    </label>
+                    <label class="flex items-center gap-3">
+                        <input class="form-checkbox h-4 w-4 rounded border-slate-300 text-primary focus:ring-primary dark:border-slate-600 dark:bg-slate-800" type="checkbox" />
+                        <span class="text-sm text-slate-600 dark:text-slate-400">Neurology</span>
+                    </label>
+                    <label class="flex items-center gap-3">
+                        <input class="form-checkbox h-4 w-4 rounded border-slate-300 text-primary focus:ring-primary dark:border-slate-600 dark:bg-slate-800" type="checkbox" />
+                        <span class="text-sm text-slate-600 dark:text-slate-400">Pediatrics</span>
+                    </label>
+                    <a class="text-xs text-primary font-medium mt-1 hover:underline" href="#">Show more</a>
+                </div>
+            </div>
+
+            <!-- Availability Filter -->
+            <div class="mb-5 border-t border-slate-100 dark:border-slate-800 pt-5">
+                <h4 class="text-sm font-semibold text-slate-700 dark:text-slate-300 mb-3 flex items-center justify-between">
+                    Availability
+                    <span class="material-symbols-outlined text-[18px]">expand_more</span>
+                </h4>
+                <div class="flex flex-col gap-2">
+                    <label class="flex items-center gap-3">
+                        <input checked class="form-radio h-4 w-4 border-slate-300 text-primary focus:ring-primary dark:border-slate-600 dark:bg-slate-800" name="availability" type="radio" />
+                        <span class="text-sm text-slate-600 dark:text-slate-400">Anytime</span>
+                    </label>
+                    <label class="flex items-center gap-3">
+                        <input class="form-radio h-4 w-4 border-slate-300 text-primary focus:ring-primary dark:border-slate-600 dark:bg-slate-800" name="availability" type="radio" />
+                        <span class="text-sm text-slate-600 dark:text-slate-400">Available Today</span>
+                    </label>
+                    <label class="flex items-center gap-3">
+                        <input class="form-radio h-4 w-4 border-slate-300 text-primary focus:ring-primary dark:border-slate-600 dark:bg-slate-800" name="availability" type="radio" />
+                        <span class="text-sm text-slate-600 dark:text-slate-400">Available Tomorrow</span>
+                    </label>
+                    <label class="flex items-center gap-3">
+                        <input class="form-radio h-4 w-4 border-slate-300 text-primary focus:ring-primary dark:border-slate-600 dark:bg-slate-800" name="availability" type="radio" />
+                        <span class="text-sm text-slate-600 dark:text-slate-400">Next 7 Days</span>
+                    </label>
+                </div>
+            </div>
+
+            <!-- Gender Filter -->
+            <div class="border-t border-slate-100 dark:border-slate-800 pt-5">
+                <h4 class="text-sm font-semibold text-slate-700 dark:text-slate-300 mb-3 flex items-center justify-between">
+                    Gender
+                    <span class="material-symbols-outlined text-[18px]">expand_more</span>
+                </h4>
+                <div class="flex flex-col gap-2">
+                    <label class="flex items-center gap-3">
+                        <input checked class="form-checkbox h-4 w-4 rounded border-slate-300 text-primary focus:ring-primary dark:border-slate-600 dark:bg-slate-800" type="checkbox" />
+                        <span class="text-sm text-slate-600 dark:text-slate-400">Any</span>
+                    </label>
+                    <label class="flex items-center gap-3">
+                        <input class="form-checkbox h-4 w-4 rounded border-slate-300 text-primary focus:ring-primary dark:border-slate-600 dark:bg-slate-800" type="checkbox" />
+                        <span class="text-sm text-slate-600 dark:text-slate-400">Female</span>
+                    </label>
+                    <label class="flex items-center gap-3">
+                        <input class="form-checkbox h-4 w-4 rounded border-slate-300 text-primary focus:ring-primary dark:border-slate-600 dark:bg-slate-800" type="checkbox" />
+                        <span class="text-sm text-slate-600 dark:text-slate-400">Male</span>
+                    </label>
+                </div>
+            </div>
+        </div>
+    </aside>
+
+    <!-- Main Content Area -->
+    <div class="flex-1 flex flex-col gap-6">
+        <!-- Results Header -->
+        <div class="flex justify-between items-center bg-white dark:bg-slate-900 p-4 rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm">
+            <p class="text-sm text-slate-500 dark:text-slate-400">
+                Showing <span class="font-bold text-slate-900 dark:text-white">1-4</span> of <span class="font-bold text-slate-900 dark:text-white">42</span> doctors
+            </p>
+            <div class="flex items-center gap-2">
+                <span class="text-sm text-slate-500 dark:text-slate-400">Sort by:</span>
+                <button class="flex items-center gap-1 text-sm font-medium text-slate-700 dark:text-slate-300 hover:text-primary dark:hover:text-primary transition-colors">
+                    Recommended
+                    <span class="material-symbols-outlined text-[18px]">swap_vert</span>
+                </button>
+            </div>
+        </div>
+
+        <!-- Doctor Cards Grid -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-1 xl:grid-cols-2 gap-6">
+            <!-- Doctor Card 1 -->
+            <div class="flex flex-col lg:flex-row bg-white dark:bg-slate-900 rounded-xl overflow-hidden border border-slate-200 dark:border-slate-700 shadow-sm hover:shadow-md hover:border-primary/50 transition-all duration-300">
+                <div class="w-full lg:w-48 h-48 lg:h-auto bg-slate-200 dark:bg-slate-800 relative">
+                    <img alt="Dr. Emily Chen, Cardiologist" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuA6wrTt341E3yA-wcu7p1aezUUzdiU1W6-T8VcCSRJDUz30gdlsrDhEkuQ81u3wwgHfpxjPy8qPB4Vs67aLJOmkK9fxlE09vNYcwPv82Z0wAPTVv3FU43V2XurmRI90S5d_WpTxuti53EFIOo1TVob_7CzaY8-egib308iyVTAfuKpsfCH_zq1rxrZpmZAuA8qXs0teRnfvMPOYnJleqCFK6gPIeS9EJQ42w4zNrXgEEKuRKrqSSNwUwWmWtTSEf2_nuTPWKE0Q2CSB" />
+                    <div class="absolute top-3 left-3 bg-white/90 dark:bg-slate-900/90 backdrop-blur-sm px-2 py-1 rounded-md text-xs font-bold text-primary flex items-center gap-1">
+                        <span class="material-symbols-outlined text-[14px]">star</span> 4.9
+                    </div>
+                </div>
+                <div class="p-5 flex-1 flex flex-col justify-between">
+                    <div>
+                        <div class="flex justify-between items-start mb-1">
+                            <h3 class="text-lg font-bold text-slate-900 dark:text-white leading-tight">Dr. Emily Chen</h3>
+                            <button class="text-slate-400 hover:text-red-500 transition-colors">
+                                <span class="material-symbols-outlined text-[20px]">favorite_border</span>
+                            </button>
+                        </div>
+                        <p class="text-primary text-sm font-medium mb-2">Cardiology</p>
+                        <div class="flex flex-col gap-2 mb-4">
+                            <div class="flex items-center gap-2 text-sm text-slate-600 dark:text-slate-400">
+                                <span class="material-symbols-outlined text-[16px] text-slate-400">work</span>
+                                15 Years Experience
+                            </div>
+                            <div class="flex items-center gap-2 text-sm text-slate-600 dark:text-slate-400">
+                                <span class="material-symbols-outlined text-[16px] text-slate-400">location_on</span>
+                                Main Campus, Wing A
+                            </div>
+                            <div class="flex items-center gap-2 text-sm text-slate-600 dark:text-slate-400">
+                                <span class="material-symbols-outlined text-[16px] text-slate-400">language</span>
+                                English, Mandarin
+                            </div>
+                        </div>
+                    </div>
+                    <div class="flex gap-3 mt-4">
+                        <a asp-area="" asp-controller="Doctors" asp-action="Details" asp-route-id="1" 
+                           class="flex-1 flex items-center justify-center cursor-pointer rounded-lg h-10 px-4 bg-primary/10 dark:bg-primary/20 text-primary text-sm font-semibold hover:bg-primary/20 transition-colors no-underline">
+                            View Profile
+                        </a>
+                        <a asp-area="" asp-controller="Appointment" asp-action="Book" asp-route-doctorId="1" 
+                           class="flex-1 flex items-center justify-center cursor-pointer rounded-lg h-10 px-4 bg-primary text-white text-sm font-bold hover:bg-primary/90 transition-colors shadow-sm no-underline">
+                            Book Now
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Doctor Card 2 -->
+            <div class="flex flex-col lg:flex-row bg-white dark:bg-slate-900 rounded-xl overflow-hidden border border-slate-200 dark:border-slate-700 shadow-sm hover:shadow-md hover:border-primary/50 transition-all duration-300">
+                <div class="w-full lg:w-48 h-48 lg:h-auto bg-slate-200 dark:bg-slate-800 relative">
+                    <img alt="Dr. Marcus Johnson, Neurologist" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCqwIgMbGcY96gevDFCIo-w_AO6bicyVlqwdSnci0dC8pTAVaPeeloMbZBWe1Ze5rtptK6u1O0BM0N7fmQv5yh_JZBxKOrgW-DzgFeRXi6_eoCfYDCYbwhN2UcnBJni1deqsP2E2uL3b7jDYlpxdeJavx0eGme7N_f20sxJyi3cjubpzelNX8sLUn2vBEW_nPQ-YomdymMzghv3tkVO86k8ctFsoSZpnXSvgWNY4xO4g6n7Y2lkjXgk-I3VdyYt1uLJFc_eQr0hLTmV" />
+                    <div class="absolute top-3 left-3 bg-white/90 dark:bg-slate-900/90 backdrop-blur-sm px-2 py-1 rounded-md text-xs font-bold text-primary flex items-center gap-1">
+                        <span class="material-symbols-outlined text-[14px]">star</span> 4.8
+                    </div>
+                </div>
+                <div class="p-5 flex-1 flex flex-col justify-between">
+                    <div>
+                        <div class="flex justify-between items-start mb-1">
+                            <h3 class="text-lg font-bold text-slate-900 dark:text-white leading-tight">Dr. Marcus Johnson</h3>
+                            <button class="text-slate-400 hover:text-red-500 transition-colors">
+                                <span class="material-symbols-outlined text-[20px]">favorite_border</span>
+                            </button>
+                        </div>
+                        <p class="text-primary text-sm font-medium mb-2">Neurology</p>
+                        <div class="flex flex-col gap-2 mb-4">
+                            <div class="flex items-center gap-2 text-sm text-slate-600 dark:text-slate-400">
+                                <span class="material-symbols-outlined text-[16px] text-slate-400">work</span>
+                                12 Years Experience
+                            </div>
+                            <div class="flex items-center gap-2 text-sm text-slate-600 dark:text-slate-400">
+                                <span class="material-symbols-outlined text-[16px] text-slate-400">location_on</span>
+                                North Clinic, Suite 302
+                            </div>
+                            <div class="flex items-center gap-2 text-sm text-slate-600 dark:text-slate-400">
+                                <span class="material-symbols-outlined text-[16px] text-slate-400">language</span>
+                                English, Spanish
+                            </div>
+                        </div>
+                    </div>
+                    <div class="flex gap-3 mt-4">
+                        <a asp-area="" asp-controller="Doctors" asp-action="Details" asp-route-id="2" 
+                           class="flex-1 flex items-center justify-center cursor-pointer rounded-lg h-10 px-4 bg-primary/10 dark:bg-primary/20 text-primary text-sm font-semibold hover:bg-primary/20 transition-colors no-underline">
+                            View Profile
+                        </a>
+                        <a asp-area="" asp-controller="Appointment" asp-action="Book" asp-route-doctorId="2" 
+                           class="flex-1 flex items-center justify-center cursor-pointer rounded-lg h-10 px-4 bg-primary text-white text-sm font-bold hover:bg-primary/90 transition-colors shadow-sm no-underline">
+                            Book Now
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Doctor Card 3 -->
+            <div class="flex flex-col lg:flex-row bg-white dark:bg-slate-900 rounded-xl overflow-hidden border border-slate-200 dark:border-slate-700 shadow-sm hover:shadow-md hover:border-primary/50 transition-all duration-300">
+                <div class="w-full lg:w-48 h-48 lg:h-auto bg-slate-200 dark:bg-slate-800 relative">
+                    <img alt="Dr. Sarah Patel, Dermatologist" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCxFkEg4MvatjF5Jt30_e1V_1uHOAljZ6PumLEN75ruIXZ3uvcyX1Xxiw82_fIvn9Nqyq5rijetXlpEM6jFDy12ZyWxs1wv1MKGvobPLxkg3EpJeJ4SqkPPcUIGL14zeoDjds8TKwLTPvP3AdQ9EVOQl0NKK3Qy12r7yhJpOUUN2fyetyVvmCC8Tj7fh8OWIq5SagzulPwLAVBJnC3i4vHSVq126IwJnLy-TAZ49IdIZNR-baA5Gl6hTB392w2sa7dgnv0-cEg5Gz8V" />
+                    <div class="absolute top-3 left-3 bg-white/90 dark:bg-slate-900/90 backdrop-blur-sm px-2 py-1 rounded-md text-xs font-bold text-primary flex items-center gap-1">
+                        <span class="material-symbols-outlined text-[14px]">star</span> 5.0
+                    </div>
+                </div>
+                <div class="p-5 flex-1 flex flex-col justify-between">
+                    <div>
+                        <div class="flex justify-between items-start mb-1">
+                            <h3 class="text-lg font-bold text-slate-900 dark:text-white leading-tight">Dr. Sarah Patel</h3>
+                            <button class="text-slate-400 hover:text-red-500 transition-colors">
+                                <span class="material-symbols-outlined text-[20px]">favorite_border</span>
+                            </button>
+                        </div>
+                        <p class="text-primary text-sm font-medium mb-2">Dermatology</p>
+                        <div class="flex flex-col gap-2 mb-4">
+                            <div class="flex items-center gap-2 text-sm text-slate-600 dark:text-slate-400">
+                                <span class="material-symbols-outlined text-[16px] text-slate-400">work</span>
+                                8 Years Experience
+                            </div>
+                            <div class="flex items-center gap-2 text-sm text-slate-600 dark:text-slate-400">
+                                <span class="material-symbols-outlined text-[16px] text-slate-400">location_on</span>
+                                Main Campus, Wing B
+                            </div>
+                            <div class="flex items-center gap-2 text-sm text-slate-600 dark:text-slate-400">
+                                <span class="material-symbols-outlined text-[16px] text-slate-400">language</span>
+                                English, Hindi
+                            </div>
+                        </div>
+                    </div>
+                    <div class="flex gap-3 mt-4">
+                        <a asp-area="" asp-controller="Doctors" asp-action="Details" asp-route-id="3" 
+                           class="flex-1 flex items-center justify-center cursor-pointer rounded-lg h-10 px-4 bg-primary/10 dark:bg-primary/20 text-primary text-sm font-semibold hover:bg-primary/20 transition-colors no-underline">
+                            View Profile
+                        </a>
+                        <a asp-area="" asp-controller="Appointment" asp-action="Book" asp-route-doctorId="3" 
+                           class="flex-1 flex items-center justify-center cursor-pointer rounded-lg h-10 px-4 bg-primary text-white text-sm font-bold hover:bg-primary/90 transition-colors shadow-sm no-underline">
+                            Book Now
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Doctor Card 4 -->
+            <div class="flex flex-col lg:flex-row bg-white dark:bg-slate-900 rounded-xl overflow-hidden border border-slate-200 dark:border-slate-700 shadow-sm hover:shadow-md hover:border-primary/50 transition-all duration-300">
+                <div class="w-full lg:w-48 h-48 lg:h-auto bg-slate-200 dark:bg-slate-800 relative">
+                    <img alt="Dr. David Wilson, Pediatrician" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDXQZna2h6VMsuzhgfuErgB60Vw3raDH9krDGMNUMh0P6uBLUTDqKnoj_7x0V4eUDnf9SmHwzrT15jo1xk922e4VOXTZDG-uf1nAU24cn6YjXlzvOUB88rLchU-S_yrQ97kl1JNtwWHucgUcCw0fsGtp-j1z6zY8eBaGjc0dgfPIAzJfdtlaUqetaOJDbBmc2iGCKtK9X-TikTW4wzu28gdlkQJPXJP4-BqKN_4v2SjJLCzgYFAOaGGq5Bcb2Q-IMghQqvQrioeD2-T" />
+                    <div class="absolute top-3 left-3 bg-white/90 dark:bg-slate-900/90 backdrop-blur-sm px-2 py-1 rounded-md text-xs font-bold text-primary flex items-center gap-1">
+                        <span class="material-symbols-outlined text-[14px]">star</span> 4.7
+                    </div>
+                </div>
+                <div class="p-5 flex-1 flex flex-col justify-between">
+                    <div>
+                        <div class="flex justify-between items-start mb-1">
+                            <h3 class="text-lg font-bold text-slate-900 dark:text-white leading-tight">Dr. David Wilson</h3>
+                            <button class="text-slate-400 hover:text-red-500 transition-colors">
+                                <span class="material-symbols-outlined text-[20px]">favorite_border</span>
+                            </button>
+                        </div>
+                        <p class="text-primary text-sm font-medium mb-2">Pediatrics</p>
+                        <div class="flex flex-col gap-2 mb-4">
+                            <div class="flex items-center gap-2 text-sm text-slate-600 dark:text-slate-400">
+                                <span class="material-symbols-outlined text-[16px] text-slate-400">work</span>
+                                20 Years Experience
+                            </div>
+                            <div class="flex items-center gap-2 text-sm text-slate-600 dark:text-slate-400">
+                                <span class="material-symbols-outlined text-[16px] text-slate-400">location_on</span>
+                                East Wing Children's Center
+                            </div>
+                            <div class="flex items-center gap-2 text-sm text-slate-600 dark:text-slate-400">
+                                <span class="material-symbols-outlined text-[16px] text-slate-400">language</span>
+                                English
+                            </div>
+                        </div>
+                    </div>
+                    <div class="flex gap-3 mt-4">
+                        <a asp-area="" asp-controller="Doctors" asp-action="Details" asp-route-id="4" 
+                           class="flex-1 flex items-center justify-center cursor-pointer rounded-lg h-10 px-4 bg-primary/10 dark:bg-primary/20 text-primary text-sm font-semibold hover:bg-primary/20 transition-colors no-underline">
+                            View Profile
+                        </a>
+                        <a asp-area="" asp-controller="Appointment" asp-action="Book" asp-route-doctorId="4" 
+                           class="flex-1 flex items-center justify-center cursor-pointer rounded-lg h-10 px-4 bg-primary text-white text-sm font-bold hover:bg-primary/90 transition-colors shadow-sm no-underline">
+                            Book Now
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Pagination -->
+        <div class="flex justify-center mt-8">
+            <nav class="flex items-center gap-2">
+                <button class="w-10 h-10 flex items-center justify-center rounded-lg border border-slate-200 dark:border-slate-700 text-slate-500 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors" disabled>
+                    <span class="material-symbols-outlined">chevron_left</span>
+                </button>
+                <button class="w-10 h-10 flex items-center justify-center rounded-lg bg-primary text-white font-bold">1</button>
+                <button class="w-10 h-10 flex items-center justify-center rounded-lg border border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors">2</button>
+                <button class="w-10 h-10 flex items-center justify-center rounded-lg border border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors">3</button>
+                <span class="text-slate-500 dark:text-slate-400">...</span>
+                <button class="w-10 h-10 flex items-center justify-center rounded-lg border border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors">9</button>
+                <button class="w-10 h-10 flex items-center justify-center rounded-lg border border-slate-200 dark:border-slate-700 text-slate-500 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors">
+                    <span class="material-symbols-outlined">chevron_right</span>
+                </button>
+            </nav>
+        </div>
+    </div>
+</div>

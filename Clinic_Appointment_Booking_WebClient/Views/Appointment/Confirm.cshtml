@@ -1,0 +1,222 @@
+@{
+    ViewData["Title"] = "Confirm Appointment";
+    Layout = "_LayoutMediClinic";
+}
+
+<!-- Page Header with Progress Steps -->
+<div class="mb-8 flex flex-col items-center justify-center px-4">
+    <h1 class="text-3xl md:text-4xl font-black leading-tight tracking-tight mb-6 text-slate-900 dark:text-white text-center">Book an Appointment</h1>
+    
+    <!-- Progress Indicator - Step 3 -->
+    <div class="w-full max-w-3xl flex items-center justify-between relative">
+        <div class="absolute left-0 top-1/2 -translate-y-1/2 w-full h-1 bg-primary -z-10 rounded-full"></div>
+        
+        <div class="flex flex-col items-center gap-2">
+            <div class="w-8 h-8 rounded-full bg-primary text-white font-bold flex items-center justify-center border-4 border-white dark:border-background-dark shadow-sm">
+                <span class="material-symbols-outlined text-sm">check</span>
+            </div>
+            <span class="text-xs font-semibold text-primary">Date &amp; Time</span>
+        </div>
+        <div class="flex flex-col items-center gap-2">
+            <div class="w-8 h-8 rounded-full bg-primary text-white font-bold flex items-center justify-center border-4 border-white dark:border-background-dark shadow-sm">
+                <span class="material-symbols-outlined text-sm">check</span>
+            </div>
+            <span class="text-xs font-semibold text-primary">Patient Info</span>
+        </div>
+        <div class="flex flex-col items-center gap-2">
+            <div class="w-8 h-8 rounded-full bg-primary text-white font-bold flex items-center justify-center border-4 border-white dark:border-background-dark shadow-sm">3</div>
+            <span class="text-xs font-semibold text-primary">Confirmation</span>
+        </div>
+    </div>
+</div>
+
+<!-- Main Content -->
+<div class="flex flex-col lg:flex-row gap-8 px-4">
+    <!-- Left Column - Confirmation Form -->
+    <div class="flex-1 flex flex-col gap-8">
+        <!-- Insurance Information -->
+        <div class="bg-white dark:bg-slate-900 rounded-2xl p-6 border border-slate-200 dark:border-slate-700 shadow-sm">
+            <h2 class="text-xl font-bold text-slate-900 dark:text-white mb-6 flex items-center gap-2">
+                <span class="material-symbols-outlined text-primary">shield</span>
+                Insurance Information
+            </h2>
+            
+            <div class="space-y-6">
+                <!-- Insurance Toggle -->
+                <div class="flex items-center justify-between p-4 border border-slate-200 dark:border-slate-700 rounded-xl bg-slate-50 dark:bg-slate-800/50">
+                    <div>
+                        <h3 class="font-semibold text-slate-900 dark:text-white">Will you be using insurance?</h3>
+                        <p class="text-sm text-slate-500 dark:text-slate-400">Select yes to provide your insurance details for billing.</p>
+                    </div>
+                    <label class="relative inline-flex items-center cursor-pointer">
+                        <input checked class="sr-only peer" type="checkbox" />
+                        <div class="w-11 h-6 bg-slate-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-primary/30 dark:peer-focus:ring-primary/20 rounded-full peer dark:bg-slate-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-slate-600 peer-checked:bg-primary"></div>
+                    </label>
+                </div>
+
+                <!-- Insurance Form Fields -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2" for="insurance-provider">Insurance Provider</label>
+                        <select class="w-full rounded-lg border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-white focus:ring-primary focus:border-primary shadow-sm" id="insurance-provider">
+                            <option value="bluecross">Blue Cross Blue Shield</option>
+                            <option value="aetna">Aetna</option>
+                            <option value="cigna">Cigna</option>
+                            <option value="united">UnitedHealthcare</option>
+                            <option value="medicare">Medicare</option>
+                            <option value="other">Other</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2" for="member-id">Member ID</label>
+                        <input class="w-full rounded-lg border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-white focus:ring-primary focus:border-primary shadow-sm placeholder:text-slate-400" 
+                               id="member-id" 
+                               placeholder="e.g. ABC123456789" 
+                               type="text" 
+                               value="BCC987654321" />
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2" for="group-number">Group Number</label>
+                        <input class="w-full rounded-lg border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-white focus:ring-primary focus:border-primary shadow-sm placeholder:text-slate-400" 
+                               id="group-number" 
+                               placeholder="e.g. 123456" 
+                               type="text" 
+                               value="554433" />
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2" for="policy-holder">Policy Holder Name</label>
+                        <input class="w-full rounded-lg border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-white focus:ring-primary focus:border-primary shadow-sm placeholder:text-slate-400" 
+                               id="policy-holder" 
+                               placeholder="Full Name" 
+                               type="text" 
+                               value="John Doe" />
+                    </div>
+                </div>
+
+                <!-- Info Notice -->
+                <div class="p-4 bg-teal-50 dark:bg-teal-900/20 border border-teal-100 dark:border-teal-800 rounded-xl flex items-start gap-3">
+                    <span class="material-symbols-outlined text-teal-600 dark:text-teal-400 mt-0.5">info</span>
+                    <p class="text-sm text-teal-800 dark:text-teal-300">
+                        Your insurance information will be verified prior to your appointment. You may be required to present your physical card at the clinic.
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Review Details -->
+        <div class="bg-white dark:bg-slate-900 rounded-2xl p-6 border border-slate-200 dark:border-slate-700 shadow-sm">
+            <h2 class="text-xl font-bold text-slate-900 dark:text-white mb-6 flex items-center gap-2">
+                <span class="material-symbols-outlined text-primary">fact_check</span>
+                Review Details
+            </h2>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 pb-6 border-b border-slate-100 dark:border-slate-800">
+                <div>
+                    <h3 class="text-xs font-semibold text-slate-500 uppercase tracking-wider mb-2">Patient Details</h3>
+                    <p class="font-medium text-slate-900 dark:text-white">John Doe</p>
+                    <p class="text-sm text-slate-600 dark:text-slate-400 mt-1">johndoe@example.com</p>
+                    <p class="text-sm text-slate-600 dark:text-slate-400 mt-1">+1 (555) 123-4567</p>
+                </div>
+                <div>
+                    <h3 class="text-xs font-semibold text-slate-500 uppercase tracking-wider mb-2">Visit Information</h3>
+                    <p class="font-medium text-slate-900 dark:text-white">Reason: Routine Checkup</p>
+                    <p class="text-sm text-slate-600 dark:text-slate-400 mt-1">Status: First-time patient</p>
+                    <p class="text-sm text-slate-600 dark:text-slate-400 mt-1 italic">"Experiencing mild discomfort in chest during exercise."</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Action Buttons -->
+        <div class="flex justify-between items-center border-t border-slate-200 dark:border-slate-800 pt-6">
+            <a asp-area="" asp-controller="Appointment" asp-action="Book" 
+               class="px-6 py-3 rounded-lg border border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-300 font-semibold hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors flex items-center gap-2 no-underline">
+                <span class="material-symbols-outlined text-[20px]">arrow_back</span>
+                Back
+            </a>
+        </div>
+    </div>
+
+    <!-- Right Column - Final Summary & Confirm -->
+    <aside class="w-full lg:w-[350px] shrink-0">
+        <div class="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-md sticky top-24 overflow-hidden">
+            <!-- Doctor Info -->
+            <div class="p-6 border-b border-slate-100 dark:border-slate-800">
+                <h3 class="font-bold text-slate-900 dark:text-white text-lg mb-4">Appointment Summary</h3>
+                <div class="flex items-center gap-4 mb-4">
+                    <div class="w-16 h-16 rounded-full overflow-hidden bg-slate-200 dark:bg-slate-800 shrink-0 border-2 border-primary/20">
+                        <img alt="Dr. Emily Chen" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuA6wrTt341E3yA-wcu7p1aezUUzdiU1W6-T8VcCSRJDUz30gdlsrDhEkuQ81u3wwgHfpxjPy8qPB4Vs67aLJOmkK9fxlE09vNYcwPv82Z0wAPTVv3FU43V2XurmRI90S5d_WpTxuti53EFIOo1TVob_7CzaY8-egib308iyVTAfuKpsfCH_zq1rxrZpmZAuA8qXs0teRnfvMPOYnJleqCFK6gPIeS9EJQ42w4zNrXgEEKuRKrqSSNwUwWmWtTSEf2_nuTPWKE0Q2CSB" />
+                    </div>
+                    <div>
+                        <h4 class="font-bold text-slate-900 dark:text-white text-base">Dr. Emily Chen</h4>
+                        <p class="text-sm text-primary font-medium">Cardiology</p>
+                        <div class="flex items-center gap-1 mt-1 text-xs text-slate-500">
+                            <span class="material-symbols-outlined text-[14px] text-yellow-400" style="font-variation-settings: 'FILL' 1;">star</span>
+                            <span>4.9 (120 reviews)</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="flex items-start gap-3 text-sm text-slate-600 dark:text-slate-400 mt-4">
+                    <span class="material-symbols-outlined text-[18px] text-slate-400 mt-0.5">location_on</span>
+                    <span>Main Campus, Wing A<br />123 Health Ave, Medical District</span>
+                </div>
+            </div>
+
+            <!-- Appointment Details -->
+            <div class="p-6 bg-slate-50 dark:bg-slate-800/30 border-b border-slate-100 dark:border-slate-800">
+                <div class="space-y-4">
+                    <div class="flex items-start gap-3">
+                        <div class="w-8 h-8 rounded-full bg-blue-100 dark:bg-blue-900/30 flex items-center justify-center text-blue-600 dark:text-blue-400 shrink-0">
+                            <span class="material-symbols-outlined text-[18px]">calendar_today</span>
+                        </div>
+                        <div>
+                            <p class="text-xs font-medium text-slate-500 uppercase tracking-wider mb-1">Date</p>
+                            <p class="text-sm font-semibold text-slate-900 dark:text-white">Thursday, Oct 12, 2023</p>
+                        </div>
+                    </div>
+                    <div class="flex items-start gap-3">
+                        <div class="w-8 h-8 rounded-full bg-teal-100 dark:bg-teal-900/30 flex items-center justify-center text-teal-600 dark:text-teal-400 shrink-0">
+                            <span class="material-symbols-outlined text-[18px]">schedule</span>
+                        </div>
+                        <div>
+                            <p class="text-xs font-medium text-slate-500 uppercase tracking-wider mb-1">Time</p>
+                            <p class="text-sm font-semibold text-slate-900 dark:text-white">11:30 AM</p>
+                            <p class="text-xs text-slate-500 mt-0.5">Estimated duration: 30-45 min</p>
+                        </div>
+                    </div>
+                    <div class="flex items-start gap-3">
+                        <div class="w-8 h-8 rounded-full bg-purple-100 dark:bg-purple-900/30 flex items-center justify-center text-purple-600 dark:text-purple-400 shrink-0">
+                            <span class="material-symbols-outlined text-[18px]">payments</span>
+                        </div>
+                        <div>
+                            <p class="text-xs font-medium text-slate-500 uppercase tracking-wider mb-1">Consultation Fee</p>
+                            <p class="text-sm font-semibold text-slate-900 dark:text-white">$150.00</p>
+                            <p class="text-xs text-slate-500 mt-0.5">Insurance Applied (Copay pending)</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Final Confirmation -->
+            <div class="p-6">
+                <div class="flex justify-between items-center mb-6">
+                    <span class="text-base font-semibold text-slate-700 dark:text-slate-300">Total Amount:</span>
+                    <span class="text-2xl font-black text-slate-900 dark:text-white">$150.00</span>
+                </div>
+                
+                <div class="flex items-start gap-3 mb-6">
+                    <input class="mt-1 w-4 h-4 rounded border-slate-300 text-primary focus:ring-primary dark:border-slate-600 dark:bg-slate-800" 
+                           id="terms" 
+                           type="checkbox" />
+                    <label class="text-xs text-slate-600 dark:text-slate-400 leading-snug" for="terms">
+                        I agree to the <a href="#" class="text-primary hover:underline">Terms &amp; Conditions</a> and understand the cancellation policy.
+                    </label>
+                </div>
+                
+                <button class="w-full px-8 py-3 rounded-lg bg-primary text-white font-bold hover:bg-primary/90 transition-colors shadow-md flex items-center justify-center gap-2">
+                    <span class="material-symbols-outlined text-[20px]">check_circle</span>
+                    Confirm Appointment
+                </button>
+            </div>
+        </div>
+    </aside>
+</div>

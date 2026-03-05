@@ -1,0 +1,179 @@
+@{
+    ViewData["Title"] = "Contact Us";
+    Layout = "_LayoutMediClinic";
+}
+
+<!-- Page Header -->
+<div class="mb-10 px-4">
+    <h1 class="text-4xl md:text-5xl font-black leading-tight tracking-tight mb-4 text-slate-900 dark:text-slate-100">Contact Us</h1>
+    <p class="text-lg text-slate-700 dark:text-slate-300">Get in touch with us for any inquiries, appointment bookings, or feedback. We are here to help.</p>
+</div>
+
+<!-- Main Content -->
+<div class="flex flex-col lg:flex-row gap-12 px-4">
+    <!-- Contact Form -->
+    <div class="w-full lg:w-1/2 bg-white dark:bg-slate-900 rounded-2xl p-6 md:p-8 shadow-sm border border-slate-200 dark:border-slate-800">
+        <h2 class="text-2xl font-bold mb-6 text-slate-900 dark:text-slate-100">Send us a Message</h2>
+        
+        <form asp-area="" asp-controller="Home" asp-action="Contact" method="post" class="space-y-6">
+            <div asp-validation-summary="ModelOnly" class="text-red-600 text-sm"></div>
+
+            <!-- Name Fields -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div>
+                    <label class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2" for="firstName">First Name</label>
+                    <input name="FirstName" 
+                           class="w-full px-4 py-3 rounded-lg border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-slate-900 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all" 
+                           id="firstName" 
+                           placeholder="John" 
+                           type="text" 
+                           required />
+                    @* <span asp-validation-for="FirstName" class="text-red-600 text-xs mt-1"></span> *@
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2" for="lastName">Last Name</label>
+                    <input name="LastName" 
+                           class="w-full px-4 py-3 rounded-lg border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-slate-900 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all" 
+                           id="lastName" 
+                           placeholder="Doe" 
+                           type="text" 
+                           required />
+                    @* <span asp-validation-for="LastName" class="text-red-600 text-xs mt-1"></span> *@
+                </div>
+            </div>
+
+            <!-- Email -->
+            <div>
+                <label class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2" for="email">Email Address</label>
+                <input name="Email" 
+                       class="w-full px-4 py-3 rounded-lg border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-slate-900 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all" 
+                       id="email" 
+                       placeholder="john.doe@example.com" 
+                       type="email" 
+                       required />
+                @* <span asp-validation-for="Email" class="text-red-600 text-xs mt-1"></span> *@
+            </div>
+
+            <!-- Subject -->
+            <div>
+                <label class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2" for="subject">Subject</label>
+                <input name="Subject" 
+                       class="w-full px-4 py-3 rounded-lg border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-slate-900 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all" 
+                       id="subject" 
+                       placeholder="How can we help you?" 
+                       type="text" 
+                       required />
+                @* <span asp-validation-for="Subject" class="text-red-600 text-xs mt-1"></span> *@
+            </div>
+
+            <!-- Message -->
+            <div>
+                <label class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2" for="message">Message</label>
+                <textarea name="Message" 
+                          class="w-full px-4 py-3 rounded-lg border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-slate-900 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent min-h-[150px] resize-y transition-all" 
+                          id="message" 
+                          placeholder="Write your message here..." 
+                          required></textarea>
+                @* <span asp-validation-for="Message" class="text-red-600 text-xs mt-1"></span> *@
+            </div>
+
+            <!-- Submit Button -->
+            <button class="w-full flex items-center justify-center rounded-lg h-12 px-6 bg-primary text-white text-base font-bold leading-normal hover:bg-primary/90 transition-colors shadow-md" 
+                    type="submit">
+                Send Message
+            </button>
+        </form>
+    </div>
+
+    <!-- Contact Information -->
+    <div class="w-full lg:w-1/2 flex flex-col gap-8">
+        <!-- Contact Details Card -->
+        <div class="bg-white dark:bg-slate-900 rounded-2xl p-6 md:p-8 shadow-sm border border-slate-200 dark:border-slate-800">
+            <h2 class="text-2xl font-bold mb-6 text-slate-900 dark:text-slate-100">Contact Information</h2>
+            
+            <div class="space-y-6">
+                <!-- Location -->
+                <div class="flex items-start gap-4">
+                    <div class="bg-primary/10 dark:bg-primary/20 p-3 rounded-full text-primary mt-1 shrink-0">
+                        <span class="material-symbols-outlined">location_on</span>
+                    </div>
+                    <div>
+                        <h3 class="font-bold text-lg mb-1 text-slate-900 dark:text-slate-100">Our Location</h3>
+                        <p class="text-slate-700 dark:text-slate-300 leading-relaxed">
+                            123 Health Avenue, Medical District<br />
+                            New York, NY 10001
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Phone -->
+                <div class="flex items-start gap-4">
+                    <div class="bg-primary/10 dark:bg-primary/20 p-3 rounded-full text-primary mt-1 shrink-0">
+                        <span class="material-symbols-outlined">call</span>
+                    </div>
+                    <div>
+                        <h3 class="font-bold text-lg mb-1 text-slate-900 dark:text-slate-100">Phone Number</h3>
+                        <p class="text-slate-700 dark:text-slate-300">
+                            Main: <a href="tel:+15551234567" class="text-primary hover:underline">(555) 123-4567</a><br />
+                            Emergency: <a href="tel:+15559876543" class="text-primary hover:underline">(555) 987-6543</a>
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Email -->
+                <div class="flex items-start gap-4">
+                    <div class="bg-primary/10 dark:bg-primary/20 p-3 rounded-full text-primary mt-1 shrink-0">
+                        <span class="material-symbols-outlined">mail</span>
+                    </div>
+                    <div>
+                        <h3 class="font-bold text-lg mb-1 text-slate-900 dark:text-slate-100">Email Address</h3>
+                        <p class="text-slate-700 dark:text-slate-300">
+                            <a href="mailto:info@mediclinic.com" class="text-primary hover:underline">info@mediclinic.com</a><br />
+                            <a href="mailto:appointments@mediclinic.com" class="text-primary hover:underline">appointments@mediclinic.com</a>
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Operating Hours -->
+                <div class="flex items-start gap-4">
+                    <div class="bg-primary/10 dark:bg-primary/20 p-3 rounded-full text-primary mt-1 shrink-0">
+                        <span class="material-symbols-outlined">schedule</span>
+                    </div>
+                    <div>
+                        <h3 class="font-bold text-lg mb-1 text-slate-900 dark:text-slate-100">Operating Hours</h3>
+                        <p class="text-slate-700 dark:text-slate-300">
+                            Mon - Fri: 8:00 AM - 8:00 PM<br />
+                            Saturday: 9:00 AM - 5:00 PM<br />
+                            Sunday: Closed
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Map Placeholder -->
+        <div class="bg-slate-200 dark:bg-slate-800 rounded-2xl h-64 md:h-80 w-full overflow-hidden relative shadow-sm border border-slate-200 dark:border-slate-800">
+            <div class="absolute inset-0 flex items-center justify-center text-slate-500 dark:text-slate-400 flex-col gap-2">
+                <span class="material-symbols-outlined text-4xl">map</span>
+                <span class="font-medium">Interactive Map Integration</span>
+                <p class="text-sm text-slate-400">Google Maps or similar service</p>
+            </div>
+        </div>
+
+        <!-- Social Links -->
+        <div class="bg-white dark:bg-slate-900 rounded-2xl p-6 shadow-sm border border-slate-200 dark:border-slate-800">
+            <h3 class="font-bold text-lg mb-4 text-slate-900 dark:text-slate-100">Follow Us</h3>
+            <div class="flex items-center gap-4">
+                <a href="#" class="w-10 h-10 rounded-full bg-primary/10 dark:bg-primary/20 hover:bg-primary hover:text-white text-primary flex items-center justify-center transition-colors">
+                    <span class="material-symbols-outlined">language</span>
+                </a>
+                <a href="#" class="w-10 h-10 rounded-full bg-primary/10 dark:bg-primary/20 hover:bg-primary hover:text-white text-primary flex items-center justify-center transition-colors">
+                    <span class="material-symbols-outlined">share</span>
+                </a>
+                <a href="#" class="w-10 h-10 rounded-full bg-primary/10 dark:bg-primary/20 hover:bg-primary hover:text-white text-primary flex items-center justify-center transition-colors">
+                    <span class="material-symbols-outlined">forum</span>
+                </a>
+            </div>
+        </div>
+    </div>
+</div>

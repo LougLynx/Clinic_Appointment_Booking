@@ -1,0 +1,130 @@
+@{
+    ViewData["Title"] = "Medical Specialties";
+    Layout = "_LayoutMediClinic";
+}
+
+<!-- Main Content -->
+<div class="flex flex-col gap-8 px-4 w-full">
+    <!-- Page Header -->
+    <div class="flex flex-col gap-4 max-w-2xl mx-auto text-center mb-6">
+        <h1 class="text-slate-900 dark:text-slate-100 text-4xl md:text-5xl font-black leading-tight tracking-tight">Our Medical Specialties</h1>
+        <p class="text-slate-600 dark:text-slate-400 text-lg font-normal leading-relaxed">
+            Explore our comprehensive range of specialized medical departments designed to provide you with expert care tailored to your unique health needs.
+        </p>
+    </div>
+
+    <!-- Specialties Grid -->
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 p-4">
+        <!-- Cardiology -->
+        <a asp-area="" asp-controller="Specialties" asp-action="Details" asp-route-id="1" 
+           class="group flex flex-col gap-4 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 p-6 hover:shadow-lg hover:border-primary transition-all duration-300 no-underline">
+            <div class="size-12 rounded-full bg-primary/10 dark:bg-primary/20 flex items-center justify-center text-primary group-hover:bg-primary group-hover:text-white transition-colors duration-300">
+                <span class="material-symbols-outlined text-2xl">cardiology</span>
+            </div>
+            <div class="flex flex-col gap-2">
+                <h2 class="text-slate-900 dark:text-slate-100 text-lg font-bold leading-tight group-hover:text-primary transition-colors">Cardiology</h2>
+                <p class="text-slate-600 dark:text-slate-400 text-sm font-normal leading-relaxed">
+                    Expert care for heart and blood vessel health, including diagnostics and treatments.
+                </p>
+            </div>
+        </a>
+
+        <!-- Dermatology -->
+        <a asp-area="" asp-controller="Specialties" asp-action="Details" asp-route-id="2" 
+           class="group flex flex-col gap-4 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 p-6 hover:shadow-lg hover:border-primary transition-all duration-300 no-underline">
+            <div class="size-12 rounded-full bg-primary/10 dark:bg-primary/20 flex items-center justify-center text-primary group-hover:bg-primary group-hover:text-white transition-colors duration-300">
+                <span class="material-symbols-outlined text-2xl">dermatology</span>
+            </div>
+            <div class="flex flex-col gap-2">
+                <h2 class="text-slate-900 dark:text-slate-100 text-lg font-bold leading-tight group-hover:text-primary transition-colors">Dermatology</h2>
+                <p class="text-slate-600 dark:text-slate-400 text-sm font-normal leading-relaxed">
+                    Comprehensive care for skin, hair, and nail conditions, from medical to cosmetic.
+                </p>
+            </div>
+        </a>
+
+        <!-- Pediatrics -->
+        <a asp-area="" asp-controller="Specialties" asp-action="Details" asp-route-id="3" 
+           class="group flex flex-col gap-4 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 p-6 hover:shadow-lg hover:border-primary transition-all duration-300 no-underline">
+            <div class="size-12 rounded-full bg-primary/10 dark:bg-primary/20 flex items-center justify-center text-primary group-hover:bg-primary group-hover:text-white transition-colors duration-300">
+                <span class="material-symbols-outlined text-2xl">child_care</span>
+            </div>
+            <div class="flex flex-col gap-2">
+                <h2 class="text-slate-900 dark:text-slate-100 text-lg font-bold leading-tight group-hover:text-primary transition-colors">Pediatrics</h2>
+                <p class="text-slate-600 dark:text-slate-400 text-sm font-normal leading-relaxed">
+                    Compassionate medical care tailored specifically for infants, children, and adolescents.
+                </p>
+            </div>
+        </a>
+
+        <!-- Orthopedics -->
+        <a asp-area="" asp-controller="Specialties" asp-action="Details" asp-route-id="4" 
+           class="group flex flex-col gap-4 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 p-6 hover:shadow-lg hover:border-primary transition-all duration-300 no-underline">
+            <div class="size-12 rounded-full bg-primary/10 dark:bg-primary/20 flex items-center justify-center text-primary group-hover:bg-primary group-hover:text-white transition-colors duration-300">
+                <span class="material-symbols-outlined text-2xl">orthopedics</span>
+            </div>
+            <div class="flex flex-col gap-2">
+                <h2 class="text-slate-900 dark:text-slate-100 text-lg font-bold leading-tight group-hover:text-primary transition-colors">Orthopedics</h2>
+                <p class="text-slate-600 dark:text-slate-400 text-sm font-normal leading-relaxed">
+                    Specialized treatment for bone, joint, muscle, and ligament health and injuries.
+                </p>
+            </div>
+        </a>
+
+        <!-- Neurology -->
+        <a asp-area="" asp-controller="Specialties" asp-action="Details" asp-route-id="5" 
+           class="group flex flex-col gap-4 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 p-6 hover:shadow-lg hover:border-primary transition-all duration-300 no-underline">
+            <div class="size-12 rounded-full bg-primary/10 dark:bg-primary/20 flex items-center justify-center text-primary group-hover:bg-primary group-hover:text-white transition-colors duration-300">
+                <span class="material-symbols-outlined text-2xl">neurology</span>
+            </div>
+            <div class="flex flex-col gap-2">
+                <h2 class="text-slate-900 dark:text-slate-100 text-lg font-bold leading-tight group-hover:text-primary transition-colors">Neurology</h2>
+                <p class="text-slate-600 dark:text-slate-400 text-sm font-normal leading-relaxed">
+                    Advanced diagnosis and treatment of nervous system disorders and conditions.
+                </p>
+            </div>
+        </a>
+
+        <!-- Ophthalmology -->
+        <a asp-area="" asp-controller="Specialties" asp-action="Details" asp-route-id="6" 
+           class="group flex flex-col gap-4 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 p-6 hover:shadow-lg hover:border-primary transition-all duration-300 no-underline">
+            <div class="size-12 rounded-full bg-primary/10 dark:bg-primary/20 flex items-center justify-center text-primary group-hover:bg-primary group-hover:text-white transition-colors duration-300">
+                <span class="material-symbols-outlined text-2xl">visibility</span>
+            </div>
+            <div class="flex flex-col gap-2">
+                <h2 class="text-slate-900 dark:text-slate-100 text-lg font-bold leading-tight group-hover:text-primary transition-colors">Ophthalmology</h2>
+                <p class="text-slate-600 dark:text-slate-400 text-sm font-normal leading-relaxed">
+                    Complete eye care services, from vision testing to surgical interventions.
+                </p>
+            </div>
+        </a>
+
+        <!-- Dentistry -->
+        <a asp-area="" asp-controller="Specialties" asp-action="Details" asp-route-id="7" 
+           class="group flex flex-col gap-4 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 p-6 hover:shadow-lg hover:border-primary transition-all duration-300 no-underline">
+            <div class="size-12 rounded-full bg-primary/10 dark:bg-primary/20 flex items-center justify-center text-primary group-hover:bg-primary group-hover:text-white transition-colors duration-300">
+                <span class="material-symbols-outlined text-2xl">dentistry</span>
+            </div>
+            <div class="flex flex-col gap-2">
+                <h2 class="text-slate-900 dark:text-slate-100 text-lg font-bold leading-tight group-hover:text-primary transition-colors">Dentistry</h2>
+                <p class="text-slate-600 dark:text-slate-400 text-sm font-normal leading-relaxed">
+                    Comprehensive oral health care, including preventive, restorative, and cosmetic services.
+                </p>
+            </div>
+        </a>
+
+        <!-- Psychiatry -->
+        <a asp-area="" asp-controller="Specialties" asp-action="Details" asp-route-id="8" 
+           class="group flex flex-col gap-4 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 p-6 hover:shadow-lg hover:border-primary transition-all duration-300 no-underline">
+            <div class="size-12 rounded-full bg-primary/10 dark:bg-primary/20 flex items-center justify-center text-primary group-hover:bg-primary group-hover:text-white transition-colors duration-300">
+                <span class="material-symbols-outlined text-2xl">psychology</span>
+            </div>
+            <div class="flex flex-col gap-2">
+                <h2 class="text-slate-900 dark:text-slate-100 text-lg font-bold leading-tight group-hover:text-primary transition-colors">Psychiatry</h2>
+                <p class="text-slate-600 dark:text-slate-400 text-sm font-normal leading-relaxed">
+                    Mental health services focusing on diagnosis, treatment, and prevention.
+                </p>
+            </div>
+        </a>
+    </div>
+</div>

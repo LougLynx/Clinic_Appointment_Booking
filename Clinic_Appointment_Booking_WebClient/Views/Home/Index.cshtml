@@ -1,0 +1,332 @@
+@{
+    ViewData["Title"] = "Home Page";
+    Layout = "_LayoutMediClinic";
+}
+
+@section Styles {
+    <style>
+        .hide-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .hide-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+        
+        /* Background decorations */
+        .bg-decoration {
+            position: absolute;
+            pointer-events: none;
+            z-index: 0;
+        }
+    </style>
+}
+
+<!-- Background Decorations -->
+<div class="bg-decoration top-32 left-8 text-primary/10 rotate-12 hidden lg:block">
+    <span class="material-symbols-outlined text-[150px]">ecg_heart</span>
+</div>
+<div class="bg-decoration top-1/2 right-10 text-primary/10 -rotate-12 hidden lg:block">
+    <span class="material-symbols-outlined text-[200px]">genetics</span>
+</div>
+<div class="bg-decoration bottom-1/4 left-1/4 text-primary/5 rotate-45 hidden lg:block">
+    <span class="material-symbols-outlined text-[120px]">medical_services</span>
+</div>
+
+<!-- Hero Section with Image Carousel -->
+<section class="@("container") px-4 lg:px-8 mb-16 relative z-10">
+    <div class="flex flex-col gap-8 lg:flex-row-reverse items-center bg-white dark:bg-slate-900 rounded-2xl shadow-xl border border-slate-200 dark:border-slate-700 overflow-hidden">
+        <!-- Image Carousel -->
+        <div class="relative w-full lg:w-1/2 min-h-[400px] lg:h-[550px] group">
+            <div id="carousel" class="flex w-full h-full snap-x snap-mandatory overflow-x-auto hide-scrollbar">
+                <!-- Slide 1 -->
+                <div class="w-full h-full flex-shrink-0 snap-center relative">
+                    <img alt="High-Tech Diagnostic Equipment" class="w-full h-full object-cover" 
+                         src="https://lh3.googleusercontent.com/aida-public/AB6AXuA-Dlvxs8V0_zzicwpQGwLq7l1_2wAyVi9tUf6LMtmPmbgR-xCDvPT04HwL5_5hESK4p0jy8SOfZ0J-EIMa7zBOL7b3hzQUYEAC8o6tx87JRxKnnaG5CcGp3MCGGESlabfMRT2R43eX804r_uPg_VyfMkhAxtJnM1wAby6feHMQrlwN9SeUQzkJRuhQtHaVajA4SlCLDePYnvCqrpX3QRqB_UwhsTtxt75JkRC-1yHl6mh5rzkAvJuoYFkxhbXxLMv76jHlN3Ql-LNB" />
+                    <div class="absolute inset-0 bg-slate-900/30"></div>
+                    <div class="absolute bottom-8 left-8 bg-white/90 dark:bg-slate-900/90 backdrop-blur-sm px-5 py-3 rounded-xl shadow-lg border border-white/20">
+                        <p class="text-sm font-bold text-primary mb-1 uppercase tracking-wider">State of the art</p>
+                        <p class="text-lg font-black text-slate-800 dark:text-slate-100">High-Tech Diagnostics</p>
+                    </div>
+                </div>
+                
+                <!-- Slide 2 -->
+                <div class="w-full h-full flex-shrink-0 snap-center relative">
+                    <img alt="Doctor-Patient Consultation" class="w-full h-full object-cover" 
+                         src="https://lh3.googleusercontent.com/aida-public/AB6AXuApJxZp6AT9VXQHnPA16XYuD6PVTQJTP5EZpbg13dtXgJEgJHxZouoXcegnQuslwz12rS-a3akvJGHU8UY_1kEM04wIzdLMK28o7C5uDQuQVHvx6JDoCayNK4QwOP9dAt8aZXluS5aBnGyOE87YV2I-kENkSfPp6RIecgFgmhMkz0jokdbDcEMxXJOtM0EENw4VQuAEqyw6F4hz09vXgutGz4CtDwpZDo7SFR-HUplBBvDqzMh5iUG4krGdd8EKGfLHjsU6sb0nKLDZ" />
+                    <div class="absolute inset-0 bg-slate-900/30"></div>
+                    <div class="absolute bottom-8 left-8 bg-white/90 dark:bg-slate-900/90 backdrop-blur-sm px-5 py-3 rounded-xl shadow-lg border border-white/20">
+                        <p class="text-sm font-bold text-primary mb-1 uppercase tracking-wider">Compassionate</p>
+                        <p class="text-lg font-black text-slate-800 dark:text-slate-100">Friendly Expert Care</p>
+                    </div>
+                </div>
+                
+                <!-- Slide 3 -->
+                <div class="w-full h-full flex-shrink-0 snap-center relative">
+                    <img alt="Modern Laboratory Facility" class="w-full h-full object-cover" 
+                         src="https://lh3.googleusercontent.com/aida-public/AB6AXuC14z_7A2HzpnieLEBVwJ2oSVL8nBVKWD1R_ApGaZnTIU3gqoZThPUyG0m78iUxFCjsxijnDqg11PbT1yAVSy6R4Jbbau3d21cuPo0E2rPzOel5Azf2nj0QhcSHyQ1MLJcCRaUyA0HDPWnoJLVo9tJkP_XI6rYLRhYDyilwcS4tu8iRFexVmP4wByWVfS6U_wUuAqhwELrdECzDvQIu-2pea2-9129tNNCA5N-cxfO4OLPhDK8Ssmp5epaXaM0kBMHz9VLy0MhaKHJA" />
+                    <div class="absolute inset-0 bg-slate-900/30"></div>
+                    <div class="absolute bottom-8 left-8 bg-white/90 dark:bg-slate-900/90 backdrop-blur-sm px-5 py-3 rounded-xl shadow-lg border border-white/20">
+                        <p class="text-sm font-bold text-primary mb-1 uppercase tracking-wider">Precision</p>
+                        <p class="text-lg font-black text-slate-800 dark:text-slate-100">Modern Laboratories</p>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Carousel Indicators -->
+            <div class="absolute bottom-6 right-6 flex gap-2">
+                <div class="carousel-dot w-8 h-2 rounded-full bg-primary shadow-sm"></div>
+                <div class="carousel-dot w-2 h-2 rounded-full bg-white/60 shadow-sm"></div>
+                <div class="carousel-dot w-2 h-2 rounded-full bg-white/60 shadow-sm"></div>
+            </div>
+            
+            <!-- Navigation Arrows -->
+            <button onclick="prevSlide()" class="absolute top-1/2 left-4 -translate-y-1/2 w-10 h-10 bg-white/80 dark:bg-slate-900/80 rounded-full flex items-center justify-center text-slate-800 dark:text-slate-200 shadow-lg hover:bg-white transition-colors opacity-0 group-hover:opacity-100">
+                <span class="material-symbols-outlined">chevron_left</span>
+            </button>
+            <button onclick="nextSlide()" class="absolute top-1/2 right-4 -translate-y-1/2 w-10 h-10 bg-white/80 dark:bg-slate-900/80 rounded-full flex items-center justify-center text-slate-800 dark:text-slate-200 shadow-lg hover:bg-white transition-colors opacity-0 group-hover:opacity-100">
+                <span class="material-symbols-outlined">chevron_right</span>
+            </button>
+        </div>
+        
+        <!-- Hero Content -->
+        <div class="flex flex-col gap-8 p-8 lg:p-12 lg:w-1/2">
+            <div class="flex flex-col gap-4 text-left">
+                <span class="text-primary font-bold tracking-wider uppercase text-sm">Trusted Healthcare</span>
+                <h1 class="text-4xl md:text-5xl font-black leading-tight tracking-tight text-slate-900 dark:text-slate-100">
+                    Expert Medical Care <br />You Can Trust
+                </h1>
+                <p class="text-slate-600 dark:text-slate-400 text-lg leading-relaxed max-w-md">
+                    Book an appointment with our experienced doctors today and get the personalized care you and your family deserve.
+                </p>
+            </div>
+            
+            <!-- Search Form -->
+            <div class="w-full max-w-[500px] relative z-20">
+                <form asp-area="" asp-controller="Doctors" asp-action="Search" method="get">
+                    <div class="flex w-full items-stretch rounded-xl h-14 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 shadow-md overflow-hidden focus-within:ring-4 focus-within:ring-primary/20 transition-all">
+                        <div class="flex items-center justify-center pl-4 text-slate-400">
+                            <span class="material-symbols-outlined">search</span>
+                        </div>
+                        <input name="query" 
+                               class="w-full bg-transparent border-none text-slate-900 dark:text-slate-100 focus:outline-none focus:ring-0 px-3 text-base placeholder-slate-400" 
+                               placeholder="Search doctors or specialties..." 
+                               type="text" />
+                        <button type="submit" 
+                                class="flex items-center justify-center px-6 bg-primary text-white font-bold text-sm tracking-wide hover:bg-primary/90 transition-colors">
+                            Search
+                        </button>
+                    </div>
+                </form>
+            </div>
+
+            <!-- Reviews Section -->
+            <div class="flex items-center gap-4 mt-2">
+                <div class="flex -space-x-3">
+                    <img alt="Patient review" 
+                         class="w-10 h-10 rounded-full border-2 border-white dark:border-slate-900 object-cover" 
+                         src="https://lh3.googleusercontent.com/aida-public/AB6AXuAsscCTkidFi9USEsI6Zcit5BoerU4U7RACw2Xm_J8vPSxaNlPty1I1KttNYdBihoiA4iqtoZznkhC3Au1Bx_19h4YyFn6QyFRUmOxVC6i9ehOW_2A2ZCp9YBtpqCUEydIC8zjulZFMhU9sUdqqxBbdw3yy7yXn-eyw7dHilgge8qZJHPjTDYNKPhLbEWNW38b453IIaRg_Rj2S1qpmqyZlnz2F2E_GsNHifY6l3edxJadffMW5QTpc-EGzn9sXibkPebooW0aFlT4r" />
+                    <img alt="Patient review" 
+                         class="w-10 h-10 rounded-full border-2 border-white dark:border-slate-900 object-cover" 
+                         src="https://lh3.googleusercontent.com/aida-public/AB6AXuBP0ngpVl5dlHtIm61Ne7kdxVhjovowLEVYWsWz-cpRjviBu64HD_7rkSDeSuGIJnA8PYKfxcWdR0Knn1IFYC7Q13x6CSF8jJIEURv-KWXPxicm2SuJB6aMr3DISI-S1iGu_qxpPxeW04NuvFRU1JNdIjpL8GmALr4PoSqD_2JjpIc690kNveCoc204vpJ8YXaX9l3X5QaDbKfpHkGEdsVYE_sbcYYKWujTGAc6WKdUTEdH4fyizoS6D0KumKCWl5f3kb3Rg6ZP7OB9" />
+                    <img alt="Patient review" 
+                         class="w-10 h-10 rounded-full border-2 border-white dark:border-slate-900 object-cover" 
+                         src="https://lh3.googleusercontent.com/aida-public/AB6AXuD9qUXRzZKtYbUZli4vZ1zzE9FWQu9LeDKCnh-nsa7gj1XHTfmFIiDoiuDLpja77tR0fzFXvJn4iT9F77fT8_Zx31Y2dJqu3JYsSiTCKHyKNQMTMxCJmirdd0iawcdB99bIDPj2R34XERV5MTG8_eEWGeTgWBrtlfxkfkoRHcve_y2wAP3yXYwiC8ZLnWcROmyrDRL07eZY8lRwtqculjSXO0wIGNbjbmkb6jITHTDguDyP5a3ShPniEqTINWGt8WgwYJWRzX7_B8gZ" />
+                </div>
+                <div class="text-sm">
+                    <div class="flex text-yellow-400 text-lg leading-none drop-shadow-sm">
+                        <span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">star</span>
+                        <span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">star</span>
+                        <span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">star</span>
+                        <span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">star</span>
+                        <span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">star</span>
+                    </div>
+                    <p class="text-slate-600 dark:text-slate-400 font-medium mt-1">4.9/5 from over 2,000 reviews</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Features Section -->
+<section class="@("container") px-4 lg:px-8 mb-16 relative z-10">
+    <div class="flex flex-col gap-10">
+        <div class="flex flex-col gap-4 text-center items-center">
+            <h2 class="text-3xl md:text-4xl font-black leading-tight tracking-tight text-slate-900 dark:text-slate-100 max-w-2xl">
+                Why Choose MediClinic
+            </h2>
+            <p class="text-slate-600 dark:text-slate-400 text-lg max-w-2xl">
+                We are committed to providing the highest quality medical services with compassion and state-of-the-art facilities.
+            </p>
+        </div>
+        
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <!-- Feature 1 -->
+            <div class="flex flex-col items-center text-center gap-4 rounded-2xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 p-8 shadow-lg hover:-translate-y-1 hover:shadow-xl transition-all duration-300">
+                <div class="w-16 h-16 rounded-full bg-primary/20 flex items-center justify-center text-primary mb-2 shadow-inner">
+                    <span class="material-symbols-outlined text-3xl">stethoscope</span>
+                </div>
+                <h3 class="text-xl font-bold text-slate-900 dark:text-slate-100">Expert Doctors</h3>
+                <p class="text-slate-600 dark:text-slate-400">Our team consists of highly qualified, board-certified professionals dedicated to your health.</p>
+            </div>
+            
+            <!-- Feature 2 -->
+            <div class="flex flex-col items-center text-center gap-4 rounded-2xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 p-8 shadow-lg hover:-translate-y-1 hover:shadow-xl transition-all duration-300">
+                <div class="w-16 h-16 rounded-full bg-primary/20 flex items-center justify-center text-primary mb-2 shadow-inner">
+                    <span class="material-symbols-outlined text-3xl">biotech</span>
+                </div>
+                <h3 class="text-xl font-bold text-slate-900 dark:text-slate-100">Modern Equipment</h3>
+                <p class="text-slate-600 dark:text-slate-400">We utilize the latest medical equipment and technology for fast, accurate diagnoses.</p>
+            </div>
+            
+            <!-- Feature 3 -->
+            <div class="flex flex-col items-center text-center gap-4 rounded-2xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 p-8 shadow-lg hover:-translate-y-1 hover:shadow-xl transition-all duration-300">
+                <div class="w-16 h-16 rounded-full bg-primary/20 flex items-center justify-center text-primary mb-2 shadow-inner">
+                    <span class="material-symbols-outlined text-3xl">support_agent</span>
+                </div>
+                <h3 class="text-xl font-bold text-slate-900 dark:text-slate-100">24/7 Support</h3>
+                <p class="text-slate-600 dark:text-slate-400">Our medical support team is available round-the-clock to assist you with any emergencies.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Facilities Section -->
+<section class="@("container") px-4 lg:px-8 mb-16 relative z-10 w-full">
+    <div class="flex flex-col gap-10">
+        <div class="flex flex-col gap-4 text-center items-center">
+            <h2 class="text-3xl md:text-4xl font-black leading-tight tracking-tight text-slate-900 dark:text-slate-100 max-w-2xl">
+                Our Facilities
+            </h2>
+            <p class="text-slate-600 dark:text-slate-400 text-lg max-w-2xl">
+                Take a virtual tour of our state-of-the-art clinic designed for your comfort, privacy, and healing.
+            </p>
+        </div>
+        
+        <div class="flex gap-6 overflow-x-auto snap-x snap-mandatory hide-scrollbar pb-6 pt-2 px-2">
+            <!-- Facility 1 -->
+            <div class="min-w-[320px] md:min-w-[450px] h-[320px] rounded-2xl overflow-hidden snap-center flex-shrink-0 shadow-lg border border-slate-100 dark:border-slate-800 relative group">
+                <img alt="Welcoming Reception Area" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" 
+                     src="https://lh3.googleusercontent.com/aida-public/AB6AXuDM5TU2x9QHEX9WHXLzD__0XkplayCsDPrI0s9KPJJeBIMbzQDKtR0zp_o-EORPT4JDLFQi2QQy4OQEpxJEjZb1O3sAE435uL49Xn2EWtz6rWIRhh4kASF7UqMzkKz7WovevcZt52PJ88ediN8pqd4-uge7050W_J14_4Ct0l-zkpNw-UA8zMbH3HQPwKpqA6efXdEUCwEXSxcbkmdKBBmgrjdgtc1JENrh1jCkJov-dN5OlwclX-bhiSUhV6t0AvLktZVbl9dx9RjE" />
+                <div class="absolute inset-0 bg-slate-900/60 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-6">
+                    <h4 class="text-white font-bold text-xl">Welcoming Reception</h4>
+                </div>
+            </div>
+            
+            <!-- Facility 2 -->
+            <div class="min-w-[320px] md:min-w-[450px] h-[320px] rounded-2xl overflow-hidden snap-center flex-shrink-0 shadow-lg border border-slate-100 dark:border-slate-800 relative group">
+                <img alt="Private Consultation Rooms" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" 
+                     src="https://lh3.googleusercontent.com/aida-public/AB6AXuDmSlMEuydSIyJo9ehr8NUkADHS1k7ArQsMffqikJiL_6FqFiaat8f8Xi9wwiKDNNS7SC0tuY252Iz0Ph1rWFPHnUgUtckMTe2BLxHv0fAatqMts8KWaUtwMq9R9gKuh4d1FaZ4fpYkNT99YfyX4hrK3Q2YbKvpinaIKECVXAB3kOAwiBy6olNp34CWSM_Z-nDQTEbcMFwm4uVk1DeA-KwxyuqIv2nUdPisAnY4g8NVl5_kXw7Etea0-sr_tYGuQu9bDJL3sIh5hOMP" />
+                <div class="absolute inset-0 bg-slate-900/60 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-6">
+                    <h4 class="text-white font-bold text-xl">Private Consultation Rooms</h4>
+                </div>
+            </div>
+            
+            <!-- Facility 3 -->
+            <div class="min-w-[320px] md:min-w-[450px] h-[320px] rounded-2xl overflow-hidden snap-center flex-shrink-0 shadow-lg border border-slate-100 dark:border-slate-800 relative group">
+                <img alt="Advanced Imaging Center" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" 
+                     src="https://lh3.googleusercontent.com/aida-public/AB6AXuAkf4QENdG0hp9lulzdzuTQD9zPMth7ppEY4Xfq-VkLOVh6o_HFpCsRDApL6rMWpbrnRMkJLQrwwaSuxVachdwb2Fs4f3AB2q6wjjbblnLrpczKyFNfVR69QmNPOxOPklHQiJC2dd-PfQ5mBwOPlwaNpXMOUrHj8hemnHULeSNl3aSLBm-j4IBLQtIBkmVzalv83RLYWnIP7kmAoIF8hWU-Vw8QVyngLaF1OHaQw2Ot_XYSxAm_5NDFD7sJQfUj_H5NqLEpvqTiZ6mf" />
+                <div class="absolute inset-0 bg-slate-900/60 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-6">
+                    <h4 class="text-white font-bold text-xl">Advanced Imaging Center</h4>
+                </div>
+            </div>
+            
+            <!-- Facility 4 -->
+            <div class="min-w-[320px] md:min-w-[450px] h-[320px] rounded-2xl overflow-hidden snap-center flex-shrink-0 shadow-lg border border-slate-100 dark:border-slate-800 relative group">
+                <img alt="Sterile Operating Theaters" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" 
+                     src="https://lh3.googleusercontent.com/aida-public/AB6AXuA387-UERkJdlnweaWUO2_G0BufQWTiJcSHTrtEXd6R4MMQ9nCvAIvQDdDJBlHD9imT0aanfU2hbXOHh2jzZ2f-oO0_VxtLX1_-UuJD-PwgF75JIThi21mKwsxIeXGSRIRXJu945ZmXBmu7OsceiipDi_o0OnspB74Hj8K1Uq-_wjLJYpPCgi1WuqTgxds5Q97HLQjLHNF_E_6AChpc5cjoD5SxjNuNTDfWuDKJkrwOpRCdtkr_LBbAGPJcPwn2NVpm3Z1IxPm4NHKS" />
+                <div class="absolute inset-0 bg-slate-900/60 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-6">
+                    <h4 class="text-white font-bold text-xl">Sterile Operating Theaters</h4>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+@section Scripts {
+    <script>
+        let currentSlide = 0;
+        const carousel = document.getElementById('carousel');
+        const dots = document.querySelectorAll('.carousel-dot');
+        const totalSlides = 3;
+        let autoPlayInterval;
+        let isUserScrolling = false;
+
+        function updateCarousel() {
+            const slideWidth = carousel.offsetWidth;
+            carousel.scrollTo({
+                left: slideWidth * currentSlide,
+                behavior: 'smooth'
+            });
+            
+            // Update dots
+            dots.forEach((dot, index) => {
+                if (index === currentSlide) {
+                    dot.classList.remove('w-2', 'bg-white/60');
+                    dot.classList.add('w-8', 'bg-primary');
+                } else {
+                    dot.classList.remove('w-8', 'bg-primary');
+                    dot.classList.add('w-2', 'bg-white/60');
+                }
+            });
+        }
+
+        function nextSlide() {
+            currentSlide = (currentSlide + 1) % totalSlides;
+            updateCarousel();
+        }
+
+        function prevSlide() {
+            currentSlide = (currentSlide - 1 + totalSlides) % totalSlides;
+            updateCarousel();
+        }
+
+        function startAutoPlay() {
+            stopAutoPlay();
+            autoPlayInterval = setInterval(() => {
+                if (!isUserScrolling) {
+                    nextSlide();
+                }
+            }, 4000);
+        }
+
+        function stopAutoPlay() {
+            if (autoPlayInterval) {
+                clearInterval(autoPlayInterval);
+            }
+        }
+
+        // Handle manual scroll detection
+        let scrollTimeout;
+        carousel.addEventListener('scroll', () => {
+            isUserScrolling = true;
+            clearTimeout(scrollTimeout);
+            
+            scrollTimeout = setTimeout(() => {
+                isUserScrolling = false;
+                const scrollPosition = carousel.scrollLeft;
+                const slideWidth = carousel.offsetWidth;
+                const newSlide = Math.round(scrollPosition / slideWidth);
+                
+                if (newSlide !== currentSlide) {
+                    currentSlide = newSlide;
+                    updateCarousel();
+                }
+            }, 150);
+        });
+
+        // Initialize
+        updateCarousel();
+        startAutoPlay();
+
+        // Pause on hover
+        carousel.addEventListener('mouseenter', stopAutoPlay);
+        carousel.addEventListener('mouseleave', startAutoPlay);
+
+        // Make prev/next buttons work
+        window.prevSlide = prevSlide;
+        window.nextSlide = nextSlide;
+    </script>
+}
+
+

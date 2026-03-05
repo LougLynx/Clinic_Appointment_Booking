@@ -1,0 +1,239 @@
+@{
+    ViewData["Title"] = "Book Appointment";
+    Layout = "_LayoutMediClinic";
+}
+
+<!-- Page Header with Progress Steps -->
+<div class="mb-8 flex flex-col items-center justify-center px-4">
+    <h1 class="text-3xl md:text-4xl font-black leading-tight tracking-tight mb-6 text-slate-900 dark:text-white text-center">Book an Appointment</h1>
+    
+    <!-- Progress Indicator -->
+    <div class="w-full max-w-3xl flex items-center justify-between relative">
+        <div class="absolute left-0 top-1/2 -translate-y-1/2 w-full h-1 bg-slate-200 dark:border-slate-700 -z-10 rounded-full"></div>
+        <div class="absolute left-0 top-1/2 -translate-y-1/2 w-1/3 h-1 bg-primary -z-10 rounded-full"></div>
+        
+        <div class="flex flex-col items-center gap-2">
+            <div class="w-8 h-8 rounded-full bg-primary text-white font-bold flex items-center justify-center border-4 border-white dark:border-background-dark shadow-sm">1</div>
+            <span class="text-xs font-semibold text-primary">Date &amp; Time</span>
+        </div>
+        <div class="flex flex-col items-center gap-2">
+            <div class="w-8 h-8 rounded-full bg-slate-200 dark:bg-slate-700 text-slate-500 dark:text-slate-400 font-bold flex items-center justify-center border-4 border-white dark:border-background-dark shadow-sm">2</div>
+            <span class="text-xs font-medium text-slate-500 dark:text-slate-400">Patient Info</span>
+        </div>
+        <div class="flex flex-col items-center gap-2">
+            <div class="w-8 h-8 rounded-full bg-slate-200 dark:bg-slate-700 text-slate-500 dark:text-slate-400 font-bold flex items-center justify-center border-4 border-white dark:border-background-dark shadow-sm">3</div>
+            <span class="text-xs font-medium text-slate-500 dark:text-slate-400">Confirmation</span>
+        </div>
+    </div>
+</div>
+
+<!-- Main Content -->
+<div class="flex flex-col lg:flex-row gap-8 px-4">
+    <!-- Left Column - Booking Form -->
+    <div class="flex-1 flex flex-col gap-8">
+        <!-- Date & Time Selection -->
+        <div class="bg-white dark:bg-slate-900 rounded-2xl p-6 border border-slate-200 dark:border-slate-700 shadow-sm">
+            <h2 class="text-xl font-bold text-slate-900 dark:text-white mb-6 flex items-center gap-2">
+                <span class="material-symbols-outlined text-primary">calendar_month</span>
+                Select Date &amp; Time
+            </h2>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <!-- Calendar -->
+                <div>
+                    <div class="flex items-center justify-between mb-4">
+                        <button class="w-8 h-8 flex items-center justify-center rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-600 dark:text-slate-400 transition-colors">
+                            <span class="material-symbols-outlined">chevron_left</span>
+                        </button>
+                        <h3 class="text-base font-bold text-slate-900 dark:text-white">October 2023</h3>
+                        <button class="w-8 h-8 flex items-center justify-center rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-600 dark:text-slate-400 transition-colors">
+                            <span class="material-symbols-outlined">chevron_right</span>
+                        </button>
+                    </div>
+                    
+                    <!-- Calendar Grid -->
+                    <div class="grid grid-cols-7 gap-1 text-center mb-2">
+                        <div class="text-xs font-semibold text-slate-500 py-2">Su</div>
+                        <div class="text-xs font-semibold text-slate-500 py-2">Mo</div>
+                        <div class="text-xs font-semibold text-slate-500 py-2">Tu</div>
+                        <div class="text-xs font-semibold text-slate-500 py-2">We</div>
+                        <div class="text-xs font-semibold text-slate-500 py-2">Th</div>
+                        <div class="text-xs font-semibold text-slate-500 py-2">Fr</div>
+                        <div class="text-xs font-semibold text-slate-500 py-2">Sa</div>
+                    </div>
+                    <div class="grid grid-cols-7 gap-1 text-center">
+                        @for (int i = 1; i <= 31; i++)
+                        {
+                            if (i < 4)
+                            {
+                                <button class="h-10 w-10 mx-auto rounded-full flex items-center justify-center text-sm text-slate-400 dark:text-slate-600" disabled>@i</button>
+                            }
+                            else if (i == 12)
+                            {
+                                <button class="h-10 w-10 mx-auto rounded-full flex items-center justify-center text-sm bg-primary text-white font-bold shadow-md">@i</button>
+                            }
+                            else
+                            {
+                                <button class="h-10 w-10 mx-auto rounded-full flex items-center justify-center text-sm text-slate-700 dark:text-slate-300 hover:bg-primary/10 dark:hover:bg-primary/20 transition-colors">@i</button>
+                            }
+                        }
+                    </div>
+                </div>
+
+                <!-- Time Slots -->
+                <div>
+                    <h3 class="text-sm font-semibold text-slate-700 dark:text-slate-300 mb-4 pb-2 border-b border-slate-100 dark:border-slate-800">Available Time Slots</h3>
+                    
+                    <!-- Morning -->
+                    <div class="mb-5">
+                        <h4 class="text-xs font-semibold text-slate-500 uppercase tracking-wider mb-3 flex items-center gap-1">
+                            <span class="material-symbols-outlined text-[16px]">wb_sunny</span> Morning
+                        </h4>
+                        <div class="grid grid-cols-3 gap-2">
+                            <button class="py-2 px-3 rounded-lg border border-slate-200 dark:border-slate-700 text-sm text-slate-700 dark:text-slate-300 hover:border-primary hover:text-primary transition-colors">09:00 AM</button>
+                            <button class="py-2 px-3 rounded-lg border border-slate-200 dark:border-slate-700 text-sm text-slate-700 dark:text-slate-300 hover:border-primary hover:text-primary transition-colors">09:30 AM</button>
+                            <button class="py-2 px-3 rounded-lg border border-slate-200 dark:border-slate-700 text-sm text-slate-700 dark:text-slate-300 hover:border-primary hover:text-primary transition-colors">10:00 AM</button>
+                            <button class="py-2 px-3 rounded-lg border border-slate-200 dark:border-slate-700 text-sm text-slate-700 dark:text-slate-300 hover:border-primary hover:text-primary transition-colors">10:30 AM</button>
+                            <button class="py-2 px-3 rounded-lg border border-slate-200 dark:border-slate-700 text-sm text-slate-700 dark:text-slate-300 hover:border-primary hover:text-primary transition-colors">11:00 AM</button>
+                            <button class="py-2 px-3 rounded-lg border-2 border-primary bg-primary/10 dark:bg-primary/20 text-sm font-semibold text-slate-900 dark:text-white transition-colors">11:30 AM</button>
+                        </div>
+                    </div>
+
+                    <!-- Afternoon -->
+                    <div class="mb-5">
+                        <h4 class="text-xs font-semibold text-slate-500 uppercase tracking-wider mb-3 flex items-center gap-1">
+                            <span class="material-symbols-outlined text-[16px]">sunny</span> Afternoon
+                        </h4>
+                        <div class="grid grid-cols-3 gap-2">
+                            <button class="py-2 px-3 rounded-lg border border-slate-200 dark:border-slate-700 text-sm text-slate-700 dark:text-slate-300 hover:border-primary hover:text-primary transition-colors">01:00 PM</button>
+                            <button class="py-2 px-3 rounded-lg border border-slate-200 dark:border-slate-700 text-sm text-slate-700 dark:text-slate-300 hover:border-primary hover:text-primary transition-colors">01:30 PM</button>
+                            <button class="py-2 px-3 rounded-lg border border-slate-200 dark:border-slate-700 text-sm text-slate-700 dark:text-slate-300 hover:border-primary hover:text-primary transition-colors">02:00 PM</button>
+                            <button class="py-2 px-3 rounded-lg border border-slate-200 dark:border-slate-700 text-sm text-slate-700 dark:text-slate-300 hover:border-primary hover:text-primary transition-colors">03:00 PM</button>
+                            <button class="py-2 px-3 rounded-lg border border-slate-200 dark:border-slate-700 text-sm text-slate-400 dark:text-slate-600 bg-slate-50 dark:bg-slate-800/50 cursor-not-allowed" disabled>03:30 PM</button>
+                            <button class="py-2 px-3 rounded-lg border border-slate-200 dark:border-slate-700 text-sm text-slate-700 dark:text-slate-300 hover:border-primary hover:text-primary transition-colors">04:00 PM</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Patient Details Form -->
+        <div class="bg-white dark:bg-slate-900 rounded-2xl p-6 border border-slate-200 dark:border-slate-700 shadow-sm">
+            <h2 class="text-xl font-bold text-slate-900 dark:text-white mb-6 flex items-center gap-2">
+                <span class="material-symbols-outlined text-primary">edit_document</span>
+                Patient Details
+            </h2>
+            
+            <form class="space-y-5">
+                <div>
+                    <label class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2" for="reason">
+                        Reason for Visit <span class="text-red-500">*</span>
+                    </label>
+                    <select class="w-full rounded-lg border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-white focus:ring-primary focus:border-primary shadow-sm" id="reason" name="reason">
+                        <option value="">Select a reason</option>
+                        <option value="routine">Routine Checkup</option>
+                        <option value="consultation">Initial Consultation</option>
+                        <option value="followup">Follow-up Visit</option>
+                        <option value="urgent">Urgent Concern</option>
+                    </select>
+                </div>
+                
+                <div>
+                    <label class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2" for="notes">
+                        Additional Notes (Optional)
+                    </label>
+                    <textarea class="w-full rounded-lg border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-white focus:ring-primary focus:border-primary shadow-sm placeholder:text-slate-400" 
+                              id="notes" 
+                              name="notes" 
+                              placeholder="Please describe your symptoms or any specific concerns you'd like to address during the visit." 
+                              rows="4"></textarea>
+                </div>
+                
+                <div class="flex items-center gap-3 pt-2">
+                    <input class="w-4 h-4 rounded border-slate-300 text-primary focus:ring-primary dark:border-slate-600 dark:bg-slate-800" 
+                           id="first-time" 
+                           name="first-time" 
+                           type="checkbox" />
+                    <label class="text-sm text-slate-600 dark:text-slate-400" for="first-time">
+                        I am a first-time patient with this doctor
+                    </label>
+                </div>
+            </form>
+        </div>
+
+        <!-- Action Buttons -->
+        <div class="flex justify-end gap-4">
+            <a asp-area="" asp-controller="Doctors" asp-action="Details" asp-route-id="1" 
+               class="px-6 py-3 rounded-lg border border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-300 font-semibold hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors no-underline flex items-center">
+                Cancel
+            </a>
+            <a asp-area="" asp-controller="Appointment" asp-action="Confirm" 
+               class="px-8 py-3 rounded-lg bg-primary text-white font-bold hover:bg-primary/90 transition-colors shadow-md no-underline flex items-center gap-2">
+                Continue
+                <span class="material-symbols-outlined text-[20px]">arrow_forward</span>
+            </a>
+        </div>
+    </div>
+
+    <!-- Right Column - Appointment Summary -->
+    <aside class="w-full lg:w-[350px] shrink-0">
+        <div class="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-md sticky top-24 overflow-hidden">
+            <!-- Doctor Info -->
+            <div class="p-6 border-b border-slate-100 dark:border-slate-800">
+                <h3 class="font-bold text-slate-900 dark:text-white text-lg mb-4">Appointment Summary</h3>
+                <div class="flex items-center gap-4 mb-4">
+                    <div class="w-16 h-16 rounded-full overflow-hidden bg-slate-200 dark:bg-slate-800 shrink-0 border-2 border-primary/20">
+                        <img alt="Dr. Emily Chen" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuA6wrTt341E3yA-wcu7p1aezUUzdiU1W6-T8VcCSRJDUz30gdlsrDhEkuQ81u3wwgHfpxjPy8qPB4Vs67aLJOmkK9fxlE09vNYcwPv82Z0wAPTVv3FU43V2XurmRI90S5d_WpTxuti53EFIOo1TVob_7CzaY8-egib308iyVTAfuKpsfCH_zq1rxrZpmZAuA8qXs0teRnfvMPOYnJleqCFK6gPIeS9EJQ42w4zNrXgEEKuRKrqSSNwUwWmWtTSEf2_nuTPWKE0Q2CSB" />
+                    </div>
+                    <div>
+                        <h4 class="font-bold text-slate-900 dark:text-white text-base">Dr. Emily Chen</h4>
+                        <p class="text-sm text-primary font-medium">Cardiology</p>
+                        <div class="flex items-center gap-1 mt-1 text-xs text-slate-500">
+                            <span class="material-symbols-outlined text-[14px] text-yellow-400" style="font-variation-settings: 'FILL' 1;">star</span>
+                            <span>4.9 (120 reviews)</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="flex items-start gap-3 text-sm text-slate-600 dark:text-slate-400 mt-4">
+                    <span class="material-symbols-outlined text-[18px] text-slate-400 mt-0.5">location_on</span>
+                    <span>Main Campus, Wing A<br />123 Health Ave, Medical District</span>
+                </div>
+            </div>
+
+            <!-- Appointment Details -->
+            <div class="p-6 bg-slate-50 dark:bg-slate-800/30">
+                <div class="space-y-4">
+                    <div class="flex items-start gap-3">
+                        <div class="w-8 h-8 rounded-full bg-blue-100 dark:bg-blue-900/30 flex items-center justify-center text-blue-600 dark:text-blue-400 shrink-0">
+                            <span class="material-symbols-outlined text-[18px]">calendar_today</span>
+                        </div>
+                        <div>
+                            <p class="text-xs font-medium text-slate-500 uppercase tracking-wider mb-1">Date</p>
+                            <p class="text-sm font-semibold text-slate-900 dark:text-white">Thursday, Oct 12, 2023</p>
+                        </div>
+                    </div>
+                    <div class="flex items-start gap-3">
+                        <div class="w-8 h-8 rounded-full bg-teal-100 dark:bg-teal-900/30 flex items-center justify-center text-teal-600 dark:text-teal-400 shrink-0">
+                            <span class="material-symbols-outlined text-[18px]">schedule</span>
+                        </div>
+                        <div>
+                            <p class="text-xs font-medium text-slate-500 uppercase tracking-wider mb-1">Time</p>
+                            <p class="text-sm font-semibold text-slate-900 dark:text-white">11:30 AM</p>
+                            <p class="text-xs text-slate-500 mt-0.5">Estimated duration: 30-45 min</p>
+                        </div>
+                    </div>
+                    <div class="flex items-start gap-3">
+                        <div class="w-8 h-8 rounded-full bg-purple-100 dark:bg-purple-900/30 flex items-center justify-center text-purple-600 dark:text-purple-400 shrink-0">
+                            <span class="material-symbols-outlined text-[18px]">payments</span>
+                        </div>
+                        <div>
+                            <p class="text-xs font-medium text-slate-500 uppercase tracking-wider mb-1">Consultation Fee</p>
+                            <p class="text-sm font-semibold text-slate-900 dark:text-white">$150.00</p>
+                            <p class="text-xs text-slate-500 mt-0.5">Covered by most insurances</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </aside>
+</div>

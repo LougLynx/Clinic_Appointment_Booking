@@ -1,0 +1,23 @@
+{
+  "runtimeTarget": {
+    "name": ".NETCoreApp,Version=v8.0",
+    "signature": ""
+  },
+  "compilationOptions": {},
+  "targets": {
+    ".NETCoreApp,Version=v8.0": {
+      "Clinic_Appointment_Booking_WebClient/1.0.0": {
+        "runtime": {
+          "Clinic_Appointment_Booking_WebClient.dll": {}
+        }
+      }
+    }
+  },
+  "libraries": {
+    "Clinic_Appointment_Booking_WebClient/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    }
+  }
+}
