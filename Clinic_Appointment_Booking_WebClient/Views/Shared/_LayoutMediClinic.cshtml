@@ -59,6 +59,20 @@
                            asp-area="" asp-controller="Home" asp-action="About">About Us</a>
                         <a class="@(ViewContext.RouteData.Values["action"]?.ToString() == "Contact" ? "text-primary font-bold border-b-2 border-primary pb-1" : "text-slate-700 dark:text-slate-300") text-sm font-semibold hover:text-primary transition-colors" 
                            asp-area="" asp-controller="Home" asp-action="Contact">Contact</a>
+                        
+                        <!-- Admin Link (visible for demo, should be role-based in production)
+                        <a class="@(ViewContext.RouteData.Values["controller"]?.ToString() == "Admin" ? "text-primary font-bold border-b-2 border-primary pb-1" : "text-slate-700 dark:text-slate-300") text-sm font-semibold hover:text-primary transition-colors flex items-center gap-1" 
+                           asp-area="" asp-controller="Admin" asp-action="Dashboard">
+                            <span class="material-symbols-outlined text-[18px]">admin_panel_settings</span>
+                            Admin
+                        </a> -->
+                        
+                        <!-- Doctor Link (visible for demo, should be role-based in production)
+                        <a class="@(ViewContext.RouteData.Values["controller"]?.ToString() == "Doctor" ? "text-primary font-bold border-b-2 border-primary pb-1" : "text-slate-700 dark:text-slate-300") text-sm font-semibold hover:text-primary transition-colors flex items-center gap-1" 
+                           asp-area="" asp-controller="Doctor" asp-action="Dashboard">
+                            <span class="material-symbols-outlined text-[18px]">medical_services</span>
+                            Doctor
+                        </a> -->
                     </nav>
 
                     <!-- Auth Buttons (when not logged in) -->
@@ -116,6 +130,21 @@
                        asp-area="" asp-controller="Home" asp-action="About">About Us</a>
                     <a class="px-4 py-3 text-sm font-semibold text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 hover:text-primary rounded-lg transition-colors" 
                        asp-area="" asp-controller="Home" asp-action="Contact">Contact</a>
+                    
+                    <!-- Admin Link for Mobile -->
+                    <a class="px-4 py-3 text-sm font-semibold text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 hover:text-primary rounded-lg transition-colors flex items-center gap-2" 
+                       asp-area="" asp-controller="Admin" asp-action="Dashboard">
+                        <span class="material-symbols-outlined text-[18px]">admin_panel_settings</span>
+                        Admin Panel
+                    </a>
+                    
+                    <!-- Doctor Link for Mobile -->
+                    <a class="px-4 py-3 text-sm font-semibold text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 hover:text-primary rounded-lg transition-colors flex items-center gap-2" 
+                       asp-area="" asp-controller="Doctor" asp-action="Dashboard">
+                        <span class="material-symbols-outlined text-[18px]">medical_services</span>
+                        Doctor Panel
+                    </a>
+                    
                     <hr class="my-2 border-slate-200 dark:border-slate-700" />
                     <a asp-area="" asp-controller="Account" asp-action="Login" 
                        class="px-4 py-3 text-sm font-bold text-center bg-primary text-white rounded-lg hover:bg-primary/90 transition-colors no-underline">

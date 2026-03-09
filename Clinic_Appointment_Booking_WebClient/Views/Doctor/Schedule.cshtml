@@ -11,13 +11,16 @@
     <title>@ViewData["Title"] - MediDash</title>
     <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
     <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet" />
+    <!-- Inter Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&display=swap" rel="stylesheet" />
+    
     <script>
         tailwind.config = {
+            darkMode: "class",
             theme: {
                 extend: {
                     colors: {
-                        "primary": "#1e3a8a",
-                        "primary-light": "#3b82f6",
+                        "primary": "#13b6ec",
                         "background-light": "#f8fafc",
                     },
                     fontFamily: {
@@ -30,42 +33,54 @@
 </head>
 <body class="bg-background-light text-slate-800 font-display">
     <div class="flex h-screen w-full overflow-hidden">
-        <aside class="w-64 bg-primary text-white flex flex-col h-full flex-shrink-0">
-            <div class="h-16 flex items-center px-6 border-b border-blue-800/50">
-                <span class="material-symbols-outlined text-2xl mr-3">local_hospital</span>
-                <span class="text-xl font-bold tracking-wide">MediDash</span>
+        <!-- Sidebar -->
+        <aside class="w-64 bg-slate-900 text-white flex flex-col h-full flex-shrink-0">
+            <!-- Logo -->
+            <div class="h-16 flex items-center px-6 border-b border-slate-800">
+                <span class="material-symbols-outlined text-2xl mr-3 text-primary">local_hospital</span>
+                <span class="text-xl font-bold tracking-wide">MediClinic</span>
             </div>
-            <div class="p-6 pb-2">
-                <p class="text-xs text-blue-300 uppercase tracking-wider font-semibold mb-4">Main Menu</p>
+
+            <!-- Navigation Menu -->
+            <div class="p-6 pb-2 flex-1 overflow-y-auto">
+                <p class="text-xs text-slate-400 uppercase tracking-wider font-semibold mb-4">Main Menu</p>
                 <nav class="space-y-2">
-                    <a asp-area="" asp-controller="Doctor" asp-action="Dashboard" class="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-blue-800/30 text-blue-100 transition-colors no-underline">
+                    <a asp-area="" asp-controller="Doctor" asp-action="Dashboard" 
+                       class="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-slate-800 text-slate-300 transition-colors no-underline">
                         <span class="material-symbols-outlined text-xl">dashboard</span> Dashboard
                     </a>
-                    <a asp-area="" asp-controller="Doctor" asp-action="Schedule" class="flex items-center gap-3 px-3 py-2.5 rounded-lg bg-blue-800/50 text-white font-medium no-underline">
+                    <a asp-area="" asp-controller="Doctor" asp-action="Schedule" 
+                       class="flex items-center gap-3 px-3 py-2.5 rounded-lg bg-primary/20 text-white font-medium no-underline">
                         <span class="material-symbols-outlined text-xl">calendar_month</span> Schedule
                     </a>
-                    <a asp-area="" asp-controller="Doctor" asp-action="Patients" class="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-blue-800/30 text-blue-100 transition-colors no-underline">
+                    <a asp-area="" asp-controller="Doctor" asp-action="Patients" 
+                       class="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-slate-800 text-slate-300 transition-colors no-underline">
                         <span class="material-symbols-outlined text-xl">groups</span> My Patients
                     </a>
-                    <a asp-area="" asp-controller="Doctor" asp-action="Consultations" class="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-blue-800/30 text-blue-100 transition-colors no-underline">
+                    <a asp-area="" asp-controller="Doctor" asp-action="Consultations" 
+                       class="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-slate-800 text-slate-300 transition-colors no-underline">
                         <span class="material-symbols-outlined text-xl">medical_information</span> Consultations
                     </a>
-                    <a asp-area="" asp-controller="Doctor" asp-action="Earnings" class="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-blue-800/30 text-blue-100 transition-colors no-underline">
+                    <a asp-area="" asp-controller="Doctor" asp-action="Earnings" 
+                       class="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-slate-800 text-slate-300 transition-colors no-underline">
                         <span class="material-symbols-outlined text-xl">payments</span> Earnings
                     </a>
                 </nav>
             </div>
-            <div class="mt-auto p-6 border-t border-blue-800/50">
+
+            <!-- User Profile -->
+            <div class="mt-auto p-6 border-t border-slate-800">
                 <div class="flex items-center gap-3">
-                    <div class="w-10 h-10 rounded-full bg-blue-300 flex items-center justify-center text-primary font-bold">
+                    <div class="w-10 h-10 rounded-full bg-primary flex items-center justify-center text-white font-bold">
                         DR
                     </div>
                     <div>
                         <p class="font-medium text-sm">Dr. Sarah Smith</p>
-                        <p class="text-xs text-blue-300">Cardiologist</p>
+                        <p class="text-xs text-slate-400">Cardiologist</p>
                     </div>
                 </div>
-                <a asp-area="" asp-controller="Account" asp-action="Logout" class="mt-4 flex items-center gap-2 px-3 py-2 rounded-lg hover:bg-blue-800/30 text-blue-100 transition-colors text-sm no-underline">
+                <a asp-area="" asp-controller="Account" asp-action="Logout" 
+                   class="mt-4 flex items-center gap-2 px-3 py-2 rounded-lg hover:bg-slate-800 text-slate-300 transition-colors text-sm no-underline">
                     <span class="material-symbols-outlined text-lg">logout</span> Logout
                 </a>
             </div>
@@ -182,7 +197,7 @@
                             <h3 class="text-lg font-bold text-slate-800">Daily Agenda</h3>
                             <p class="text-sm text-slate-500">Oct 4, 2023</p>
                         </div>
-                        <button class="w-full py-2 bg-primary text-white rounded-lg font-medium hover:bg-primary/90 transition-colors flex items-center justify-center gap-2">
+                        <button class="w-full py-2 bg-primary hover:bg-primary/90 text-white rounded-lg font-medium transition-colors flex items-center justify-center gap-2 shadow-sm">
                             <span class="material-symbols-outlined text-sm">add</span> New Appointment
                         </button>
                     </div>
