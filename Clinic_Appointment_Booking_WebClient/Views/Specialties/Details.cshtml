@@ -1,0 +1,220 @@
+@{
+    ViewData["Title"] = "Cardiology - Specialty Details";
+    Layout = "_LayoutMediClinic";
+}
+
+<!-- Main Content -->
+<div class="flex flex-col gap-12 px-4 w-full">
+    <!-- Specialty Header -->
+    <div class="flex flex-col gap-6 w-full">
+        <div class="flex items-center gap-4">
+            <div class="size-16 rounded-full bg-primary/20 dark:bg-primary/10 flex items-center justify-center text-primary">
+                <span class="material-symbols-outlined text-4xl">cardiology</span>
+            </div>
+            <h1 class="text-slate-900 dark:text-slate-100 text-4xl md:text-5xl font-black leading-tight tracking-tight">Cardiology</h1>
+        </div>
+        <p class="text-slate-600 dark:text-slate-400 text-lg font-normal leading-relaxed max-w-4xl">
+            Expert care for heart and blood vessel health. Our specialized cardiology department is dedicated to providing cutting-edge diagnostics, advanced treatments, and comprehensive cardiovascular care to ensure your heart stays strong and healthy.
+        </p>
+    </div>
+
+    <!-- Heart Health Facts Section -->
+    <section class="flex flex-col gap-6 w-full">
+        <h2 class="text-slate-900 dark:text-slate-100 text-2xl font-bold">Heart Health Facts</h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            <!-- Fact 1 -->
+            <div class="flex flex-col gap-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 p-6 hover:-translate-y-1 transition-transform duration-300 shadow-sm hover:shadow-md">
+                <span class="material-symbols-outlined text-3xl text-primary mb-2">favorite</span>
+                <h3 class="text-slate-900 dark:text-slate-100 font-bold text-lg">100,000 Beats</h3>
+                <p class="text-slate-600 dark:text-slate-400 text-sm leading-relaxed">
+                    The average human heart beats about 100,000 times a day, pumping roughly 2,000 gallons of blood.
+                </p>
+            </div>
+
+            <!-- Fact 2 -->
+            <div class="flex flex-col gap-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 p-6 hover:-translate-y-1 transition-transform duration-300 shadow-sm hover:shadow-md">
+                <span class="material-symbols-outlined text-3xl text-primary mb-2">fitness_center</span>
+                <h3 class="text-slate-900 dark:text-slate-100 font-bold text-lg">Exercise Matters</h3>
+                <p class="text-slate-600 dark:text-slate-400 text-sm leading-relaxed">
+                    Regular physical activity can reduce your risk of developing heart disease by up to 50% over a lifetime.
+                </p>
+            </div>
+
+            <!-- Fact 3 -->
+            <div class="flex flex-col gap-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 p-6 hover:-translate-y-1 transition-transform duration-300 shadow-sm hover:shadow-md">
+                <span class="material-symbols-outlined text-3xl text-primary mb-2">water_drop</span>
+                <h3 class="text-slate-900 dark:text-slate-100 font-bold text-lg">Blood Vessels</h3>
+                <p class="text-slate-600 dark:text-slate-400 text-sm leading-relaxed">
+                    If you were to stretch out your entire blood vessel system, it would be over 60,000 miles long.
+                </p>
+            </div>
+
+            <!-- Fact 4 -->
+            <div class="flex flex-col gap-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 p-6 hover:-translate-y-1 transition-transform duration-300 shadow-sm hover:shadow-md">
+                <span class="material-symbols-outlined text-3xl text-primary mb-2">restaurant_menu</span>
+                <h3 class="text-slate-900 dark:text-slate-100 font-bold text-lg">Diet Impact</h3>
+                <p class="text-slate-600 dark:text-slate-400 text-sm leading-relaxed">
+                    A diet rich in omega-3 fatty acids, fresh fruits, and vegetables can significantly lower blood pressure.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Top Specialists Section -->
+    <section class="flex flex-col gap-6 w-full">
+        <div class="flex items-center justify-between">
+            <h2 class="text-slate-900 dark:text-slate-100 text-2xl font-bold">Top Cardiology Specialists</h2>
+            <a asp-area="" asp-controller="Specialties" asp-action="Doctors" asp-route-id="1" 
+               class="text-primary hover:text-primary/80 text-sm font-semibold transition-colors no-underline">
+                View All Specialists →
+            </a>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+            <!-- Doctor 1 -->
+            <div class="flex flex-col rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 overflow-hidden hover:shadow-lg transition-shadow duration-300">
+                <div class="w-full h-56 bg-slate-200 dark:bg-slate-700 bg-cover bg-center" 
+                     style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuAIweLwJ16013IlLvW_YDiEwoqLxnOpuMvJnV8UHdqktsCLqbL31r0g_KubTOgjVT1QuJcfqaYCO6cFd3y2vPOZrYOxrwc1vmv3Sv6SWR0uIs09CU1S-BYOknZHaWOkX0JS5afRKOR9pu__aiuhy7F96NpvYWtWXay67ezWgKOHspDVWoot2oazKb2UGLlBcKit6kA0wWniTqxfhxbZvjUHUoLHlRhjWj5jz2AALaNjOIrDp-h8_GCbSdF-6lMQlJDohoeoDKmrsAvY');"></div>
+                <div class="p-5 flex flex-col gap-4 flex-1">
+                    <div class="flex flex-col gap-1">
+                        <h3 class="text-slate-900 dark:text-slate-100 text-lg font-bold">Dr. Sarah Jenkins</h3>
+                        <p class="text-slate-600 dark:text-slate-400 text-sm font-medium">Interventional Cardiologist</p>
+                    </div>
+                    <div class="flex items-center gap-1 text-sm text-yellow-500 font-medium">
+                        <span class="material-symbols-outlined text-base" style="font-variation-settings: 'FILL' 1;">star</span>
+                        <span>4.9 <span class="text-slate-500 dark:text-slate-500 font-normal">(128 reviews)</span></span>
+                    </div>
+                    <div class="mt-auto pt-4">
+                        <a asp-area="" asp-controller="Doctors" asp-action="Details" asp-route-id="5" 
+                           class="w-full flex items-center justify-center rounded-lg h-10 border border-primary text-primary hover:bg-primary hover:text-white transition-colors font-bold text-sm no-underline">
+                            Book Now
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Doctor 2 -->
+            <div class="flex flex-col rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 overflow-hidden hover:shadow-lg transition-shadow duration-300">
+                <div class="w-full h-56 bg-slate-200 dark:bg-slate-700 bg-cover bg-center" 
+                     style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuCZCV74C0JgjK-GKyRaUZWZehYJunz6ChBMiorz1sMCiimYXw7MYxL0nrWgTq-IRI5pAlVVTw5ChzcoFwFNuaCEZja8z-WlxjWQLIo3q0KKvzTiKFFIHd1Cf03tZ_AfxZsk46Q8nRhdlifpffQAKZ4FhiFfVTQ6Nh7PLM2QTzCNRUgXoMjbdTR-GiyZMRMq1YcbYlEuyv8GvGAEzbqUHj3OLuhWPCXwaYtQ8KzCuZEmydofPBUbZPE9onBPd7Z34AdHDypTBAyF_JZW');"></div>
+                <div class="p-5 flex flex-col gap-4 flex-1">
+                    <div class="flex flex-col gap-1">
+                        <h3 class="text-slate-900 dark:text-slate-100 text-lg font-bold">Dr. Michael Chen</h3>
+                        <p class="text-slate-600 dark:text-slate-400 text-sm font-medium">Clinical Cardiologist</p>
+                    </div>
+                    <div class="flex items-center gap-1 text-sm text-yellow-500 font-medium">
+                        <span class="material-symbols-outlined text-base" style="font-variation-settings: 'FILL' 1;">star</span>
+                        <span>4.8 <span class="text-slate-500 dark:text-slate-500 font-normal">(95 reviews)</span></span>
+                    </div>
+                    <div class="mt-auto pt-4">
+                        <a asp-area="" asp-controller="Doctors" asp-action="Details" asp-route-id="6" 
+                           class="w-full flex items-center justify-center rounded-lg h-10 border border-primary text-primary hover:bg-primary hover:text-white transition-colors font-bold text-sm no-underline">
+                            Book Now
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Doctor 3 -->
+            <div class="flex flex-col rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 overflow-hidden hover:shadow-lg transition-shadow duration-300">
+                <div class="w-full h-56 bg-slate-200 dark:bg-slate-700 bg-cover bg-center" 
+                     style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuBvcFHSUgH-ryQ37qv2vMWXjoxzBXEsaZVHLtfQbbkPH58ZLfc_irSZl3hal-vAGGVc6EetZYM4PLHuQlXiUaB50RCx0_oWtXbS1zqUmQJnPAEnnjSb2otpYrzedpWEIkp8e-DE9woJPFfF5FNAHDb5kzO_r9Cp4EDTOHa-HLUI5RQY21-N7oeSvARDLcyJ_xz6Uy_N0jXWyB10WS4-j7CVkn8Krngs6_2o9LoxnhHRsP0zw10zaIaNtwSiTNHfqrFbj1mROZJ2IqHU');"></div>
+                <div class="p-5 flex flex-col gap-4 flex-1">
+                    <div class="flex flex-col gap-1">
+                        <h3 class="text-slate-900 dark:text-slate-100 text-lg font-bold">Dr. Emily Torres</h3>
+                        <p class="text-slate-600 dark:text-slate-400 text-sm font-medium">Electrophysiologist</p>
+                    </div>
+                    <div class="flex items-center gap-1 text-sm text-yellow-500 font-medium">
+                        <span class="material-symbols-outlined text-base" style="font-variation-settings: 'FILL' 1;">star</span>
+                        <span>5.0 <span class="text-slate-500 dark:text-slate-500 font-normal">(150 reviews)</span></span>
+                    </div>
+                    <div class="mt-auto pt-4">
+                        <a asp-area="" asp-controller="Doctors" asp-action="Details" asp-route-id="7" 
+                           class="w-full flex items-center justify-center rounded-lg h-10 border border-primary text-primary hover:bg-primary hover:text-white transition-colors font-bold text-sm no-underline">
+                            Book Now
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Doctor 4 -->
+            <div class="flex flex-col rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 overflow-hidden hover:shadow-lg transition-shadow duration-300">
+                <div class="w-full h-56 bg-slate-200 dark:bg-slate-700 bg-cover bg-center" 
+                     style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuBQrRi7-VsZITUu4nDkQL1PmvAUClzqaexDJqK2bb3SW1VMacoNeuWpRz41eFQhH3Vz6bUakwPukt-XHs3TZRgVKPQFuCO1L7rtfzSBIRoSgWSU0Q3tnhTutvTzkK2Bi0uaqz9xBBLBI9oMFhsP-uR3DY0GP-dufap8uPHRtA1TVN5N-wzsjS4ktQvRW02uBqLGm3qsl0ky2hTG6ust6I50cTnGQjUymdgs844EFTVz8YugUVYGKSMZBzHVDZIgI5K4zy77zfmO_jGw');"></div>
+                <div class="p-5 flex flex-col gap-4 flex-1">
+                    <div class="flex flex-col gap-1">
+                        <h3 class="text-slate-900 dark:text-slate-100 text-lg font-bold">Dr. Robert Hayes</h3>
+                        <p class="text-slate-600 dark:text-slate-400 text-sm font-medium">Cardiovascular Surgeon</p>
+                    </div>
+                    <div class="flex items-center gap-1 text-sm text-yellow-500 font-medium">
+                        <span class="material-symbols-outlined text-base" style="font-variation-settings: 'FILL' 1;">star</span>
+                        <span>4.9 <span class="text-slate-500 dark:text-slate-500 font-normal">(210 reviews)</span></span>
+                    </div>
+                    <div class="mt-auto pt-4">
+                        <a asp-area="" asp-controller="Doctors" asp-action="Details" asp-route-id="8" 
+                           class="w-full flex items-center justify-center rounded-lg h-10 border border-primary text-primary hover:bg-primary hover:text-white transition-colors font-bold text-sm no-underline">
+                            Book Now
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Health Blog Section -->
+    <section class="flex flex-col gap-6 w-full">
+        <div class="flex items-center justify-between">
+            <h2 class="text-slate-900 dark:text-slate-100 text-2xl font-bold">Cardiology Health Blog</h2>
+            <a href="#blog" class="text-primary hover:text-primary/80 text-sm font-semibold transition-colors no-underline">
+                View All Articles →
+            </a>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            <!-- Article 1 -->
+            <div class="flex flex-col rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 overflow-hidden hover:shadow-lg transition-shadow duration-300">
+                <div class="w-full h-48 bg-slate-200 dark:bg-slate-700 bg-cover bg-center" 
+                     style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuAGwKTbqz6Bvd-b3gngtG-SCNnK3PAZ6XgFRvIYJPn4k5jrbSxHTSNHcrCZ_YzxPm0JfLifLeGuNqTQWjf1BMwPJV3c0FglQFuvwPWmlZu0QyAi1J-w1zISebU0Bd5f4PYUQWxJUtjn_fIop40g6XA16JSc12-NklPQdSao4z1ShA1YHVAlMBOeDOhJQawt4DjugpjwLZYXs-qZFvzIbeVoPJHUt2Kbd_yxBjvS9fJd2E3dJRtXEsBCGMDI_KJpYr0CiQDUBWGqXmGR');"></div>
+                <div class="p-5 flex flex-col gap-3 flex-1">
+                    <h3 class="text-slate-900 dark:text-slate-100 text-lg font-bold">10 Tips for a Stronger Heart</h3>
+                    <p class="text-slate-600 dark:text-slate-400 text-sm leading-relaxed flex-1">
+                        Discover simple lifestyle changes you can make today to improve your cardiovascular health and prevent heart disease in the long term.
+                    </p>
+                    <a href="#article1" class="text-primary hover:text-primary/80 text-sm font-bold transition-colors mt-2 no-underline">
+                        Read More
+                    </a>
+                </div>
+            </div>
+
+            <!-- Article 2 -->
+            <div class="flex flex-col rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 overflow-hidden hover:shadow-lg transition-shadow duration-300">
+                <div class="w-full h-48 bg-slate-200 dark:bg-slate-700 bg-cover bg-center" 
+                     style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuCNkR1piSTS9FfkOEwzs2pizyGBWMsZ26I4WuPvDvJSUMrMQCNyAWSnbGDJn81axFtVhYwuu9cYalS-3S7Nl-fmqhxc5ZMkGFDQV8BGt4vIzPxsrBniGd9Qjx1nQRHL-7d_VRsHKOGkPWm4mU5wXTjaOcULPlEud5JrFN_moy-Fp4cxIu6jBQM2K84mYbYrDKqb-VZIcf0gB2O7n0yYcM8P7JOoEVxoTIwn0D9RnNATrFk1rKFkNEXZpzrDHookybrjBY-JpS500l8C');"></div>
+                <div class="p-5 flex flex-col gap-3 flex-1">
+                    <h3 class="text-slate-900 dark:text-slate-100 text-lg font-bold">Understanding Blood Pressure</h3>
+                    <p class="text-slate-600 dark:text-slate-400 text-sm leading-relaxed flex-1">
+                        What those numbers really mean and why keeping them in the normal range is crucial for your overall well-being and longevity.
+                    </p>
+                    <a href="#article2" class="text-primary hover:text-primary/80 text-sm font-bold transition-colors mt-2 no-underline">
+                        Read More
+                    </a>
+                </div>
+            </div>
+
+            <!-- Article 3 -->
+            <div class="flex flex-col rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 overflow-hidden hover:shadow-lg transition-shadow duration-300">
+                <div class="w-full h-48 bg-slate-200 dark:bg-slate-700 bg-cover bg-center" 
+                     style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuDb0c2IrBMGGHbmPQiSpjoaCbnzYMQpPzqH6Z07jyTTmrg8Y82DX9IxUVkNBiivP_JR1c2I7FAl42CJqsUyf9fUAMUX_JtQtDdA_848LRLBtFgs9Eg5ZL4xLf-McI0IxGIpoe2lWVuTbc5t7_VdCCIAbmUVXtxrGrkTD-IvRX9ObCdp50tyQ36Nl1H4JGcZJ5tXe5MJ5pdOw-c83X0M9VCxp865DiekVVxjHYsO-IiJhltPLazgediprLT_ZUfzGk7S8z5ltUoxoUGy');"></div>
+                <div class="p-5 flex flex-col gap-3 flex-1">
+                    <h3 class="text-slate-900 dark:text-slate-100 text-lg font-bold">Cardio Exercises at Home</h3>
+                    <p class="text-slate-600 dark:text-slate-400 text-sm leading-relaxed flex-1">
+                        You don't need a gym membership to get a good cardiovascular workout. Try these effective exercises from the comfort of your living room.
+                    </p>
+                    <a href="#article3" class="text-primary hover:text-primary/80 text-sm font-bold transition-colors mt-2 no-underline">
+                        Read More
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>

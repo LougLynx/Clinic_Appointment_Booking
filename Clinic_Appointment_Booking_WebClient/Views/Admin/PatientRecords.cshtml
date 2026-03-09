@@ -1,0 +1,418 @@
+@{
+    ViewData["Title"] = "Patient Records";
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - MediClinic</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    
+    <!-- Material Symbols -->
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet" />
+    
+    <!-- Inter Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
+    
+    <!-- Tailwind Config -->
+    <script>
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#13b6ec",
+                        "background-light": "#f6f8f8",
+                        "background-dark": "#101d22",
+                    },
+                    fontFamily: {
+                        "display": ["Inter"]
+                    },
+                    borderRadius: { "DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px" },
+                },
+            },
+        }
+    </script>
+    <style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+    </style>
+</head>
+<body class="bg-background-light dark:bg-background-dark text-slate-900 dark:text-slate-100 font-display">
+    <div class="flex h-screen overflow-hidden">
+        <!-- Sidebar Navigation -->
+        <aside class="w-64 flex-shrink-0 border-r border-slate-200 dark:border-slate-800 bg-white dark:bg-background-dark flex flex-col justify-between py-6 px-4">
+            <div class="flex flex-col gap-8">
+                <!-- Brand -->
+                <div class="flex items-center gap-3 px-2">
+                    <div class="bg-primary size-10 rounded-lg flex items-center justify-center text-white">
+                        <span class="material-symbols-outlined">health_and_safety</span>
+                    </div>
+                    <div class="flex flex-col">
+                        <h1 class="text-slate-900 dark:text-slate-100 text-lg font-bold leading-none">MediCenter</h1>
+                        <p class="text-slate-500 dark:text-slate-400 text-xs font-medium">Admin Portal</p>
+                    </div>
+                </div>
+
+                <!-- Nav Links -->
+                <nav class="flex flex-col gap-1">
+                    <a asp-area="" asp-controller="Admin" asp-action="Dashboard" 
+                       class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors no-underline">
+                        <span class="material-symbols-outlined">dashboard</span>
+                        <span class="text-sm font-semibold">Dashboard</span>
+                    </a>
+                    <a asp-area="" asp-controller="Admin" asp-action="PatientRecords" 
+                       class="flex items-center gap-3 px-3 py-2.5 rounded-lg bg-primary/10 text-primary transition-colors no-underline">
+                        <span class="material-symbols-outlined text-primary" style="font-variation-settings: 'FILL' 1;">groups</span>
+                        <span class="text-sm font-bold">Patient Records</span>
+                    </a>
+                    <a asp-area="" asp-controller="Admin" asp-action="Appointments" 
+                       class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors no-underline">
+                        <span class="material-symbols-outlined">calendar_today</span>
+                        <span class="text-sm font-semibold">Appointments</span>
+                    </a>
+                    <a asp-area="" asp-controller="Admin" asp-action="DoctorManagement" 
+                       class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors no-underline">
+                        <span class="material-symbols-outlined">medical_services</span>
+                        <span class="text-sm font-semibold">Staff Directory</span>
+                    </a>
+                    <a asp-area="" asp-controller="Admin" asp-action="Reports" 
+                       class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors no-underline">
+                        <span class="material-symbols-outlined">analytics</span>
+                        <span class="text-sm font-semibold">Reports</span>
+                    </a>
+                </nav>
+            </div>
+
+            <!-- Sidebar Footer -->
+            <div class="flex flex-col gap-1 border-t border-slate-200 dark:border-slate-800 pt-6">
+                <a asp-area="" asp-controller="Admin" asp-action="Settings" 
+                   class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors no-underline">
+                    <span class="material-symbols-outlined">settings</span>
+                    <span class="text-sm font-semibold">Settings</span>
+                </a>
+                <div class="mt-4 flex items-center gap-3 px-3">
+                    <div class="w-10 h-10 rounded-full bg-slate-200 dark:bg-slate-800 bg-cover bg-center" 
+                         style="background-image: url('https://images.unsplash.com/photo-1612349317150-e413f6a5b16d?w=100&h=100&fit=crop')"></div>
+                    <div class="flex flex-col overflow-hidden">
+                        <span class="text-xs font-bold truncate">Dr. Aris Thorne</span>
+                        <span class="text-[10px] text-slate-500 uppercase tracking-wider">Chief Surgeon</span>
+                    </div>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Main Content Area -->
+        <main class="flex-1 flex flex-col overflow-hidden">
+            <!-- Header -->
+            <header class="h-16 flex items-center justify-between px-8 border-b border-slate-200 dark:border-slate-800 bg-white dark:bg-background-dark/50">
+                <div class="flex items-center gap-4">
+                    <h2 class="text-xl font-bold text-slate-900 dark:text-slate-100">Patient Directory</h2>
+                </div>
+                <div class="flex items-center gap-4">
+                    <div class="relative hidden md:block">
+                        <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-sm">search</span>
+                        <input class="pl-10 pr-4 py-2 bg-slate-100 dark:bg-slate-800 border-none rounded-lg text-sm w-64 focus:ring-2 focus:ring-primary/50 transition-all" 
+                               placeholder="Global search..." 
+                               type="text" />
+                    </div>
+                    <button class="p-2 rounded-lg bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 hover:text-primary transition-colors">
+                        <span class="material-symbols-outlined">notifications</span>
+                    </button>
+                    <div class="h-8 w-px bg-slate-200 dark:bg-slate-800 mx-2"></div>
+                    <button class="bg-primary text-white px-4 py-2 rounded-lg text-sm font-bold flex items-center gap-2 hover:bg-primary/90 transition-all">
+                        <span class="material-symbols-outlined text-sm">add</span>
+                        Add Patient
+                    </button>
+                </div>
+            </header>
+
+            <!-- View Content -->
+            <div class="flex-1 overflow-y-auto p-8 bg-background-light dark:bg-background-dark/95">
+                <!-- Stats Summary -->
+                <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+                    <!-- Total Patients -->
+                    <div class="bg-white dark:bg-slate-900 p-5 rounded-xl border border-slate-200 dark:border-slate-800 flex items-center gap-4 shadow-sm">
+                        <div class="p-3 bg-primary/10 rounded-lg text-primary">
+                            <span class="material-symbols-outlined">person</span>
+                        </div>
+                        <div>
+                            <p class="text-xs font-semibold text-slate-500 uppercase tracking-wider">Total Patients</p>
+                            <p class="text-2xl font-bold">12,482</p>
+                        </div>
+                    </div>
+
+                    <!-- New This Month -->
+                    <div class="bg-white dark:bg-slate-900 p-5 rounded-xl border border-slate-200 dark:border-slate-800 flex items-center gap-4 shadow-sm">
+                        <div class="p-3 bg-emerald-500/10 rounded-lg text-emerald-500">
+                            <span class="material-symbols-outlined">how_to_reg</span>
+                        </div>
+                        <div>
+                            <p class="text-xs font-semibold text-slate-500 uppercase tracking-wider">New This Month</p>
+                            <p class="text-2xl font-bold">428</p>
+                        </div>
+                    </div>
+
+                    <!-- Pending Follow-up -->
+                    <div class="bg-white dark:bg-slate-900 p-5 rounded-xl border border-slate-200 dark:border-slate-800 flex items-center gap-4 shadow-sm">
+                        <div class="p-3 bg-amber-500/10 rounded-lg text-amber-500">
+                            <span class="material-symbols-outlined">pending_actions</span>
+                        </div>
+                        <div>
+                            <p class="text-xs font-semibold text-slate-500 uppercase tracking-wider">Pending Follow-up</p>
+                            <p class="text-2xl font-bold">156</p>
+                        </div>
+                    </div>
+
+                    <!-- Active This Week -->
+                    <div class="bg-white dark:bg-slate-900 p-5 rounded-xl border border-slate-200 dark:border-slate-800 flex items-center gap-4 shadow-sm">
+                        <div class="p-3 bg-primary/10 rounded-lg text-primary">
+                            <span class="material-symbols-outlined">calendar_month</span>
+                        </div>
+                        <div>
+                            <p class="text-xs font-semibold text-slate-500 uppercase tracking-wider">Active This Week</p>
+                            <p class="text-2xl font-bold">892</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Table Section -->
+                <div class="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm overflow-hidden">
+                    <!-- Table Filter/Search Header -->
+                    <div class="p-4 border-b border-slate-200 dark:border-slate-800 flex flex-wrap gap-4 items-center justify-between">
+                        <div class="flex items-center gap-2">
+                            <div class="relative">
+                                <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-sm">search</span>
+                                <input class="pl-10 pr-4 py-2 bg-slate-50 dark:bg-slate-800/50 border border-slate-200 dark:border-slate-700 rounded-lg text-sm w-80 focus:ring-1 focus:ring-primary focus:border-primary transition-all" 
+                                       placeholder="Filter by name, ID, or physician..." 
+                                       type="text" />
+                            </div>
+                            <button class="flex items-center gap-2 px-3 py-2 border border-slate-200 dark:border-slate-700 rounded-lg text-sm font-medium text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800">
+                                <span class="material-symbols-outlined text-lg">filter_list</span>
+                                Filters
+                            </button>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <p class="text-xs font-medium text-slate-500">Sort by:</p>
+                            <select class="bg-transparent border-none text-sm font-semibold text-slate-700 dark:text-slate-300 focus:ring-0 cursor-pointer">
+                                <option>Last Visit (Newest)</option>
+                                <option>Name (A-Z)</option>
+                                <option>Patient ID</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- Main Table -->
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left">
+                            <thead>
+                                <tr class="bg-slate-50 dark:bg-slate-800/50 text-slate-500 dark:text-slate-400 text-[11px] font-bold uppercase tracking-widest border-b border-slate-200 dark:border-slate-800">
+                                    <th class="px-6 py-4">Patient ID</th>
+                                    <th class="px-6 py-4">Patient Name</th>
+                                    <th class="px-6 py-4">Last Visit</th>
+                                    <th class="px-6 py-4">Primary Physician</th>
+                                    <th class="px-6 py-4">Status</th>
+                                    <th class="px-6 py-4 text-right">Action</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-slate-100 dark:divide-slate-800">
+                                <!-- Row 1 -->
+                                <tr class="hover:bg-slate-50 dark:hover:bg-slate-800/30 transition-colors group">
+                                    <td class="px-6 py-4 text-sm font-mono text-slate-500 dark:text-slate-400">#PT-8821</td>
+                                    <td class="px-6 py-4">
+                                        <div class="flex items-center gap-3">
+                                            <div class="w-8 h-8 rounded-full bg-primary/20 flex items-center justify-center text-primary text-xs font-bold">SJ</div>
+                                            <div>
+                                                <p class="text-sm font-bold text-slate-900 dark:text-slate-100">Sarah Johnson</p>
+                                                <p class="text-xs text-slate-500">sarah.j@example.com</p>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td class="px-6 py-4">
+                                        <p class="text-sm font-medium">Oct 12, 2023</p>
+                                        <p class="text-[10px] text-slate-500">09:15 AM</p>
+                                    </td>
+                                    <td class="px-6 py-4">
+                                        <div class="flex items-center gap-2">
+                                            <div class="w-6 h-6 rounded-full bg-slate-200 bg-cover bg-center" 
+                                                 style="background-image: url('https://images.unsplash.com/photo-1612349317150-e413f6a5b16d?w=50&h=50&fit=crop')"></div>
+                                            <span class="text-sm font-medium">Dr. Aris Thorne</span>
+                                        </div>
+                                    </td>
+                                    <td class="px-6 py-4">
+                                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-bold bg-emerald-100 text-emerald-700 dark:bg-emerald-500/10 dark:text-emerald-400">Active</span>
+                                    </td>
+                                    <td class="px-6 py-4 text-right">
+                                        <button class="text-slate-400 hover:text-primary transition-colors">
+                                            <span class="material-symbols-outlined">more_vert</span>
+                                        </button>
+                                    </td>
+                                </tr>
+
+                                <!-- Row 2 -->
+                                <tr class="hover:bg-slate-50 dark:hover:bg-slate-800/30 transition-colors">
+                                    <td class="px-6 py-4 text-sm font-mono text-slate-500 dark:text-slate-400">#PT-7742</td>
+                                    <td class="px-6 py-4">
+                                        <div class="flex items-center gap-3">
+                                            <div class="w-8 h-8 rounded-full bg-slate-200 dark:bg-slate-700 flex items-center justify-center text-slate-600 dark:text-slate-300 text-xs font-bold">MC</div>
+                                            <div>
+                                                <p class="text-sm font-bold text-slate-900 dark:text-slate-100">Michael Chen</p>
+                                                <p class="text-xs text-slate-500">m.chen@hospital.org</p>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td class="px-6 py-4">
+                                        <p class="text-sm font-medium">Oct 10, 2023</p>
+                                        <p class="text-[10px] text-slate-500">02:30 PM</p>
+                                    </td>
+                                    <td class="px-6 py-4">
+                                        <div class="flex items-center gap-2">
+                                            <div class="w-6 h-6 rounded-full bg-slate-200 bg-cover bg-center" 
+                                                 style="background-image: url('https://images.unsplash.com/photo-1559839734-2b71ea197ec2?w=50&h=50&fit=crop')"></div>
+                                            <span class="text-sm font-medium">Dr. Sarah Miller</span>
+                                        </div>
+                                    </td>
+                                    <td class="px-6 py-4">
+                                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-bold bg-amber-100 text-amber-700 dark:bg-amber-500/10 dark:text-amber-400">Follow-up</span>
+                                    </td>
+                                    <td class="px-6 py-4 text-right">
+                                        <button class="text-slate-400 hover:text-primary transition-colors">
+                                            <span class="material-symbols-outlined">more_vert</span>
+                                        </button>
+                                    </td>
+                                </tr>
+
+                                <!-- Row 3 -->
+                                <tr class="hover:bg-slate-50 dark:hover:bg-slate-800/30 transition-colors">
+                                    <td class="px-6 py-4 text-sm font-mono text-slate-500 dark:text-slate-400">#PT-6619</td>
+                                    <td class="px-6 py-4">
+                                        <div class="flex items-center gap-3">
+                                            <div class="w-8 h-8 rounded-full bg-primary/20 flex items-center justify-center text-primary text-xs font-bold">ER</div>
+                                            <div>
+                                                <p class="text-sm font-bold text-slate-900 dark:text-slate-100">Elena Rodriguez</p>
+                                                <p class="text-xs text-slate-500">e.rodriguez@mail.com</p>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td class="px-6 py-4">
+                                        <p class="text-sm font-medium">Sep 28, 2023</p>
+                                        <p class="text-[10px] text-slate-500">11:00 AM</p>
+                                    </td>
+                                    <td class="px-6 py-4">
+                                        <div class="flex items-center gap-2">
+                                            <div class="w-6 h-6 rounded-full bg-slate-200 bg-cover bg-center" 
+                                                 style="background-image: url('https://images.unsplash.com/photo-1612349317150-e413f6a5b16d?w=50&h=50&fit=crop')"></div>
+                                            <span class="text-sm font-medium">Dr. Aris Thorne</span>
+                                        </div>
+                                    </td>
+                                    <td class="px-6 py-4">
+                                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-bold bg-slate-100 text-slate-700 dark:bg-slate-800 dark:text-slate-400">Inactive</span>
+                                    </td>
+                                    <td class="px-6 py-4 text-right">
+                                        <button class="text-slate-400 hover:text-primary transition-colors">
+                                            <span class="material-symbols-outlined">more_vert</span>
+                                        </button>
+                                    </td>
+                                </tr>
+
+                                <!-- Row 4 -->
+                                <tr class="hover:bg-slate-50 dark:hover:bg-slate-800/30 transition-colors">
+                                    <td class="px-6 py-4 text-sm font-mono text-slate-500 dark:text-slate-400">#PT-5501</td>
+                                    <td class="px-6 py-4">
+                                        <div class="flex items-center gap-3">
+                                            <div class="w-8 h-8 rounded-full bg-slate-200 dark:bg-slate-700 flex items-center justify-center text-slate-600 dark:text-slate-300 text-xs font-bold">JW</div>
+                                            <div>
+                                                <p class="text-sm font-bold text-slate-900 dark:text-slate-100">James Wilson</p>
+                                                <p class="text-xs text-slate-500">jwilson99@webmail.net</p>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td class="px-6 py-4">
+                                        <p class="text-sm font-medium">Sep 25, 2023</p>
+                                        <p class="text-[10px] text-slate-500">08:45 AM</p>
+                                    </td>
+                                    <td class="px-6 py-4">
+                                        <div class="flex items-center gap-2">
+                                            <div class="w-6 h-6 rounded-full bg-slate-200 bg-cover bg-center" 
+                                                 style="background-image: url('https://images.unsplash.com/photo-1622253692010-333f2da6031d?w=50&h=50&fit=crop')"></div>
+                                            <span class="text-sm font-medium">Dr. Kevin White</span>
+                                        </div>
+                                    </td>
+                                    <td class="px-6 py-4">
+                                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-bold bg-emerald-100 text-emerald-700 dark:bg-emerald-500/10 dark:text-emerald-400">Active</span>
+                                    </td>
+                                    <td class="px-6 py-4 text-right">
+                                        <button class="text-slate-400 hover:text-primary transition-colors">
+                                            <span class="material-symbols-outlined">more_vert</span>
+                                        </button>
+                                    </td>
+                                </tr>
+
+                                <!-- Row 5 -->
+                                <tr class="hover:bg-slate-50 dark:hover:bg-slate-800/30 transition-colors">
+                                    <td class="px-6 py-4 text-sm font-mono text-slate-500 dark:text-slate-400">#PT-4423</td>
+                                    <td class="px-6 py-4">
+                                        <div class="flex items-center gap-3">
+                                            <div class="w-8 h-8 rounded-full bg-primary/20 flex items-center justify-center text-primary text-xs font-bold">LW</div>
+                                            <div>
+                                                <p class="text-sm font-bold text-slate-900 dark:text-slate-100">Linda Wu</p>
+                                                <p class="text-xs text-slate-500">linda.wu@design.com</p>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td class="px-6 py-4">
+                                        <p class="text-sm font-medium">Sep 15, 2023</p>
+                                        <p class="text-[10px] text-slate-500">04:10 PM</p>
+                                    </td>
+                                    <td class="px-6 py-4">
+                                        <div class="flex items-center gap-2">
+                                            <div class="w-6 h-6 rounded-full bg-slate-200 bg-cover bg-center" 
+                                                 style="background-image: url('https://images.unsplash.com/photo-1559839734-2b71ea197ec2?w=50&h=50&fit=crop')"></div>
+                                            <span class="text-sm font-medium">Dr. Sarah Miller</span>
+                                        </div>
+                                    </td>
+                                    <td class="px-6 py-4">
+                                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-bold bg-primary/10 text-primary">Pending</span>
+                                    </td>
+                                    <td class="px-6 py-4 text-right">
+                                        <button class="text-slate-400 hover:text-primary transition-colors">
+                                            <span class="material-symbols-outlined">more_vert</span>
+                                        </button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <!-- Pagination -->
+                    <div class="p-4 border-t border-slate-200 dark:border-slate-800 flex items-center justify-between">
+                        <p class="text-xs text-slate-500">Showing 1 to 5 of 12,482 patients</p>
+                        <div class="flex items-center gap-1">
+                            <button class="p-1 rounded-md hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-400 transition-colors">
+                                <span class="material-symbols-outlined text-sm">chevron_left</span>
+                            </button>
+                            <button class="px-3 py-1 rounded-md bg-primary text-white text-xs font-bold">1</button>
+                            <button class="px-3 py-1 rounded-md hover:bg-slate-100 dark:hover:bg-slate-800 text-xs font-bold">2</button>
+                            <button class="px-3 py-1 rounded-md hover:bg-slate-100 dark:hover:bg-slate-800 text-xs font-bold">3</button>
+                            <span class="text-slate-400 px-1">...</span>
+                            <button class="px-3 py-1 rounded-md hover:bg-slate-100 dark:hover:bg-slate-800 text-xs font-bold">2497</button>
+                            <button class="p-1 rounded-md hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-400 transition-colors">
+                                <span class="material-symbols-outlined text-sm">chevron_right</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+</body>
+</html>

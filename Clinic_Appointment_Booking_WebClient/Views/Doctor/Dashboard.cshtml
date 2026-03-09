@@ -1,0 +1,277 @@
+@{
+    ViewData["Title"] = "Doctor Dashboard";
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - MediClinic</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    
+    <!-- Material Symbols -->
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet" />
+    
+    <!-- Inter Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&display=swap" rel="stylesheet" />
+    
+    <!-- Tailwind Config -->
+    <script>
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#13b6ec",
+                        "background-light": "#f8fafc",
+                    },
+                    fontFamily: {
+                        "display": ["Inter", "Noto Sans", "sans-serif"]
+                    },
+                },
+            },
+        }
+    </script>
+</head>
+<body class="bg-background-light text-slate-800 font-display">
+    <div class="flex h-screen w-full overflow-hidden">
+        <!-- Sidebar -->
+        <aside class="w-64 bg-slate-900 text-white flex flex-col h-full flex-shrink-0">
+            <!-- Logo -->
+            <div class="h-16 flex items-center px-6 border-b border-slate-800">
+                <span class="material-symbols-outlined text-2xl mr-3 text-primary">local_hospital</span>
+                <span class="text-xl font-bold tracking-wide">MediClinic</span>
+            </div>
+
+            <!-- Navigation Menu -->
+            <div class="p-6 pb-2 flex-1 overflow-y-auto">
+                <p class="text-xs text-slate-400 uppercase tracking-wider font-semibold mb-4">Main Menu</p>
+                <nav class="space-y-2">
+                    <a asp-area="" asp-controller="Doctor" asp-action="Dashboard" 
+                       class="flex items-center gap-3 px-3 py-2.5 rounded-lg bg-primary/20 text-white font-medium no-underline">
+                        <span class="material-symbols-outlined text-xl">dashboard</span> Dashboard
+                    </a>
+                    <a asp-area="" asp-controller="Doctor" asp-action="Schedule" 
+                       class="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-slate-800 text-slate-300 transition-colors no-underline">
+                        <span class="material-symbols-outlined text-xl">calendar_month</span> Schedule
+                    </a>
+                    <a asp-area="" asp-controller="Doctor" asp-action="Patients" 
+                       class="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-slate-800 text-slate-300 transition-colors no-underline">
+                        <span class="material-symbols-outlined text-xl">groups</span> My Patients
+                    </a>
+                    <a asp-area="" asp-controller="Doctor" asp-action="Consultations" 
+                       class="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-slate-800 text-slate-300 transition-colors no-underline">
+                        <span class="material-symbols-outlined text-xl">medical_information</span> Consultations
+                    </a>
+                    <a asp-area="" asp-controller="Doctor" asp-action="Earnings" 
+                       class="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-slate-800 text-slate-300 transition-colors no-underline">
+                        <span class="material-symbols-outlined text-xl">payments</span> Earnings
+                    </a>
+                </nav>
+            </div>
+
+            <!-- User Profile -->
+            <div class="mt-auto p-6 border-t border-slate-800">
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 rounded-full bg-primary flex items-center justify-center text-white font-bold">
+                        DR
+                    </div>
+                    <div>
+                        <p class="font-medium text-sm">Dr. Sarah Smith</p>
+                        <p class="text-xs text-slate-400">Cardiologist</p>
+                    </div>
+                </div>
+                <a asp-area="" asp-controller="Account" asp-action="Logout" 
+                   class="mt-4 flex items-center gap-2 px-3 py-2 rounded-lg hover:bg-slate-800 text-slate-300 transition-colors text-sm no-underline">
+                    <span class="material-symbols-outlined text-lg">logout</span> Logout
+                </a>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="flex-1 flex flex-col h-full overflow-hidden bg-background-light">
+            <!-- Top Header -->
+            <header class="h-16 flex items-center justify-between px-8 bg-white border-b border-slate-200 flex-shrink-0">
+                <h1 class="text-2xl font-bold text-slate-800">Overview</h1>
+                <div class="flex items-center gap-6">
+                    <!-- Search Bar -->
+                    <div class="relative">
+                        <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-xl">search</span>
+                        <input class="pl-10 pr-4 py-2 bg-slate-100 border-none rounded-lg text-sm focus:ring-2 focus:ring-primary w-64" 
+                               placeholder="Search patients..." 
+                               type="text" />
+                    </div>
+                    <!-- Notifications -->
+                    <button class="relative p-2 text-slate-500 hover:text-primary transition-colors">
+                        <span class="material-symbols-outlined">notifications</span>
+                        <span class="absolute top-1.5 right-1.5 w-2 h-2 bg-red-500 rounded-full"></span>
+                    </button>
+                </div>
+            </header>
+
+            <!-- Dashboard Content -->
+            <div class="flex-1 overflow-y-auto p-8">
+                <div class="max-w-7xl mx-auto space-y-6">
+                    <!-- Stats Cards -->
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                        <!-- Total Appointments -->
+                        <div class="bg-white p-6 rounded-xl border border-slate-200 shadow-sm flex items-center gap-4">
+                            <div class="w-12 h-12 rounded-full bg-blue-100 flex items-center justify-center text-primary">
+                                <span class="material-symbols-outlined">event</span>
+                            </div>
+                            <div>
+                                <p class="text-sm text-slate-500 font-medium">Total Appointments Today</p>
+                                <p class="text-2xl font-bold text-slate-800">12</p>
+                            </div>
+                        </div>
+
+                        <!-- New Patients -->
+                        <div class="bg-white p-6 rounded-xl border border-slate-200 shadow-sm flex items-center gap-4">
+                            <div class="w-12 h-12 rounded-full bg-emerald-100 flex items-center justify-center text-emerald-600">
+                                <span class="material-symbols-outlined">person_add</span>
+                            </div>
+                            <div>
+                                <p class="text-sm text-slate-500 font-medium">New Patients</p>
+                                <p class="text-2xl font-bold text-slate-800">3</p>
+                            </div>
+                        </div>
+
+                        <!-- Pending Reports -->
+                        <div class="bg-white p-6 rounded-xl border border-slate-200 shadow-sm flex items-center gap-4">
+                            <div class="w-12 h-12 rounded-full bg-amber-100 flex items-center justify-center text-amber-600">
+                                <span class="material-symbols-outlined">assignment_late</span>
+                            </div>
+                            <div>
+                                <p class="text-sm text-slate-500 font-medium">Pending Reports</p>
+                                <p class="text-2xl font-bold text-slate-800">5</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Main Grid -->
+                    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                        <!-- Today's Appointments -->
+                        <div class="lg:col-span-2 bg-white rounded-xl border border-slate-200 shadow-sm">
+                            <div class="p-6 border-b border-slate-100 flex justify-between items-center">
+                                <h2 class="text-lg font-bold text-slate-800">Today's Appointments</h2>
+                                <button class="text-sm text-primary font-medium hover:underline">View All</button>
+                            </div>
+                            <div class="p-6">
+                                <div class="relative border-l-2 border-slate-100 ml-4 space-y-8">
+                                    <!-- Appointment 1 - Completed -->
+                                    <div class="relative pl-6">
+                                        <span class="absolute -left-[9px] top-1 w-4 h-4 rounded-full bg-white border-2 border-primary"></span>
+                                        <div class="flex items-start justify-between">
+                                            <div>
+                                                <p class="text-sm font-semibold text-slate-800">09:00 AM</p>
+                                                <p class="text-base font-bold text-slate-900 mt-1">Michael Johnson</p>
+                                                <p class="text-sm text-slate-500 mt-0.5 flex items-center gap-1">
+                                                    <span class="material-symbols-outlined text-[16px]">stethoscope</span> Routine Checkup
+                                                </p>
+                                            </div>
+                                            <span class="px-2.5 py-1 text-xs font-medium rounded-full bg-green-100 text-green-700">Completed</span>
+                                        </div>
+                                    </div>
+
+                                    <!-- Appointment 2 - In Progress -->
+                                    <div class="relative pl-6">
+                                        <span class="absolute -left-[9px] top-1 w-4 h-4 rounded-full bg-primary border-2 border-white shadow-sm shadow-primary/50"></span>
+                                        <div class="flex items-start justify-between">
+                                            <div>
+                                                <p class="text-sm font-semibold text-primary">10:30 AM (Now)</p>
+                                                <p class="text-base font-bold text-slate-900 mt-1">Emily Davis</p>
+                                                <p class="text-sm text-slate-500 mt-0.5 flex items-center gap-1">
+                                                    <span class="material-symbols-outlined text-[16px]">monitor_heart</span> Blood Pressure Monitor
+                                                </p>
+                                            </div>
+                                            <span class="px-2.5 py-1 text-xs font-medium rounded-full bg-blue-100 text-blue-700">In Progress</span>
+                                        </div>
+                                    </div>
+
+                                    <!-- Appointment 3 - Upcoming -->
+                                    <div class="relative pl-6">
+                                        <span class="absolute -left-[9px] top-1 w-4 h-4 rounded-full bg-white border-2 border-slate-300"></span>
+                                        <div class="flex items-start justify-between">
+                                            <div>
+                                                <p class="text-sm font-semibold text-slate-500">11:45 AM</p>
+                                                <p class="text-base font-bold text-slate-900 mt-1">Robert Smith</p>
+                                                <p class="text-sm text-slate-500 mt-0.5 flex items-center gap-1">
+                                                    <span class="material-symbols-outlined text-[16px]">healing</span> Follow-up
+                                                </p>
+                                            </div>
+                                            <span class="px-2.5 py-1 text-xs font-medium rounded-full bg-slate-100 text-slate-600">Upcoming</span>
+                                        </div>
+                                    </div>
+
+                                    <!-- Appointment 4 - Upcoming -->
+                                    <div class="relative pl-6">
+                                        <span class="absolute -left-[9px] top-1 w-4 h-4 rounded-full bg-white border-2 border-slate-300"></span>
+                                        <div class="flex items-start justify-between">
+                                            <div>
+                                                <p class="text-sm font-semibold text-slate-500">02:00 PM</p>
+                                                <p class="text-base font-bold text-slate-900 mt-1">Amanda Lee</p>
+                                                <p class="text-sm text-slate-500 mt-0.5 flex items-center gap-1">
+                                                    <span class="material-symbols-outlined text-[16px]">medical_services</span> Test Results Review
+                                                </p>
+                                            </div>
+                                            <span class="px-2.5 py-1 text-xs font-medium rounded-full bg-slate-100 text-slate-600">Upcoming</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Right Column -->
+                        <div class="space-y-6">
+                            <!-- Urgent Updates -->
+                            <div class="bg-white rounded-xl border border-slate-200 shadow-sm">
+                                <div class="p-5 border-b border-slate-100 flex items-center gap-2">
+                                    <span class="material-symbols-outlined text-red-500">error</span>
+                                    <h2 class="text-lg font-bold text-slate-800">Urgent Updates</h2>
+                                </div>
+                                <div class="p-5 space-y-4">
+                                    <div class="flex gap-3">
+                                        <div class="w-2 h-2 rounded-full bg-red-500 mt-2 flex-shrink-0"></div>
+                                        <div>
+                                            <p class="text-sm font-medium text-slate-800">Lab Results Ready</p>
+                                            <p class="text-xs text-slate-500 mt-0.5">Critical results for John Doe's lipid panel.</p>
+                                        </div>
+                                    </div>
+                                    <div class="flex gap-3">
+                                        <div class="w-2 h-2 rounded-full bg-amber-500 mt-2 flex-shrink-0"></div>
+                                        <div>
+                                            <p class="text-sm font-medium text-slate-800">Appointment Cancelled</p>
+                                            <p class="text-xs text-slate-500 mt-0.5">3:30 PM slot opened up (Sarah Connor).</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Quick Notes -->
+                            <div class="bg-white rounded-xl border border-slate-200 shadow-sm flex flex-col h-[280px]">
+                                <div class="p-5 border-b border-slate-100 flex items-center justify-between">
+                                    <div class="flex items-center gap-2">
+                                        <span class="material-symbols-outlined text-amber-500">edit_note</span>
+                                        <h2 class="text-lg font-bold text-slate-800">Quick Notes</h2>
+                                    </div>
+                                    <button class="text-slate-400 hover:text-primary transition-colors">
+                                        <span class="material-symbols-outlined text-lg">add</span>
+                                    </button>
+                                </div>
+                                <div class="p-5 flex-1 bg-yellow-50/50">
+                                    <textarea class="w-full h-full bg-transparent border-none resize-none focus:ring-0 p-0 text-sm text-slate-700 placeholder-slate-400" 
+                                              placeholder="Type your notes here..."></textarea>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+</body>
+</html>
