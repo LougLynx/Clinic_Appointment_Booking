@@ -31,3 +31,4 @@ D:\SP26(SM8)\PRN232\Code\Clinic_Appointment_Booking\Clinic_Appointment_Booking_W
 D:\SP26(SM8)\PRN232\Code\Clinic_Appointment_Booking\Clinic_Appointment_Booking_WebClient\obj\Debug\net8.0\Clinic_Appointment_Booking_WebClient.pdb
 D:\SP26(SM8)\PRN232\Code\Clinic_Appointment_Booking\Clinic_Appointment_Booking_WebClient\obj\Debug\net8.0\Clinic_Appointment_Booking_WebClient.genruntimeconfig.cache
 D:\SP26(SM8)\PRN232\Code\Clinic_Appointment_Booking\Clinic_Appointment_Booking_WebClient\obj\Debug\net8.0\ref\Clinic_Appointment_Booking_WebClient.dll
+D:\SP26(SM8)\PRN232\Code\Clinic_Appointment_Booking\Clinic_Appointment_Booking_WebClient\obj\Debug\net8.0\Clinic_Appointment_Booking_WebClient.sourcelink.json

@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("Clinic_Appointment_Booking_WebClient")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+045ed07d045d594d78dea7f750c6456577427bd2")]
 [assembly: System.Reflection.AssemblyProductAttribute("Clinic_Appointment_Booking_WebClient")]
 [assembly: System.Reflection.AssemblyTitleAttribute("Clinic_Appointment_Booking_WebClient")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

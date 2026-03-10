@@ -60,19 +60,19 @@
                         <a class="@(ViewContext.RouteData.Values["action"]?.ToString() == "Contact" ? "text-primary font-bold border-b-2 border-primary pb-1" : "text-slate-700 dark:text-slate-300") text-sm font-semibold hover:text-primary transition-colors" 
                            asp-area="" asp-controller="Home" asp-action="Contact">Contact</a>
                         
-                        <!-- Admin Link (visible for demo, should be role-based in production)
+                        @* Admin Link (visible for demo, should be role-based in production) *@
                         <a class="@(ViewContext.RouteData.Values["controller"]?.ToString() == "Admin" ? "text-primary font-bold border-b-2 border-primary pb-1" : "text-slate-700 dark:text-slate-300") text-sm font-semibold hover:text-primary transition-colors flex items-center gap-1" 
                            asp-area="" asp-controller="Admin" asp-action="Dashboard">
                             <span class="material-symbols-outlined text-[18px]">admin_panel_settings</span>
                             Admin
-                        </a> -->
+                        </a> 
                         
-                        <!-- Doctor Link (visible for demo, should be role-based in production)
+                         @* Doctor Link (visible for demo, should be role-based in production) *@
                         <a class="@(ViewContext.RouteData.Values["controller"]?.ToString() == "Doctor" ? "text-primary font-bold border-b-2 border-primary pb-1" : "text-slate-700 dark:text-slate-300") text-sm font-semibold hover:text-primary transition-colors flex items-center gap-1" 
                            asp-area="" asp-controller="Doctor" asp-action="Dashboard">
                             <span class="material-symbols-outlined text-[18px]">medical_services</span>
                             Doctor
-                        </a> -->
+                        </a> 
                     </nav>
 
                     <!-- Auth Buttons (when not logged in) -->

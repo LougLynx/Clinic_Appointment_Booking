@@ -3,16 +3,36 @@
   "WorkspaceRootPath": "D:\\SP26(SM8)\\PRN232\\Code\\Clinic_Appointment_Booking\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{8E6BC894-BAC8-47C3-AC47-60B7544D5359}|Clinic_Appointment_Booking_WebClient\\Clinic_Appointment_Booking_WebClient.csproj|d:\\sp26(sm8)\\prn232\\code\\clinic_appointment_booking\\clinic_appointment_booking_webclient\\views\\home\\contact.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
-      "RelativeMoniker": "D:0:0:{8E6BC894-BAC8-47C3-AC47-60B7544D5359}|Clinic_Appointment_Booking_WebClient\\Clinic_Appointment_Booking_WebClient.csproj|solutionrelative:clinic_appointment_booking_webclient\\views\\home\\contact.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+      "AbsoluteMoniker": "D:0:0:{71E09140-208D-4B86-A800-E079BC2A1A8F}|BussinessObjects\\BussinessObjects.csproj|d:\\sp26(sm8)\\prn232\\code\\clinic_appointment_booking\\bussinessobjects\\bussinessobjects.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|",
+      "RelativeMoniker": "D:0:0:{71E09140-208D-4B86-A800-E079BC2A1A8F}|BussinessObjects\\BussinessObjects.csproj|solutionrelative:bussinessobjects\\bussinessobjects.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{8E6BC894-BAC8-47C3-AC47-60B7544D5359}|Clinic_Appointment_Booking_WebClient\\Clinic_Appointment_Booking_WebClient.csproj|d:\\sp26(sm8)\\prn232\\code\\clinic_appointment_booking\\clinic_appointment_booking_webclient\\views\\account\\login.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
-      "RelativeMoniker": "D:0:0:{8E6BC894-BAC8-47C3-AC47-60B7544D5359}|Clinic_Appointment_Booking_WebClient\\Clinic_Appointment_Booking_WebClient.csproj|solutionrelative:clinic_appointment_booking_webclient\\views\\account\\login.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+      "AbsoluteMoniker": "D:0:0:{8E6BC894-BAC8-47C3-AC47-60B7544D5359}|Clinic_Appointment_Booking_WebClient\\Clinic_Appointment_Booking_WebClient.csproj|d:\\sp26(sm8)\\prn232\\code\\clinic_appointment_booking\\clinic_appointment_booking_webclient\\views\\shared\\_layoutmediclinic.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{8E6BC894-BAC8-47C3-AC47-60B7544D5359}|Clinic_Appointment_Booking_WebClient\\Clinic_Appointment_Booking_WebClient.csproj|solutionrelative:clinic_appointment_booking_webclient\\views\\shared\\_layoutmediclinic.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{8E6BC894-BAC8-47C3-AC47-60B7544D5359}|Clinic_Appointment_Booking_WebClient\\Clinic_Appointment_Booking_WebClient.csproj|d:\\sp26(sm8)\\prn232\\code\\clinic_appointment_booking\\clinic_appointment_booking_webclient\\views\\account\\register.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
-      "RelativeMoniker": "D:0:0:{8E6BC894-BAC8-47C3-AC47-60B7544D5359}|Clinic_Appointment_Booking_WebClient\\Clinic_Appointment_Booking_WebClient.csproj|solutionrelative:clinic_appointment_booking_webclient\\views\\account\\register.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+      "AbsoluteMoniker": "D:0:0:{89F9ED69-F352-4932-AB05-8C5910B440FD}|Clinic_Appointment_Booking\\Clinic_Appointment_Booking_WebAPI.csproj|d:\\sp26(sm8)\\prn232\\code\\clinic_appointment_booking\\clinic_appointment_booking\\clinic_appointment_booking_webapi.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}",
+      "RelativeMoniker": "D:0:0:{89F9ED69-F352-4932-AB05-8C5910B440FD}|Clinic_Appointment_Booking\\Clinic_Appointment_Booking_WebAPI.csproj|solutionrelative:clinic_appointment_booking\\clinic_appointment_booking_webapi.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{8E6BC894-BAC8-47C3-AC47-60B7544D5359}|Clinic_Appointment_Booking_WebClient\\Clinic_Appointment_Booking_WebClient.csproj|d:\\sp26(sm8)\\prn232\\code\\clinic_appointment_booking\\clinic_appointment_booking_webclient\\controllers\\admincontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{8E6BC894-BAC8-47C3-AC47-60B7544D5359}|Clinic_Appointment_Booking_WebClient\\Clinic_Appointment_Booking_WebClient.csproj|solutionrelative:clinic_appointment_booking_webclient\\controllers\\admincontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{8E6BC894-BAC8-47C3-AC47-60B7544D5359}|Clinic_Appointment_Booking_WebClient\\Clinic_Appointment_Booking_WebClient.csproj|d:\\sp26(sm8)\\prn232\\code\\clinic_appointment_booking\\clinic_appointment_booking_webclient\\controllers\\doctorcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{8E6BC894-BAC8-47C3-AC47-60B7544D5359}|Clinic_Appointment_Booking_WebClient\\Clinic_Appointment_Booking_WebClient.csproj|solutionrelative:clinic_appointment_booking_webclient\\controllers\\doctorcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{8E6BC894-BAC8-47C3-AC47-60B7544D5359}|Clinic_Appointment_Booking_WebClient\\Clinic_Appointment_Booking_WebClient.csproj|d:\\sp26(sm8)\\prn232\\code\\clinic_appointment_booking\\clinic_appointment_booking_webclient\\controllers\\doctorscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{8E6BC894-BAC8-47C3-AC47-60B7544D5359}|Clinic_Appointment_Booking_WebClient\\Clinic_Appointment_Booking_WebClient.csproj|solutionrelative:clinic_appointment_booking_webclient\\controllers\\doctorscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{8E6BC894-BAC8-47C3-AC47-60B7544D5359}|Clinic_Appointment_Booking_WebClient\\Clinic_Appointment_Booking_WebClient.csproj|d:\\sp26(sm8)\\prn232\\code\\clinic_appointment_booking\\clinic_appointment_booking_webclient\\controllers\\appointmentcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{8E6BC894-BAC8-47C3-AC47-60B7544D5359}|Clinic_Appointment_Booking_WebClient\\Clinic_Appointment_Booking_WebClient.csproj|solutionrelative:clinic_appointment_booking_webclient\\controllers\\appointmentcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{8E6BC894-BAC8-47C3-AC47-60B7544D5359}|Clinic_Appointment_Booking_WebClient\\Clinic_Appointment_Booking_WebClient.csproj|d:\\sp26(sm8)\\prn232\\code\\clinic_appointment_booking\\clinic_appointment_booking_webclient\\controllers\\accountcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{8E6BC894-BAC8-47C3-AC47-60B7544D5359}|Clinic_Appointment_Booking_WebClient\\Clinic_Appointment_Booking_WebClient.csproj|solutionrelative:clinic_appointment_booking_webclient\\controllers\\accountcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
   "DocumentGroupContainers": [
@@ -819,41 +839,102 @@
             {
               "$type": "Document",
               "DocumentIndex": 0,
-              "Title": "Contact.cshtml",
-              "DocumentMoniker": "D:\\SP26(SM8)\\PRN232\\Code\\Clinic_Appointment_Booking\\Clinic_Appointment_Booking_WebClient\\Views\\Home\\Contact.cshtml",
-              "RelativeDocumentMoniker": "Clinic_Appointment_Booking_WebClient\\Views\\Home\\Contact.cshtml",
-              "ToolTip": "D:\\SP26(SM8)\\PRN232\\Code\\Clinic_Appointment_Booking\\Clinic_Appointment_Booking_WebClient\\Views\\Home\\Contact.cshtml*",
-              "RelativeToolTip": "Clinic_Appointment_Booking_WebClient\\Views\\Home\\Contact.cshtml*",
-              "ViewState": "AgIAAJwAAAAAAAAAAAAAALEAAAAKAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2026-03-05T16:50:01.561Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 2,
-              "Title": "Register.cshtml",
-              "DocumentMoniker": "D:\\SP26(SM8)\\PRN232\\Code\\Clinic_Appointment_Booking\\Clinic_Appointment_Booking_WebClient\\Views\\Account\\Register.cshtml",
-              "RelativeDocumentMoniker": "Clinic_Appointment_Booking_WebClient\\Views\\Account\\Register.cshtml",
-              "ToolTip": "D:\\SP26(SM8)\\PRN232\\Code\\Clinic_Appointment_Booking\\Clinic_Appointment_Booking_WebClient\\Views\\Account\\Register.cshtml",
-              "RelativeToolTip": "Clinic_Appointment_Booking_WebClient\\Views\\Account\\Register.cshtml",
-              "ViewState": "AgIAAKQAAAAAAAAAAAD4v6MAAAA9AAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2026-03-05T16:19:27.786Z",
+              "Title": "BussinessObjects",
+              "DocumentMoniker": "D:\\SP26(SM8)\\PRN232\\Code\\Clinic_Appointment_Booking\\BussinessObjects\\BussinessObjects.csproj",
+              "RelativeDocumentMoniker": "BussinessObjects\\BussinessObjects.csproj",
+              "ToolTip": "D:\\SP26(SM8)\\PRN232\\Code\\Clinic_Appointment_Booking\\BussinessObjects\\BussinessObjects.csproj",
+              "RelativeToolTip": "BussinessObjects\\BussinessObjects.csproj",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA4AAAAOAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000758|",
+              "WhenOpened": "2026-03-10T16:10:21.965Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
               "DocumentIndex": 1,
-              "Title": "Login.cshtml",
-              "DocumentMoniker": "D:\\SP26(SM8)\\PRN232\\Code\\Clinic_Appointment_Booking\\Clinic_Appointment_Booking_WebClient\\Views\\Account\\Login.cshtml",
-              "RelativeDocumentMoniker": "Clinic_Appointment_Booking_WebClient\\Views\\Account\\Login.cshtml",
-              "ToolTip": "D:\\SP26(SM8)\\PRN232\\Code\\Clinic_Appointment_Booking\\Clinic_Appointment_Booking_WebClient\\Views\\Account\\Login.cshtml",
-              "RelativeToolTip": "Clinic_Appointment_Booking_WebClient\\Views\\Account\\Login.cshtml",
-              "ViewState": "AgIAAGYAAAAAAAAAAAAAAH8AAAA1AAAAAAAAAA==",
+              "Title": "_LayoutMediClinic.cshtml",
+              "DocumentMoniker": "D:\\SP26(SM8)\\PRN232\\Code\\Clinic_Appointment_Booking\\Clinic_Appointment_Booking_WebClient\\Views\\Shared\\_LayoutMediClinic.cshtml",
+              "RelativeDocumentMoniker": "Clinic_Appointment_Booking_WebClient\\Views\\Shared\\_LayoutMediClinic.cshtml",
+              "ToolTip": "D:\\SP26(SM8)\\PRN232\\Code\\Clinic_Appointment_Booking\\Clinic_Appointment_Booking_WebClient\\Views\\Shared\\_LayoutMediClinic.cshtml",
+              "RelativeToolTip": "Clinic_Appointment_Booking_WebClient\\Views\\Shared\\_LayoutMediClinic.cshtml",
+              "ViewState": "AgIAAIEAAAAAAAAAAAAAAJgAAABSAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2026-03-05T16:19:24.273Z",
+              "WhenOpened": "2026-03-10T14:09:23.987Z",
               "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "Clinic_Appointment_Booking_WebAPI",
+              "DocumentMoniker": "D:\\SP26(SM8)\\PRN232\\Code\\Clinic_Appointment_Booking\\Clinic_Appointment_Booking\\Clinic_Appointment_Booking_WebAPI.csproj",
+              "RelativeDocumentMoniker": "Clinic_Appointment_Booking\\Clinic_Appointment_Booking_WebAPI.csproj",
+              "ToolTip": "D:\\SP26(SM8)\\PRN232\\Code\\Clinic_Appointment_Booking\\Clinic_Appointment_Booking\\Clinic_Appointment_Booking_WebAPI.csproj",
+              "RelativeToolTip": "Clinic_Appointment_Booking\\Clinic_Appointment_Booking_WebAPI.csproj",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000758|",
+              "WhenOpened": "2026-03-10T14:09:15.008Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "AdminController.cs",
+              "DocumentMoniker": "D:\\SP26(SM8)\\PRN232\\Code\\Clinic_Appointment_Booking\\Clinic_Appointment_Booking_WebClient\\Controllers\\AdminController.cs",
+              "RelativeDocumentMoniker": "Clinic_Appointment_Booking_WebClient\\Controllers\\AdminController.cs",
+              "ToolTip": "D:\\SP26(SM8)\\PRN232\\Code\\Clinic_Appointment_Booking\\Clinic_Appointment_Booking_WebClient\\Controllers\\AdminController.cs",
+              "RelativeToolTip": "Clinic_Appointment_Booking_WebClient\\Controllers\\AdminController.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABAAAABGAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-03-09T07:59:27.232Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "DoctorController.cs",
+              "DocumentMoniker": "D:\\SP26(SM8)\\PRN232\\Code\\Clinic_Appointment_Booking\\Clinic_Appointment_Booking_WebClient\\Controllers\\DoctorController.cs",
+              "RelativeDocumentMoniker": "Clinic_Appointment_Booking_WebClient\\Controllers\\DoctorController.cs",
+              "ToolTip": "D:\\SP26(SM8)\\PRN232\\Code\\Clinic_Appointment_Booking\\Clinic_Appointment_Booking_WebClient\\Controllers\\DoctorController.cs",
+              "RelativeToolTip": "Clinic_Appointment_Booking_WebClient\\Controllers\\DoctorController.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAEAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-03-09T07:48:17.576Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
+              "Title": "DoctorsController.cs",
+              "DocumentMoniker": "D:\\SP26(SM8)\\PRN232\\Code\\Clinic_Appointment_Booking\\Clinic_Appointment_Booking_WebClient\\Controllers\\DoctorsController.cs",
+              "RelativeDocumentMoniker": "Clinic_Appointment_Booking_WebClient\\Controllers\\DoctorsController.cs",
+              "ToolTip": "D:\\SP26(SM8)\\PRN232\\Code\\Clinic_Appointment_Booking\\Clinic_Appointment_Booking_WebClient\\Controllers\\DoctorsController.cs",
+              "RelativeToolTip": "Clinic_Appointment_Booking_WebClient\\Controllers\\DoctorsController.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-03-09T07:48:16.865Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 6,
+              "Title": "AppointmentController.cs",
+              "DocumentMoniker": "D:\\SP26(SM8)\\PRN232\\Code\\Clinic_Appointment_Booking\\Clinic_Appointment_Booking_WebClient\\Controllers\\AppointmentController.cs",
+              "RelativeDocumentMoniker": "Clinic_Appointment_Booking_WebClient\\Controllers\\AppointmentController.cs",
+              "ToolTip": "D:\\SP26(SM8)\\PRN232\\Code\\Clinic_Appointment_Booking\\Clinic_Appointment_Booking_WebClient\\Controllers\\AppointmentController.cs",
+              "RelativeToolTip": "Clinic_Appointment_Booking_WebClient\\Controllers\\AppointmentController.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-03-09T07:48:16.162Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 7,
+              "Title": "AccountController.cs",
+              "DocumentMoniker": "D:\\SP26(SM8)\\PRN232\\Code\\Clinic_Appointment_Booking\\Clinic_Appointment_Booking_WebClient\\Controllers\\AccountController.cs",
+              "RelativeDocumentMoniker": "Clinic_Appointment_Booking_WebClient\\Controllers\\AccountController.cs",
+              "ToolTip": "D:\\SP26(SM8)\\PRN232\\Code\\Clinic_Appointment_Booking\\Clinic_Appointment_Booking_WebClient\\Controllers\\AccountController.cs",
+              "RelativeToolTip": "Clinic_Appointment_Booking_WebClient\\Controllers\\AccountController.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABYAAAAJAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-03-09T07:45:08.903Z"
             }
           ]
         },

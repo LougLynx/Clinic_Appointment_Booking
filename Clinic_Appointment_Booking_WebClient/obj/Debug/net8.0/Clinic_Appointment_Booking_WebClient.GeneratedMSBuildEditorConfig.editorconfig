@@ -28,6 +28,22 @@ build_metadata.AdditionalFiles.CssScope =
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWNjb3VudFxSZWdpc3Rlci5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
+[D:/SP26(SM8)/PRN232/Code/Clinic_Appointment_Booking/Clinic_Appointment_Booking_WebClient/Views/Admin/Dashboard.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWRtaW5cRGFzaGJvYXJkLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/SP26(SM8)/PRN232/Code/Clinic_Appointment_Booking/Clinic_Appointment_Booking_WebClient/Views/Admin/DoctorManagement.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWRtaW5cRG9jdG9yTWFuYWdlbWVudC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/SP26(SM8)/PRN232/Code/Clinic_Appointment_Booking/Clinic_Appointment_Booking_WebClient/Views/Admin/Financials.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWRtaW5cRmluYW5jaWFscy5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/SP26(SM8)/PRN232/Code/Clinic_Appointment_Booking/Clinic_Appointment_Booking_WebClient/Views/Admin/PatientRecords.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWRtaW5cUGF0aWVudFJlY29yZHMuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
 [D:/SP26(SM8)/PRN232/Code/Clinic_Appointment_Booking/Clinic_Appointment_Booking_WebClient/Views/Appointment/Book.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQXBwb2ludG1lbnRcQm9vay5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
@@ -42,6 +58,26 @@ build_metadata.AdditionalFiles.CssScope =
 
 [D:/SP26(SM8)/PRN232/Code/Clinic_Appointment_Booking/Clinic_Appointment_Booking_WebClient/Views/Doctors/Index.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcRG9jdG9yc1xJbmRleC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/SP26(SM8)/PRN232/Code/Clinic_Appointment_Booking/Clinic_Appointment_Booking_WebClient/Views/Doctor/Consultations.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcRG9jdG9yXENvbnN1bHRhdGlvbnMuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/SP26(SM8)/PRN232/Code/Clinic_Appointment_Booking/Clinic_Appointment_Booking_WebClient/Views/Doctor/Dashboard.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcRG9jdG9yXERhc2hib2FyZC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/SP26(SM8)/PRN232/Code/Clinic_Appointment_Booking/Clinic_Appointment_Booking_WebClient/Views/Doctor/Earnings.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcRG9jdG9yXEVhcm5pbmdzLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/SP26(SM8)/PRN232/Code/Clinic_Appointment_Booking/Clinic_Appointment_Booking_WebClient/Views/Doctor/Patients.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcRG9jdG9yXFBhdGllbnRzLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/SP26(SM8)/PRN232/Code/Clinic_Appointment_Booking/Clinic_Appointment_Booking_WebClient/Views/Doctor/Schedule.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcRG9jdG9yXFNjaGVkdWxlLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
 [D:/SP26(SM8)/PRN232/Code/Clinic_Appointment_Booking/Clinic_Appointment_Booking_WebClient/Views/Home/About.cshtml]
@@ -70,6 +106,10 @@ build_metadata.AdditionalFiles.CssScope =
 
 [D:/SP26(SM8)/PRN232/Code/Clinic_Appointment_Booking/Clinic_Appointment_Booking_WebClient/Views/Shared/_ValidationScriptsPartial.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXF9WYWxpZGF0aW9uU2NyaXB0c1BhcnRpYWwuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/SP26(SM8)/PRN232/Code/Clinic_Appointment_Booking/Clinic_Appointment_Booking_WebClient/Views/Specialties/Details.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU3BlY2lhbHRpZXNcRGV0YWlscy5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
 [D:/SP26(SM8)/PRN232/Code/Clinic_Appointment_Booking/Clinic_Appointment_Booking_WebClient/Views/Specialties/Index.cshtml]

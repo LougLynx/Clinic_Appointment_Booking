@@ -26,14 +26,15 @@
             theme: {
                 extend: {
                     colors: {
-                        "primary": "#13b6ec",
-                        "background-light": "#f6f8f8",
-                        "background-dark": "#101d22",
+                        "primary": "#0d9488",
+                        "primary-hover": "#0f766e",
+                        "accent-blue": "#3b82f6",
+                        "background-light": "#f0fdfa",
+                        "surface-light": "#ffffff",
                     },
                     fontFamily: {
-                        "display": ["Inter"]
+                        "display": ["Inter", "Noto Sans", "sans-serif"]
                     },
-                    borderRadius: { "DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px" },
                 },
             },
         }
@@ -43,96 +44,93 @@
         .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
     </style>
 </head>
-<body class="bg-background-light dark:bg-background-dark text-slate-900 dark:text-slate-100 font-display">
-    <div class="flex min-h-screen">
+<body class="bg-background-light text-slate-800 font-display">
+    <div class="flex h-screen overflow-hidden">
         <!-- Sidebar -->
-        <aside class="w-64 border-r border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 hidden md:flex flex-col">
+        <aside class="w-64 bg-slate-900 text-slate-300 flex flex-col transition-all duration-300 flex-shrink-0 border-r border-slate-800">
             <!-- Logo -->
-            <div class="p-6 flex items-center gap-3">
-                <div class="bg-primary rounded-lg p-2 text-white">
-                    <span class="material-symbols-outlined">medical_services</span>
-                </div>
-                <div>
-                    <h1 class="font-bold text-slate-900 dark:text-white leading-none">MediClinic</h1>
-                    <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">Admin Panel v2.1</p>
-                </div>
+            <div class="h-16 flex items-center px-6 border-b border-slate-800 bg-slate-950/50">
+                <span class="material-symbols-outlined text-primary text-3xl mr-3">admin_panel_settings</span>
+                <h1 class="text-white font-bold text-lg tracking-wide">MediAdmin</h1>
             </div>
 
             <!-- Navigation -->
-            <nav class="flex-1 px-4 space-y-1">
+            <nav class="flex-1 overflow-y-auto py-6 flex flex-col gap-2 px-3">
                 <a asp-area="" asp-controller="Admin" asp-action="Dashboard" 
-                   class="flex items-center gap-3 px-3 py-2 text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-lg no-underline">
-                    <span class="material-symbols-outlined">dashboard</span>
-                    <span class="text-sm font-medium">Dashboard</span>
-                </a>
-                <a asp-area="" asp-controller="Admin" asp-action="PatientRecords" 
-                   class="flex items-center gap-3 px-3 py-2 text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-lg no-underline">
-                    <span class="material-symbols-outlined">group</span>
-                    <span class="text-sm font-medium">Patients</span>
-                </a>
-                <a asp-area="" asp-controller="Admin" asp-action="Appointments" 
-                   class="flex items-center gap-3 px-3 py-2 text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-lg no-underline">
-                    <span class="material-symbols-outlined">calendar_today</span>
-                    <span class="text-sm font-medium">Appointments</span>
-                </a>
-                <a asp-area="" asp-controller="Admin" asp-action="Financials" 
-                   class="flex items-center gap-3 px-3 py-2 bg-primary/10 text-primary rounded-lg no-underline">
-                    <span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1">account_balance_wallet</span>
-                    <span class="text-sm font-medium">Financials</span>
+                   class="flex items-center gap-3 px-4 py-3 hover:bg-slate-800 rounded-lg transition-colors text-slate-400 hover:text-white border-l-4 border-transparent no-underline">
+                    <span class="material-symbols-outlined text-[20px]">dashboard</span>
+                    <span class="font-medium">Dashboard</span>
                 </a>
                 <a asp-area="" asp-controller="Admin" asp-action="DoctorManagement" 
-                   class="flex items-center gap-3 px-3 py-2 text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-lg no-underline">
-                    <span class="material-symbols-outlined">badge</span>
-                    <span class="text-sm font-medium">Staff</span>
+                   class="flex items-center gap-3 px-4 py-3 hover:bg-slate-800 rounded-lg transition-colors text-slate-400 hover:text-white border-l-4 border-transparent no-underline">
+                    <span class="material-symbols-outlined text-[20px]">stethoscope</span>
+                    <span class="font-medium">Doctor Management</span>
+                </a>
+                <a asp-area="" asp-controller="Admin" asp-action="PatientRecords" 
+                   class="flex items-center gap-3 px-4 py-3 hover:bg-slate-800 rounded-lg transition-colors text-slate-400 hover:text-white border-l-4 border-transparent no-underline">
+                    <span class="material-symbols-outlined text-[20px]">folder_shared</span>
+                    <span class="font-medium">Patient Records</span>
+                </a>
+                <a asp-area="" asp-controller="Admin" asp-action="Financials" 
+                   class="flex items-center gap-3 px-4 py-3 bg-primary/20 text-white rounded-lg transition-colors border-l-4 border-primary no-underline">
+                    <span class="material-symbols-outlined text-[20px]">account_balance_wallet</span>
+                    <span class="font-medium">Financials</span>
                 </a>
                 <a asp-area="" asp-controller="Admin" asp-action="Settings" 
-                   class="flex items-center gap-3 px-3 py-2 text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-lg no-underline">
-                    <span class="material-symbols-outlined">settings</span>
-                    <span class="text-sm font-medium">Settings</span>
+                   class="flex items-center gap-3 px-4 py-3 hover:bg-slate-800 rounded-lg transition-colors text-slate-400 hover:text-white border-l-4 border-transparent no-underline">
+                    <span class="material-symbols-outlined text-[20px]">settings</span>
+                    <span class="font-medium">System Settings</span>
                 </a>
             </nav>
 
             <!-- User Profile -->
-            <div class="p-4 border-t border-slate-200 dark:border-slate-800">
-                <div class="flex items-center gap-3 p-2 rounded-lg bg-slate-50 dark:bg-slate-800">
-                    <img alt="User Profile" 
-                         class="w-10 h-10 rounded-full bg-slate-200" 
-                         src="https://images.unsplash.com/photo-1559839734-2b71ea197ec2?w=100&h=100&fit=crop" />
-                    <div class="flex-1 min-w-0">
-                        <p class="text-sm font-semibold truncate">Dr. Sarah Miller</p>
-                        <p class="text-xs text-slate-500 truncate">Administrator</p>
+            <div class="p-4 border-t border-slate-800">
+                <div class="flex items-center gap-3 px-2 mb-3">
+                    <div class="w-10 h-10 rounded-full bg-slate-700 flex items-center justify-center text-white font-bold">
+                        SA
                     </div>
-                    <span class="material-symbols-outlined text-slate-400 text-sm">unfold_more</span>
+                    <div>
+                        <p class="text-white text-sm font-medium">System Admin</p>
+                        <p class="text-xs text-slate-500">admin@mediclinic.com</p>
+                    </div>
                 </div>
+                <!-- Back to Home Button -->
+                <a asp-area="" asp-controller="Home" asp-action="Index" 
+                   class="flex items-center gap-2 px-4 py-2 text-slate-400 hover:text-white hover:bg-slate-800 rounded-lg transition-colors text-sm no-underline">
+                    <span class="material-symbols-outlined text-[18px]">home</span>
+                    <span>Back to Home</span>
+                </a>
             </div>
         </aside>
 
-        <!-- Main Content -->
-        <main class="flex-1 flex flex-col min-w-0 overflow-y-auto">
+        <!-- Main Content Area -->
+        <div class="flex-1 flex flex-col overflow-hidden">
             <!-- Top Header -->
-            <header class="h-16 border-b border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 flex items-center justify-between px-8 sticky top-0 z-10">
-                <div class="flex items-center gap-4 flex-1">
-                    <div class="relative w-full max-w-md">
-                        <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-lg">search</span>
-                        <input class="w-full pl-10 pr-4 py-2 rounded-lg bg-slate-50 dark:bg-slate-800 border-none focus:ring-2 focus:ring-primary text-sm" 
-                               placeholder="Search transactions, patients, or invoices..." 
-                               type="text" />
-                    </div>
+            <header class="h-16 bg-surface-light border-b border-slate-200 flex items-center justify-between px-8 shadow-sm flex-shrink-0 z-10">
+                <!-- Search Bar -->
+                <div class="flex items-center bg-slate-100 rounded-lg px-3 py-2 w-96 border border-slate-200 focus-within:border-primary focus-within:ring-1 focus-within:ring-primary transition-all">
+                    <span class="material-symbols-outlined text-slate-400 mr-2">search</span>
+                    <input class="bg-transparent border-none outline-none text-sm w-full text-slate-700 placeholder-slate-400 focus:ring-0 p-0" 
+                           placeholder="Search records, doctors..." 
+                           type="text" />
                 </div>
-                <div class="flex items-center gap-4">
-                    <button class="p-2 text-slate-500 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-lg relative">
+
+                <!-- Header Actions -->
+                <div class="flex items-center gap-5">
+                    <button class="relative text-slate-500 hover:text-primary transition-colors">
                         <span class="material-symbols-outlined">notifications</span>
-                        <span class="absolute top-2 right-2 w-2 h-2 bg-red-500 rounded-full border-2 border-white dark:border-slate-900"></span>
+                        <span class="absolute top-0 right-0 w-2 h-2 bg-red-500 rounded-full border border-white"></span>
                     </button>
-                    <button class="flex items-center gap-2 bg-primary text-white px-4 py-2 rounded-lg text-sm font-semibold hover:bg-primary/90">
-                        <span class="material-symbols-outlined text-sm">add</span>
-                        New Payment
+                    <div class="h-8 w-px bg-slate-200"></div>
+                    <button class="flex items-center gap-2 text-slate-600 hover:text-slate-900 font-medium text-sm">
+                        <span>Export Report</span>
+                        <span class="material-symbols-outlined text-[18px]">download</span>
                     </button>
                 </div>
             </header>
 
-            <!-- Content -->
-            <div class="p-8 space-y-8">
+            <!-- Main Dashboard Content -->
+            <main class="flex-1 overflow-y-auto p-8 bg-slate-50/50 space-y-8">
                 <!-- Page Title -->
                 <div class="flex flex-col gap-2">
                     <h2 class="text-3xl font-extrabold text-slate-900 dark:text-white tracking-tight">Financial Performance</h2>
@@ -358,8 +356,8 @@
                         </div>
                     </div>
                 </div>
-            </div>
-        </main>
+            </main>
+        </div>
     </div>
 </body>
 </html>
