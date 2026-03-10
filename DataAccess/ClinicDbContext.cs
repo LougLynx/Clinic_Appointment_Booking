@@ -31,12 +31,18 @@ namespace DataAccess
         {
             if (!optionsBuilder.IsConfigured)
             {
-                var configuration = new ConfigurationBuilder()
-                    .SetBasePath(Directory.GetCurrentDirectory())
-                    .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
-                    .Build();
+                // Load .env file
+                DotNetEnv.Env.Load();
 
-                var connectionString = configuration.GetConnectionString("DefaultConnection");
+                // Build connection string from environment variables
+                var server = Environment.GetEnvironmentVariable("DB_SERVER") ?? "(local)";
+                var database = Environment.GetEnvironmentVariable("DB_NAME") ?? "ClinicAppointmentBookingDB";
+                var user = Environment.GetEnvironmentVariable("DB_USER") ?? "sa";
+                var password = Environment.GetEnvironmentVariable("DB_PASSWORD") ?? "";
+                var trustCert = Environment.GetEnvironmentVariable("DB_TRUST_CERTIFICATE") ?? "True";
+
+                var connectionString = $"Server={server};Database={database};Uid={user};Pwd={password};TrustServerCertificate={trustCert}";
+                
                 optionsBuilder.UseSqlServer(connectionString);
             }
         }
