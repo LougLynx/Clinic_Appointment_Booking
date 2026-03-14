@@ -184,10 +184,22 @@
         </div>
     </div>
 
+    <!-- Hide browser default password toggle -->
+    <style>
+        input[type="password"]::-ms-reveal,
+        input[type="password"]::-ms-clear {
+            display: none;
+        }
+        input[type="password"]::-webkit-credentials-auto-fill-button,
+        input[type="password"]::-webkit-strong-password-auto-fill-button {
+            display: none !important;
+        }
+    </style>
+
     <!-- Password Toggle Script -->
     <script>
         function togglePassword() {
-            const passwordInput = document.getElementById('password');
+            const passwordInput = document.querySelector('input[type="password"], input[type="text"][name="Password"]');
             const toggleIcon = document.getElementById('toggleIcon');
             
             if (passwordInput.type === 'password') {
