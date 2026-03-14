@@ -1,0 +1,76 @@
+@model Clinic_Appointment_Booking_WebClient.Models.ViewModels.ChangePasswordViewModel
+@{
+    ViewData["Title"] = "Settings";
+    Layout = "_LayoutMediClinic";
+}
+
+<div class="mb-8 px-4">
+    <h1 class="text-3xl md:text-4xl font-black leading-tight tracking-tight mb-2 text-slate-900 dark:text-white">Settings</h1>
+    <p class="text-slate-500 dark:text-slate-400">Manage your account settings</p>
+</div>
+
+<div class="max-w-2xl px-4 space-y-6">
+    @if (TempData["SuccessMessage"] != null)
+    {
+        <div class="p-4 rounded-xl bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800">
+            <p class="text-green-800 dark:text-green-200 text-sm">@TempData["SuccessMessage"]</p>
+        </div>
+    }
+
+    @if (TempData["ErrorMessage"] != null)
+    {
+        <div class="p-4 rounded-xl bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800">
+            <p class="text-red-800 dark:text-red-200 text-sm">@TempData["ErrorMessage"]</p>
+        </div>
+    }
+
+    <!-- Change Password -->
+    <div class="bg-white dark:bg-slate-900 rounded-2xl p-6 border border-slate-200 dark:border-slate-700 shadow-sm">
+        <h2 class="text-xl font-bold text-slate-900 dark:text-white mb-6 flex items-center gap-2">
+            <span class="material-symbols-outlined text-primary">lock</span>
+            Change Password
+        </h2>
+
+        <form asp-action="Settings" method="post" class="space-y-6">
+            @Html.AntiForgeryToken()
+            <div asp-validation-summary="ModelOnly" class="text-red-600 text-sm bg-red-50 dark:bg-red-900/20 p-3 rounded-lg"></div>
+
+            <div>
+                <label asp-for="OldPassword" class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">Current Password</label>
+                <input asp-for="OldPassword" type="password" 
+                       class="w-full rounded-lg border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-white focus:ring-primary focus:border-primary shadow-sm" 
+                       placeholder="Enter your current password" />
+                <span asp-validation-for="OldPassword" class="text-red-600 text-sm"></span>
+            </div>
+
+            <div>
+                <label asp-for="NewPassword" class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">New Password</label>
+                <input asp-for="NewPassword" type="password" 
+                       class="w-full rounded-lg border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-white focus:ring-primary focus:border-primary shadow-sm" 
+                       placeholder="Enter new password (min 8 chars, upper, lower, number, special)" />
+                <span asp-validation-for="NewPassword" class="text-red-600 text-sm"></span>
+            </div>
+
+            <div>
+                <label asp-for="ConfirmPassword" class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">Confirm New Password</label>
+                <input asp-for="ConfirmPassword" type="password" 
+                       class="w-full rounded-lg border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-white focus:ring-primary focus:border-primary shadow-sm" 
+                       placeholder="Confirm your new password" />
+                <span asp-validation-for="ConfirmPassword" class="text-red-600 text-sm"></span>
+            </div>
+
+            <div class="flex gap-4 pt-2">
+                <button type="submit" class="px-6 py-3 rounded-lg bg-primary text-white font-bold hover:bg-primary/90 transition-colors shadow-md">
+                    Change Password
+                </button>
+                <a asp-controller="Account" asp-action="Profile" class="px-6 py-3 rounded-lg border border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-300 font-semibold hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors no-underline">
+                    Back to Profile
+                </a>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    @{ await Html.RenderPartialAsync("_ValidationScriptsPartial"); }
+}

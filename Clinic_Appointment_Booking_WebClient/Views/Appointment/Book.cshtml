@@ -2,7 +2,8 @@
 @using System.Text.Json
 @model AppointmentBookViewModel
 @{
-    ViewData["Title"] = "Book Appointment";
+    var isEdit = Model.AppointmentId.HasValue;
+    ViewData["Title"] = isEdit ? "Edit Appointment" : "Book Appointment";
     Layout = "_LayoutMediClinic";
 
     DateTime? selectedDateValue = null;
@@ -46,7 +47,9 @@
 
 <!-- Page Header with Progress Steps -->
 <div class="mb-8 flex flex-col items-center justify-center px-4">
-    <h1 class="text-3xl md:text-4xl font-black leading-tight tracking-tight mb-6 text-slate-900 dark:text-white text-center">Book an Appointment</h1>
+    <h1 class="text-3xl md:text-4xl font-black leading-tight tracking-tight mb-6 text-slate-900 dark:text-white text-center">
+        @(isEdit ? "Edit Appointment" : "Book an Appointment")
+    </h1>
     
     <!-- Progress Indicator - ticks gradually as user completes each step -->
     <div class="w-full max-w-3xl flex items-center justify-between relative">
@@ -79,8 +82,12 @@
 <!-- Main Content -->
 <div class="flex flex-col lg:flex-row gap-8 px-4">
     <!-- Left Column - Booking Form -->
-    <form asp-action="Book" method="post" class="flex-1 flex flex-col gap-8">
+    <form id="bookForm" asp-action="@(isEdit ? "Update" : "Book")" method="post" class="flex-1 flex flex-col gap-8">
         @Html.AntiForgeryToken()
+        @if (isEdit)
+        {
+            <input asp-for="AppointmentId" type="hidden" />
+        }
         <input asp-for="DoctorId" type="hidden" />
         <input asp-for="SelectedDate" type="hidden" id="SelectedDate" />
         <input asp-for="SelectedTime" type="hidden" id="SelectedTime" />
@@ -190,13 +197,23 @@
 
         <!-- Action Buttons -->
         <div class="flex justify-end gap-4">
-            <a asp-area="" asp-controller="Doctors" asp-action="Details" asp-route-id="@Model.DoctorId"
-               class="px-6 py-3 rounded-lg border border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-300 font-semibold hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors no-underline flex items-center">
-                Cancel
-            </a>
+            @if (isEdit)
+            {
+                <a asp-area="" asp-controller="Appointment" asp-action="MyAppointments"
+                   class="px-6 py-3 rounded-lg border border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-300 font-semibold hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors no-underline flex items-center">
+                    Cancel
+                </a>
+            }
+            else
+            {
+                <a asp-area="" asp-controller="Doctors" asp-action="Details" asp-route-id="@Model.DoctorId"
+                   class="px-6 py-3 rounded-lg border border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-300 font-semibold hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors no-underline flex items-center">
+                    Cancel
+                </a>
+            }
             <button type="submit"
                     class="px-8 py-3 rounded-lg bg-primary text-white font-bold hover:bg-primary/90 transition-colors shadow-md flex items-center gap-2">
-                Continue
+                @(isEdit ? "Update Appointment" : "Continue")
                 <span class="material-symbols-outlined text-[20px]">arrow_forward</span>
             </button>
         </div>
@@ -293,6 +310,7 @@
 
             const selectedDateInput = document.getElementById('SelectedDate');
             const selectedTimeInput = document.getElementById('SelectedTime');
+            const bookForm = document.getElementById('bookForm');
             const summaryDate = document.getElementById('summaryDate');
             const summaryTime = document.getElementById('summaryTime');
             const calendarGrid = document.getElementById('calendarGrid');
@@ -305,11 +323,25 @@
             const afternoonSection = document.getElementById('afternoonSection');
             const noSlotsMessage = document.getElementById('noSlotsMessage');
 
-            let selectedDate = payload.selectedDate || (days[0] ? days[0].date : null);
+            let selectedDate = payload.selectedDate || null;
             let selectedTime = payload.selectedTime || null;
 
             let currentMonth = selectedDate ? new Date(selectedDate) : (days[0] ? new Date(days[0].date) : new Date());
             currentMonth = new Date(currentMonth.getFullYear(), currentMonth.getMonth(), 1);
+
+            function setFieldMessage(fieldName, message) {
+                const messageEl = document.querySelector(`[data-valmsg-for="${fieldName}"]`);
+                if (!messageEl) return;
+                if (message) {
+                    messageEl.textContent = message;
+                    messageEl.classList.remove('field-validation-valid');
+                    messageEl.classList.add('field-validation-error');
+                } else {
+                    messageEl.textContent = '';
+                    messageEl.classList.remove('field-validation-error');
+                    messageEl.classList.add('field-validation-valid');
+                }
+            }
 
             function pad(value) {
                 return String(value).padStart(2, '0');
@@ -396,6 +428,8 @@
                 if (selectedDateInput) selectedDateInput.value = dateStr || '';
                 selectedTime = null;
                 if (selectedTimeInput) selectedTimeInput.value = '';
+                setFieldMessage('SelectedDate', '');
+                setFieldMessage('SelectedTime', '');
                 renderCalendar();
                 renderTimeSlots();
                 updateSummary();
@@ -405,6 +439,7 @@
             function setSelectedTime(timeStr) {
                 selectedTime = timeStr;
                 if (selectedTimeInput) selectedTimeInput.value = timeStr || '';
+                setFieldMessage('SelectedTime', '');
                 updateSummary();
                 highlightSelectedTime();
                 updateProgressIndicator();
@@ -473,7 +508,10 @@
                 clearSlots();
 
                 if (!selectedDate || !daysByDate.has(selectedDate)) {
-                    if (noSlotsMessage) noSlotsMessage.classList.remove('hidden');
+                    if (noSlotsMessage) {
+                        noSlotsMessage.textContent = 'Please select a date to see available slots.';
+                        noSlotsMessage.classList.remove('hidden');
+                    }
                     if (morningSection) morningSection.classList.add('hidden');
                     if (afternoonSection) afternoonSection.classList.add('hidden');
                     return;
@@ -483,7 +521,10 @@
                 const availableSlots = day.slots.filter(slot => slot.available);
 
                 if (availableSlots.length === 0) {
-                    if (noSlotsMessage) noSlotsMessage.classList.remove('hidden');
+                    if (noSlotsMessage) {
+                        noSlotsMessage.textContent = 'No available slots for this date.';
+                        noSlotsMessage.classList.remove('hidden');
+                    }
                     if (morningSection) morningSection.classList.add('hidden');
                     if (afternoonSection) afternoonSection.classList.add('hidden');
                     return;
@@ -509,15 +550,11 @@
                     container.appendChild(button);
                 });
 
-                if (!selectedTime && availableSlots.length > 0) {
-                    setSelectedTime(availableSlots[0].start);
-                } else {
-                    highlightSelectedTime();
-                }
+                highlightSelectedTime();
             }
 
             if (selectedDateInput) selectedDateInput.value = selectedDate || '';
-            if (selectedTimeInput && selectedTime) selectedTimeInput.value = selectedTime;
+            if (selectedTimeInput) selectedTimeInput.value = selectedTime || '';
 
             renderCalendar();
             renderTimeSlots();
@@ -527,6 +564,11 @@
             const reasonSelect = document.querySelector('select[name="Reason"]') || document.getElementById('Reason');
             if (reasonSelect) reasonSelect.addEventListener('change', updateProgressIndicator);
             if (reasonSelect) reasonSelect.addEventListener('input', updateProgressIndicator);
+            if (reasonSelect) {
+                reasonSelect.addEventListener('change', function () {
+                    if (reasonSelect.value) setFieldMessage('Reason', '');
+                });
+            }
 
             if (prevBtn) {
                 prevBtn.addEventListener('click', function () {
@@ -539,6 +581,28 @@
                 nextBtn.addEventListener('click', function () {
                     currentMonth = new Date(currentMonth.getFullYear(), currentMonth.getMonth() + 1, 1);
                     renderCalendar();
+                });
+            }
+
+            if (bookForm) {
+                bookForm.addEventListener('submit', function (event) {
+                    let isValid = true;
+                    if (!selectedDate) {
+                        setFieldMessage('SelectedDate', 'Please select a date.');
+                        isValid = false;
+                    }
+                    if (!selectedTime) {
+                        setFieldMessage('SelectedTime', 'Please select a time.');
+                        isValid = false;
+                    }
+                    if (!reasonSelect || !reasonSelect.value) {
+                        setFieldMessage('Reason', 'Please select a reason for your visit.');
+                        isValid = false;
+                    }
+
+                    if (!isValid) {
+                        event.preventDefault();
+                    }
                 });
             }
         })();

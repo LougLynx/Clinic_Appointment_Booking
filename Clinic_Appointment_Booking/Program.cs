@@ -54,6 +54,8 @@ namespace Clinic_Appointment_Booking
             builder.Services.AddScoped<IRefreshTokenRepository, RefreshTokenRepository>();
             builder.Services.AddScoped<IDoctorRepository, DoctorRepository>();
             builder.Services.AddScoped<ISpecialtyRepository, SpecialtyRepository>();
+            builder.Services.AddScoped<IAppointmentRepository, AppointmentRepository>();
+            builder.Services.AddScoped<IContactRepository, ContactRepository>();
 
             // Services
             builder.Services.AddScoped<ITokenService, TokenService>();

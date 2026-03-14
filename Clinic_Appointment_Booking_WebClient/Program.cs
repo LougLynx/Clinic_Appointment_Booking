@@ -37,12 +37,15 @@ namespace Clinic_Appointment_Booking_WebClient
             var apiSettings = builder.Configuration.GetSection("ApiSettings");
             var apiBaseUrl = apiSettings["BaseUrl"];
 
-            // Session configuration
+            // Session configuration (dùng Session cookie để lưu trạng thái đăng nhập)
             builder.Services.AddSession(options =>
             {
                 options.IdleTimeout = TimeSpan.FromHours(1);
+                options.Cookie.Name = ".ClinicAppointment.Session";
                 options.Cookie.HttpOnly = true;
                 options.Cookie.IsEssential = true;
+                options.Cookie.SecurePolicy = CookieSecurePolicy.SameAsRequest;
+                options.Cookie.SameSite = SameSiteMode.Lax;
             });
 
             // HttpContextAccessor for accessing session in services
@@ -60,8 +63,17 @@ namespace Clinic_Appointment_Booking_WebClient
             builder.Services.AddScoped<IDoctorApiService, DoctorApiService>();
             builder.Services.AddScoped<ISpecialtyApiService, SpecialtyApiService>();
             builder.Services.AddScoped<IPaymentService, VietQRPaymentService>();
+            builder.Services.AddScoped<IAppointmentApiService, AppointmentApiService>();
+            builder.Services.AddScoped<IUserApiService, UserApiService>();
+            builder.Services.AddScoped<IContactApiService, ContactApiService>();
 
             builder.Services.AddControllersWithViews();
+
+            // Antiforgery: cho phép nhận token từ header (cho AJAX/fetch)
+            builder.Services.AddAntiforgery(options =>
+            {
+                options.HeaderName = "RequestVerificationToken";
+            });
 
             var app = builder.Build();
 

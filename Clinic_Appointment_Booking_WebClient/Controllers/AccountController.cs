@@ -8,12 +8,18 @@ namespace Clinic_Appointment_Booking_WebClient.Controllers
     public class AccountController : Controller
     {
         private readonly IAuthApiService _authApiService;
+        private readonly IUserApiService _userApiService;
         private readonly ILogger<AccountController> _logger;
         private readonly IConfiguration _configuration;
 
-        public AccountController(IAuthApiService authApiService, ILogger<AccountController> logger, IConfiguration configuration)
+        public AccountController(
+            IAuthApiService authApiService,
+            IUserApiService userApiService,
+            ILogger<AccountController> logger,
+            IConfiguration configuration)
         {
             _authApiService = authApiService;
+            _userApiService = userApiService;
             _logger = logger;
             _configuration = configuration;
         }
@@ -62,12 +68,13 @@ namespace Clinic_Appointment_Booking_WebClient.Controllers
 
                 if (response != null && response.Success && response.Data != null)
                 {
-                    // Store tokens in session
+                    // Store tokens and user info in session
                     HttpContext.Session.SetString("AccessToken", response.Data.AccessToken);
                     HttpContext.Session.SetString("RefreshToken", response.Data.RefreshToken);
                     HttpContext.Session.SetString("UserEmail", response.Data.User.Email);
                     HttpContext.Session.SetString("UserRole", response.Data.User.Role);
                     HttpContext.Session.SetString("UserName", response.Data.User.FullName);
+                    HttpContext.Session.SetString("UserPhone", response.Data.User.PhoneNumber ?? string.Empty);
 
                     TempData["SuccessMessage"] = "Login successful!";
                     if (!string.IsNullOrEmpty(returnUrl) && Url.IsLocalUrl(returnUrl))
@@ -325,6 +332,139 @@ namespace Clinic_Appointment_Booking_WebClient.Controllers
             return View();
         }
 
+        // GET: /Account/Profile (requires login)
+        public async Task<IActionResult> Profile()
+        {
+            if (string.IsNullOrEmpty(HttpContext.Session.GetString("AccessToken")))
+            {
+                TempData["ErrorMessage"] = "Please log in to view your profile.";
+                return RedirectToAction("Login", new { returnUrl = Url.Action("Profile") });
+            }
+
+            try
+            {
+                var response = await _userApiService.GetProfileAsync();
+                if (response?.Success == true && response.Data != null)
+                {
+                    var model = new ProfileViewModel
+                    {
+                        FullName = response.Data.FullName,
+                        Email = response.Data.Email,
+                        PhoneNumber = response.Data.PhoneNumber ?? "",
+                        Role = response.Data.Role ?? ""
+                    };
+                    return View(model);
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error loading profile");
+            }
+
+            // Fallback to session data
+            var userName = HttpContext.Session.GetString("UserName");
+            var userEmail = HttpContext.Session.GetString("UserEmail");
+            var userRole = HttpContext.Session.GetString("UserRole");
+            return View(new ProfileViewModel
+            {
+                FullName = userName ?? "",
+                Email = userEmail ?? "",
+                PhoneNumber = HttpContext.Session.GetString("UserPhone") ?? "",
+                Role = userRole ?? "Patient"
+            });
+        }
+
+        // POST: /Account/Profile
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Profile(ProfileViewModel model)
+        {
+            if (string.IsNullOrEmpty(HttpContext.Session.GetString("AccessToken")))
+            {
+                return RedirectToAction("Login", new { returnUrl = Url.Action("Profile") });
+            }
+
+            if (!ModelState.IsValid)
+                return View(model);
+
+            try
+            {
+                var response = await _userApiService.UpdateProfileAsync(new UserDTO
+                {
+                    FullName = model.FullName,
+                    PhoneNumber = model.PhoneNumber ?? ""
+                });
+
+                if (response?.Success == true)
+                {
+                    HttpContext.Session.SetString("UserName", model.FullName);
+                    HttpContext.Session.SetString("UserPhone", model.PhoneNumber ?? string.Empty);
+                    TempData["SuccessMessage"] = "Profile updated successfully.";
+                    return RedirectToAction("Profile");
+                }
+
+                ModelState.AddModelError("", response?.Message ?? "Failed to update profile.");
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error updating profile");
+                ModelState.AddModelError("", "An error occurred while updating profile.");
+            }
+
+            return View(model);
+        }
+
+        // GET: /Account/Settings (requires login)
+        public IActionResult Settings()
+        {
+            if (string.IsNullOrEmpty(HttpContext.Session.GetString("AccessToken")))
+            {
+                TempData["ErrorMessage"] = "Please log in to access settings.";
+                return RedirectToAction("Login", new { returnUrl = Url.Action("Settings") });
+            }
+
+            return View(new ChangePasswordViewModel());
+        }
+
+        // POST: /Account/Settings (Change password)
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Settings(ChangePasswordViewModel model)
+        {
+            if (string.IsNullOrEmpty(HttpContext.Session.GetString("AccessToken")))
+            {
+                return RedirectToAction("Login", new { returnUrl = Url.Action("Settings") });
+            }
+
+            if (!ModelState.IsValid)
+                return View(model);
+
+            try
+            {
+                var response = await _userApiService.ChangePasswordAsync(new ChangePasswordRequestDTO
+                {
+                    OldPassword = model.OldPassword,
+                    NewPassword = model.NewPassword,
+                    ConfirmPassword = model.ConfirmPassword
+                });
+
+                if (response?.Success == true)
+                {
+                    TempData["SuccessMessage"] = "Password changed successfully. Please log in again.";
+                    return RedirectToAction("Logout");
+                }
+
+                ModelState.AddModelError("", response?.Message ?? "Failed to change password.");
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error changing password");
+                ModelState.AddModelError("", "An error occurred while changing password.");
+            }
+
+            return View(model);
+        }
+
         // POST: /Account/GoogleLogin
         [HttpPost]
         public async Task<IActionResult> GoogleLogin([FromBody] GoogleLoginRequestDTO request)
@@ -345,6 +485,7 @@ namespace Clinic_Appointment_Booking_WebClient.Controllers
                     HttpContext.Session.SetString("UserEmail", response.Data.User.Email);
                     HttpContext.Session.SetString("UserRole", response.Data.User.Role);
                     HttpContext.Session.SetString("UserName", response.Data.User.FullName);
+                    HttpContext.Session.SetString("UserPhone", response.Data.User.PhoneNumber ?? string.Empty);
 
                     return Ok(new { success = true, message = "Google login successful" });
                 }

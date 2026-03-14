@@ -9,6 +9,19 @@
     <p class="text-lg text-slate-700 dark:text-slate-300">Get in touch with us for any inquiries, appointment bookings, or feedback. We are here to help.</p>
 </div>
 
+@if (TempData["ContactSuccess"] != null)
+{
+    <div class="mx-4 mb-6 p-4 rounded-lg bg-green-100 dark:bg-green-900/30 border border-green-200 dark:border-green-800 text-green-800 dark:text-green-200">
+        <p class="font-medium">@TempData["ContactSuccess"]</p>
+    </div>
+}
+@if (TempData["ContactError"] != null)
+{
+    <div class="mx-4 mb-6 p-4 rounded-lg bg-red-100 dark:bg-red-900/30 border border-red-200 dark:border-red-800 text-red-800 dark:text-red-200">
+        <p class="font-medium">@TempData["ContactError"]</p>
+    </div>
+}
+
 <!-- Main Content -->
 <div class="flex flex-col lg:flex-row gap-12 px-4">
     <!-- Contact Form -->

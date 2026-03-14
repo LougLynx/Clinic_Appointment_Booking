@@ -1,5 +1,4 @@
 using System.Text;
-using System.Web;
 
 namespace Clinic_Appointment_Booking_WebClient.Services
 {
@@ -35,8 +34,8 @@ namespace Clinic_Appointment_Booking_WebClient.Services
                 // Format: https://img.vietqr.io/image/{BANK_ID}-{ACCOUNT_NO}-{TEMPLATE}.jpg?amount={AMOUNT}&addInfo={INFO}&accountName={NAME}
                 
                 var amountValue = ((int)amount).ToString();
-                var info = HttpUtility.UrlEncode($"Appointment {appointmentReference}");
-                var name = HttpUtility.UrlEncode(accountName);
+                var info = Uri.EscapeDataString($"Appointment {appointmentReference}");
+                var name = Uri.EscapeDataString(accountName);
 
                 var qrUrl = $"https://img.vietqr.io/image/{_bankCode}-{_accountNumber}-{_template}.jpg" +
                            $"?amount={amountValue}" +

@@ -5,6 +5,8 @@ namespace Clinic_Appointment_Booking_WebClient.Models.ViewModels
 {
     public class AppointmentBookViewModel
     {
+        public int? AppointmentId { get; set; }
+
         [Required]
         public int DoctorId { get; set; }
 

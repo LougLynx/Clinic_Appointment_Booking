@@ -1,0 +1,205 @@
+@using BussinessObjects.DTOs
+@model IReadOnlyList<AppointmentDTO>
+@{
+    ViewData["Title"] = "My Appointments";
+    Layout = "_LayoutMediClinic";
+
+    var appointments = Model ?? Array.Empty<AppointmentDTO>();
+    var errorMessage = TempData["ErrorMessage"] as string;
+    var successMessage = TempData["SuccessMessage"] as string;
+}
+
+<!-- Page Header -->
+<div class="mb-8 px-4">
+    <h1 class="text-3xl md:text-4xl font-black leading-tight tracking-tight mb-2 text-slate-900 dark:text-white">My Appointments</h1>
+    <p class="text-slate-500 dark:text-slate-400 text-base">View and manage your scheduled appointments.</p>
+</div>
+
+<!-- Main Content -->
+<div class="px-4">
+    @if (!string.IsNullOrWhiteSpace(successMessage))
+    {
+        <div class="mb-6 rounded-xl border border-emerald-200 bg-emerald-50 px-4 py-3 text-emerald-700">
+            @successMessage
+        </div>
+    }
+
+    @if (!string.IsNullOrWhiteSpace(errorMessage))
+    {
+        <div class="mb-6 rounded-xl border border-rose-200 bg-rose-50 px-4 py-3 text-rose-700">
+            @errorMessage
+        </div>
+    }
+
+    @if (appointments.Count == 0)
+    {
+        <div class="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-sm overflow-hidden">
+            <div class="p-8 lg:p-12 text-center">
+                <div class="w-20 h-20 mx-auto mb-6 rounded-full bg-primary/10 dark:bg-primary/20 flex items-center justify-center">
+                    <span class="material-symbols-outlined text-4xl text-primary">calendar_month</span>
+                </div>
+                <h2 class="text-xl font-bold text-slate-900 dark:text-white mb-3">No Appointments Yet</h2>
+                <p class="text-slate-600 dark:text-slate-400 max-w-md mx-auto mb-8">
+                    You haven't booked any appointments. Browse our doctors and schedule your first appointment today.
+                </p>
+                <a asp-area="" asp-controller="Doctors" asp-action="Index"
+                   class="inline-flex items-center justify-center gap-2 px-6 py-3 bg-primary text-white font-bold rounded-lg hover:bg-primary/90 transition-colors no-underline">
+                    <span class="material-symbols-outlined text-[20px]">search</span>
+                    Find a Doctor
+                </a>
+            </div>
+        </div>
+    }
+    else
+    {
+        <div class="grid gap-4">
+            @foreach (var appointment in appointments.OrderByDescending(a => a.AppointmentDate).ThenByDescending(a => a.AppointmentTime))
+            {
+                var dateText = appointment.AppointmentDate.ToString("dddd, MMMM dd, yyyy");
+                var timeText = DateTime.Today.Add(appointment.AppointmentTime).ToString("hh:mm tt");
+                var status = appointment.Status ?? "Unknown";
+                var statusClass = status.ToLowerInvariant() switch
+                {
+                    "confirmed" => "bg-emerald-100 text-emerald-700",
+                    "pending" => "bg-amber-100 text-amber-700",
+                    "cancelled" => "bg-rose-100 text-rose-700",
+                    _ => "bg-slate-100 text-slate-700"
+                };
+                var appointmentDateTime = appointment.AppointmentDate.Date.Add(appointment.AppointmentTime);
+                var isPast = appointmentDateTime < DateTime.Now;
+                var isCancelled = status.Equals("cancelled", StringComparison.OrdinalIgnoreCase);
+                var isCompleted = status.Equals("completed", StringComparison.OrdinalIgnoreCase);
+                var canModify = !isPast && !isCancelled && !isCompleted;
+
+                <div class="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-sm p-6">
+                    <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+                        <div>
+                            <div class="text-sm text-slate-500 dark:text-slate-400 mb-1">@dateText</div>
+                            <h3 class="text-lg font-bold text-slate-900 dark:text-white">@appointment.DoctorName</h3>
+                            <div class="text-sm text-primary font-semibold">@appointment.SpecialtyName</div>
+                            <div class="mt-2 text-sm text-slate-600 dark:text-slate-400">
+                                <span class="font-semibold">Time:</span> @timeText
+                            </div>
+                            <div class="text-sm text-slate-600 dark:text-slate-400">
+                                <span class="font-semibold">Reason:</span> @appointment.ReasonForVisit
+                            </div>
+                            @if (!string.IsNullOrWhiteSpace(appointment.AdditionalNotes))
+                            {
+                                <div class="text-sm text-slate-500 dark:text-slate-400 mt-1 italic">"@appointment.AdditionalNotes"</div>
+                            }
+                        </div>
+                        <div class="flex flex-col items-start md:items-end gap-3">
+                            <span class="px-3 py-1 rounded-full text-xs font-semibold @statusClass">@status</span>
+                            <div class="text-sm text-slate-600 dark:text-slate-400">
+                                Fee: @appointment.ConsultationFee.ToString("C2")
+                            </div>
+                            <div class="flex flex-wrap gap-2">
+                                <a asp-area="" asp-controller="Appointment" asp-action="Details" asp-route-id="@appointment.AppointmentId"
+                                   class="text-sm font-semibold text-primary hover:underline">
+                                    View Details
+                                </a>
+                                @if (canModify)
+                                {
+                                    <a asp-area="" asp-controller="Appointment" asp-action="Edit" asp-route-id="@appointment.AppointmentId"
+                                       class="text-sm font-semibold text-primary hover:underline">
+                                        Edit
+                                    </a>
+                                }
+                                else
+                                {
+                                    <span class="text-sm font-semibold text-slate-400 cursor-not-allowed">Edit</span>
+                                }
+                                <button type="button"
+                                        class="text-sm font-semibold @(canModify ? "text-rose-600 hover:underline" : "text-slate-400 cursor-not-allowed")"
+                                        data-cancel-button
+                                        data-appointment-id="@appointment.AppointmentId"
+                                        data-appointment-title="@($"{appointment.DoctorName} - {dateText} {timeText}")"
+                                        @(canModify ? "" : "disabled")>
+                                    Cancel
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    }
+</div>
+
+<form id="cancelForm" asp-action="Cancel" method="post" class="hidden">
+    @Html.AntiForgeryToken()
+    <input type="hidden" id="cancelAppointmentId" name="appointmentId" />
+    <input type="hidden" id="cancelReason" name="reason" />
+</form>
+
+<div id="cancelModal" class="fixed inset-0 z-50 hidden items-center justify-center bg-black/50 p-4">
+    <div class="w-full max-w-md rounded-2xl bg-white p-6 shadow-2xl dark:bg-slate-900">
+        <h3 class="text-xl font-bold text-slate-900 dark:text-white mb-2">Cancel Appointment</h3>
+        <p class="text-sm text-slate-600 dark:text-slate-400 mb-4" id="cancelModalTitle"></p>
+        <label class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2" for="cancelReasonInput">
+            Reason (optional)
+        </label>
+        <textarea id="cancelReasonInput"
+                  class="w-full rounded-lg border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-white focus:ring-rose-500 focus:border-rose-500 shadow-sm placeholder:text-slate-400"
+                  rows="3"
+                  placeholder="Let us know why you are cancelling"></textarea>
+        <div class="mt-5 flex gap-3">
+            <button type="button" id="cancelModalClose"
+                    class="flex-1 px-4 py-2 border border-slate-200 dark:border-slate-700 rounded-lg text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors">
+                Close
+            </button>
+            <button type="button" id="cancelModalConfirm"
+                    class="flex-1 px-4 py-2 bg-rose-600 text-white rounded-lg hover:bg-rose-500 transition-colors">
+                Cancel Appointment
+            </button>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        (function () {
+            const cancelButtons = document.querySelectorAll('[data-cancel-button]');
+            const modal = document.getElementById('cancelModal');
+            const modalTitle = document.getElementById('cancelModalTitle');
+            const reasonInput = document.getElementById('cancelReasonInput');
+            const cancelIdInput = document.getElementById('cancelAppointmentId');
+            const cancelReasonInput = document.getElementById('cancelReason');
+            const cancelForm = document.getElementById('cancelForm');
+            const closeBtn = document.getElementById('cancelModalClose');
+            const confirmBtn = document.getElementById('cancelModalConfirm');
+
+            if (!modal || !cancelForm) return;
+
+            cancelButtons.forEach(button => {
+                button.addEventListener('click', function () {
+                    if (button.disabled) return;
+                    const appointmentId = button.getAttribute('data-appointment-id');
+                    const title = button.getAttribute('data-appointment-title') || '';
+                    if (modalTitle) modalTitle.textContent = title;
+                    if (reasonInput) reasonInput.value = '';
+                    if (cancelIdInput) cancelIdInput.value = appointmentId || '';
+                    modal.classList.remove('hidden');
+                    modal.classList.add('flex');
+                });
+            });
+
+            function closeModal() {
+                modal.classList.add('hidden');
+                modal.classList.remove('flex');
+            }
+
+            closeBtn?.addEventListener('click', closeModal);
+            modal.addEventListener('click', function (event) {
+                if (event.target === modal) closeModal();
+            });
+
+            confirmBtn?.addEventListener('click', function () {
+                if (cancelReasonInput && reasonInput) {
+                    cancelReasonInput.value = reasonInput.value.trim();
+                }
+                cancelForm.submit();
+            });
+        })();
+    </script>
+}
