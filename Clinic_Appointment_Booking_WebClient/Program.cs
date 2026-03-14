@@ -1,4 +1,5 @@
 using Clinic_Appointment_Booking_WebClient.Services;
+using DotNetEnv;
 
 namespace Clinic_Appointment_Booking_WebClient
 {
@@ -6,7 +7,21 @@ namespace Clinic_Appointment_Booking_WebClient
     {
         public static void Main(string[] args)
         {
+            // Load .env file from DataAccess folder
+            var envPath = Path.Combine(Directory.GetCurrentDirectory(), "..", "DataAccess", ".env");
+            if (File.Exists(envPath))
+            {
+                Env.Load(envPath);
+            }
+
             var builder = WebApplication.CreateBuilder(args);
+
+            // Override GoogleAuth:ClientId from environment variable
+            var googleClientId = Environment.GetEnvironmentVariable("GOOGLE_CLIENT_ID");
+            if (!string.IsNullOrEmpty(googleClientId))
+            {
+                builder.Configuration["GoogleAuth:ClientId"] = googleClientId;
+            }
 
             // Add services to the container.
             var apiSettings = builder.Configuration.GetSection("ApiSettings");

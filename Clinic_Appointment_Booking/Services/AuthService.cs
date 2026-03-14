@@ -2,6 +2,7 @@ using BussinessObjects.DTOs;
 using BussinessObjects.Models;
 using Clinic_Appointment_Booking.Services.Interfaces;
 using Repositories.Interfaces;
+using Google.Apis.Auth;
 
 namespace Clinic_Appointment_Booking.Services
 {
@@ -255,6 +256,106 @@ namespace Clinic_Appointment_Booking.Services
 
             _logger.LogInformation($"Password reset successful for user {user.Email}");
             return true;
+        }
+
+        public async Task<LoginResponseDTO> GoogleLoginAsync(GoogleLoginRequestDTO request)
+        {
+            try
+            {
+                var googleClientId = Environment.GetEnvironmentVariable("GOOGLE_CLIENT_ID");
+                
+                if (string.IsNullOrEmpty(googleClientId))
+                {
+                    throw new InvalidOperationException("Google Client ID is not configured");
+                }
+
+                var payload = await GoogleJsonWebSignature.ValidateAsync(request.IdToken, new GoogleJsonWebSignature.ValidationSettings
+                {
+                    Audience = new[] { googleClientId }
+                });
+
+                if (payload == null)
+                {
+                    throw new UnauthorizedAccessException("Invalid Google token");
+                }
+
+                var user = await _userRepository.GetByEmailAsync(payload.Email);
+
+                if (user == null)
+                {
+                    user = new User
+                    {
+                        FullName = payload.Name,
+                        Email = payload.Email,
+                        PasswordHash = string.Empty,
+                        Role = "Patient",
+                        IsActive = true,
+                        EmailVerified = true,
+                        CreatedAt = DateTime.Now
+                    };
+
+                    await _userRepository.AddAsync(user);
+                    await _userRepository.SaveChangesAsync();
+                }
+                else
+                {
+                    if (!user.IsActive)
+                    {
+                        throw new UnauthorizedAccessException("Account is inactive");
+                    }
+
+                    if (!user.EmailVerified)
+                    {
+                        user.EmailVerified = true;
+                        await _userRepository.UpdateAsync(user);
+                        await _userRepository.SaveChangesAsync();
+                    }
+                }
+
+                var accessToken = _tokenService.GenerateAccessToken(user);
+                var refreshToken = _tokenService.GenerateRefreshToken();
+
+                var jwtSettings = _configuration.GetSection("JwtSettings");
+                var refreshTokenExpiry = int.Parse(jwtSettings["RefreshTokenExpirationDays"] ?? "7");
+
+                var refreshTokenEntity = new RefreshToken
+                {
+                    UserId = user.UserId,
+                    Token = refreshToken,
+                    ExpiresAt = DateTime.Now.AddDays(refreshTokenExpiry),
+                    CreatedAt = DateTime.Now
+                };
+
+                await _refreshTokenRepository.AddAsync(refreshTokenEntity);
+                await _refreshTokenRepository.SaveChangesAsync();
+
+                user.LastLoginAt = DateTime.Now;
+                await _userRepository.UpdateAsync(user);
+                await _userRepository.SaveChangesAsync();
+
+                return new LoginResponseDTO
+                {
+                    AccessToken = accessToken,
+                    RefreshToken = refreshToken,
+                    ExpiresAt = DateTime.Now.AddMinutes(int.Parse(jwtSettings["AccessTokenExpirationMinutes"] ?? "60")),
+                    User = new UserDTO
+                    {
+                        UserId = user.UserId,
+                        FullName = user.FullName,
+                        Email = user.Email,
+                        PhoneNumber = user.PhoneNumber,
+                        Role = user.Role,
+                        IsActive = user.IsActive,
+                        EmailVerified = user.EmailVerified,
+                        LastLoginAt = user.LastLoginAt
+                    }
+                };
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Google login error: {ex.Message}");
+                throw;
+            }
         }
 
         public async Task LogoutAsync(string refreshToken)

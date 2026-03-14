@@ -9,11 +9,13 @@ namespace Clinic_Appointment_Booking_WebClient.Controllers
     {
         private readonly IAuthApiService _authApiService;
         private readonly ILogger<AccountController> _logger;
+        private readonly IConfiguration _configuration;
 
-        public AccountController(IAuthApiService authApiService, ILogger<AccountController> logger)
+        public AccountController(IAuthApiService authApiService, ILogger<AccountController> logger, IConfiguration configuration)
         {
             _authApiService = authApiService;
             _logger = logger;
+            _configuration = configuration;
         }
 
         // GET: /Account/Login
@@ -24,6 +26,13 @@ namespace Clinic_Appointment_Booking_WebClient.Controllers
             {
                 return RedirectToAction("Index", "Home");
             }
+            
+            // Clear any success messages when accessing login page directly
+            TempData.Remove("SuccessMessage");
+            
+            // Pass Google Client ID to view
+            ViewBag.GoogleClientId = _configuration["GoogleAuth:ClientId"];
+            
             return View();
         }
 
@@ -76,6 +85,10 @@ namespace Clinic_Appointment_Booking_WebClient.Controllers
         // GET: /Account/Register
         public IActionResult Register()
         {
+            // Clear any success messages when accessing register page directly
+            TempData.Remove("SuccessMessage");
+            TempData.Remove("ErrorMessage");
+            
             return View();
         }
 
@@ -159,6 +172,10 @@ namespace Clinic_Appointment_Booking_WebClient.Controllers
         // GET: /Account/ForgotPassword
         public IActionResult ForgotPassword()
         {
+            // Clear any success messages when accessing forgot password page directly
+            TempData.Remove("SuccessMessage");
+            TempData.Remove("ErrorMessage");
+            
             return View();
         }
 
@@ -202,6 +219,10 @@ namespace Clinic_Appointment_Booking_WebClient.Controllers
             {
                 return RedirectToAction("Login");
             }
+
+            // Clear any success messages when accessing reset password page directly
+            TempData.Remove("SuccessMessage");
+            TempData.Remove("ErrorMessage");
 
             var model = new ResetPasswordViewModel { Token = token };
             return View(model);
@@ -294,6 +315,41 @@ namespace Clinic_Appointment_Booking_WebClient.Controllers
         public IActionResult PasswordResetSuccess()
         {
             return View();
+        }
+
+        // POST: /Account/GoogleLogin
+        [HttpPost]
+        public async Task<IActionResult> GoogleLogin([FromBody] GoogleLoginRequestDTO request)
+        {
+            try
+            {
+                if (string.IsNullOrEmpty(request.IdToken))
+                {
+                    return BadRequest(new { success = false, message = "Invalid Google token" });
+                }
+
+                var response = await _authApiService.GoogleLoginAsync(request);
+
+                if (response != null && response.Success && response.Data != null)
+                {
+                    HttpContext.Session.SetString("AccessToken", response.Data.AccessToken);
+                    HttpContext.Session.SetString("RefreshToken", response.Data.RefreshToken);
+                    HttpContext.Session.SetString("UserEmail", response.Data.User.Email);
+                    HttpContext.Session.SetString("UserRole", response.Data.User.Role);
+                    HttpContext.Session.SetString("UserName", response.Data.User.FullName);
+
+                    return Ok(new { success = true, message = "Google login successful" });
+                }
+                else
+                {
+                    return BadRequest(new { success = false, message = response?.Message ?? "Google login failed" });
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Google login error: {ex.Message}");
+                return StatusCode(500, new { success = false, message = "An error occurred during Google login" });
+            }
         }
     }
 }

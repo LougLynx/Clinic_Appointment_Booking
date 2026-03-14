@@ -40,5 +40,10 @@ namespace Clinic_Appointment_Booking_WebClient.Services
         {
             return await _apiClient.GetAsync<object>($"/api/auth/verify-email?token={token}");
         }
+
+        public async Task<ApiResponse<LoginResponseDTO>?> GoogleLoginAsync(GoogleLoginRequestDTO request)
+        {
+            return await _apiClient.PostAsync<LoginResponseDTO>("/api/auth/google-login", request);
+        }
     }
 }

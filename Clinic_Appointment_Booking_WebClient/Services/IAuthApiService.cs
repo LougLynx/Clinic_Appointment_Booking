@@ -6,6 +6,7 @@ namespace Clinic_Appointment_Booking_WebClient.Services
     {
         Task<ApiResponse<RegisterResponseDTO>?> RegisterAsync(RegisterRequestDTO request);
         Task<ApiResponse<LoginResponseDTO>?> LoginAsync(LoginRequestDTO request);
+        Task<ApiResponse<LoginResponseDTO>?> GoogleLoginAsync(GoogleLoginRequestDTO request);
         Task<ApiResponse<object>?> LogoutAsync(string refreshToken);
         Task<ApiResponse<object>?> ForgotPasswordAsync(string email);
         Task<ApiResponse<object>?> ResetPasswordAsync(ResetPasswordRequestDTO request);

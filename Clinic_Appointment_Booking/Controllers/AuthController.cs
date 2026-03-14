@@ -206,5 +206,33 @@ namespace Clinic_Appointment_Booking.Controllers
                 return StatusCode(500, ApiResponse<object>.ErrorResponse("An error occurred while resetting password"));
             }
         }
+
+        [HttpPost("google-login")]
+        public async Task<ActionResult<ApiResponse<LoginResponseDTO>>> GoogleLogin([FromBody] GoogleLoginRequestDTO request)
+        {
+            try
+            {
+                if (!ModelState.IsValid)
+                {
+                    var errors = ModelState.Values
+                        .SelectMany(v => v.Errors)
+                        .Select(e => e.ErrorMessage)
+                        .ToList();
+                    return BadRequest(ApiResponse<LoginResponseDTO>.ErrorResponse("Validation failed", errors));
+                }
+
+                var result = await _authService.GoogleLoginAsync(request);
+                return Ok(ApiResponse<LoginResponseDTO>.SuccessResponse(result, "Google login successful"));
+            }
+            catch (UnauthorizedAccessException ex)
+            {
+                return Unauthorized(ApiResponse<LoginResponseDTO>.ErrorResponse(ex.Message));
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Google login error: {ex.Message}");
+                return StatusCode(500, ApiResponse<LoginResponseDTO>.ErrorResponse("An error occurred during Google login"));
+            }
+        }
     }
 }

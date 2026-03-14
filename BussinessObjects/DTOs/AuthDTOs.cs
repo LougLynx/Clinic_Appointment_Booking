@@ -75,4 +75,10 @@ namespace BussinessObjects.DTOs
         public string RefreshToken { get; set; } = string.Empty;
         public DateTime ExpiresAt { get; set; }
     }
+
+    public class GoogleLoginRequestDTO
+    {
+        [Required(ErrorMessage = "Google ID token is required")]
+        public string IdToken { get; set; } = string.Empty;
+    }
 }
