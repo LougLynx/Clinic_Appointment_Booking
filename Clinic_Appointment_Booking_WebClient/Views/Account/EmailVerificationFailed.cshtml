@@ -1,0 +1,83 @@
+@{
+    ViewData["Title"] = "Email Verification Failed";
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - MediClinic</title>
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+    
+    <script>
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: { "primary": "#13b6ec" },
+                    fontFamily: { "display": ["Inter", "sans-serif"] },
+                },
+            },
+        }
+    </script>
+</head>
+<body class="bg-slate-50 dark:bg-slate-900 font-display min-h-screen flex items-center justify-center p-6">
+    <div class="w-full max-w-lg">
+        <div class="bg-white dark:bg-slate-800 rounded-xl shadow-lg p-8 text-center">
+            <!-- Error Icon -->
+            <div class="flex justify-center mb-6">
+                <div class="w-20 h-20 rounded-full bg-red-100 dark:bg-red-900/30 flex items-center justify-center">
+                    <span class="material-symbols-outlined text-red-600 dark:text-red-400 text-5xl">error</span>
+                </div>
+            </div>
+
+            <!-- Title -->
+            <h1 class="text-2xl font-bold text-slate-900 dark:text-slate-100 mb-3">Verification Failed</h1>
+            
+            <!-- Message -->
+            <p class="text-slate-600 dark:text-slate-400 mb-6 leading-relaxed">
+                @if (TempData["ErrorMessage"] != null)
+                {
+                    @TempData["ErrorMessage"]
+                }
+                else
+                {
+                    <text>The verification link is invalid or has expired. Please request a new verification email.</text>
+                }
+            </p>
+
+            <!-- Info Box -->
+            <div class="bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-800 rounded-lg p-4 mb-6 text-left">
+                <div class="flex gap-3">
+                    <span class="material-symbols-outlined text-amber-600 dark:text-amber-400 text-xl flex-shrink-0">warning</span>
+                    <div class="text-sm text-slate-700 dark:text-slate-300">
+                        <p class="font-semibold mb-1">Common reasons:</p>
+                        <ul class="list-disc list-inside space-y-1 text-slate-600 dark:text-slate-400">
+                            <li>The link has expired (valid for 24 hours)</li>
+                            <li>The link has already been used</li>
+                            <li>The link is malformed or incomplete</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Actions -->
+            <div class="flex flex-col gap-3">
+                <a asp-action="Register" 
+                   class="flex items-center justify-center rounded-lg h-12 bg-primary hover:bg-primary/90 text-white font-bold transition-colors shadow-md">
+                    Register Again
+                </a>
+                <a asp-controller="Home" asp-action="Index" 
+                   class="text-sm text-slate-600 dark:text-slate-400 hover:text-primary">
+                    Back to Home
+                </a>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,3 +1,4 @@
+@model Clinic_Appointment_Booking_WebClient.Models.ViewModels.LoginViewModel
 @{
     ViewData["Title"] = "Login";
     Layout = null;
@@ -82,54 +83,61 @@
                         <p class="text-slate-500 dark:text-slate-400 text-base font-normal leading-normal">Log in to manage your appointments and records.</p>
                     </div>
 
+                    @if (TempData["SuccessMessage"] != null)
+                    {
+                        <div class="mb-4 p-4 rounded-lg bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800">
+                            <p class="text-green-800 dark:text-green-200 text-sm">@TempData["SuccessMessage"]</p>
+                        </div>
+                    }
+
+                    @if (TempData["ErrorMessage"] != null)
+                    {
+                        <div class="mb-4 p-4 rounded-lg bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800">
+                            <p class="text-red-800 dark:text-red-200 text-sm">@TempData["ErrorMessage"]</p>
+                        </div>
+                    }
+
                     <form asp-area="" asp-controller="Account" asp-action="Login" method="post" class="flex flex-col gap-5">
-                        <div asp-validation-summary="ModelOnly" class="text-red-600 text-sm"></div>
+                        @Html.AntiForgeryToken()
+                        <div asp-validation-summary="ModelOnly" class="text-red-600 text-sm bg-red-50 dark:bg-red-900/20 p-3 rounded-lg"></div>
 
                         <!-- Email Field -->
                         <div class="flex flex-col gap-2">
-                            <label class="text-slate-700 dark:text-slate-300 text-sm font-semibold leading-normal" for="email">Email Address</label>
+                            <label asp-for="Email" class="text-slate-700 dark:text-slate-300 text-sm font-semibold leading-normal">Email Address</label>
                             <div class="relative">
                                 <span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-slate-400">mail</span>
-                                <input name="Email" 
+                                <input asp-for="Email" 
                                        class="form-input flex w-full resize-none overflow-hidden rounded-lg text-slate-900 dark:text-slate-100 focus:outline-0 focus:ring-2 focus:ring-primary/50 border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 focus:border-primary h-12 placeholder:text-slate-400 pl-12 pr-4 text-base font-normal leading-normal transition-all" 
-                                       id="email" 
-                                       placeholder="name@example.com" 
-                                       type="email" 
-                                       required />
-                                @* <span asp-validation-for="Email" class="text-red-600 text-xs mt-1"></span> *@
+                                       placeholder="name@example.com" />
+                                <span asp-validation-for="Email" class="text-red-600 text-xs mt-1"></span>
                             </div>
                         </div>
 
                         <!-- Password Field -->
                         <div class="flex flex-col gap-2">
                             <div class="flex justify-between items-center">
-                                <label class="text-slate-700 dark:text-slate-300 text-sm font-semibold leading-normal" for="password">Password</label>
+                                <label asp-for="Password" class="text-slate-700 dark:text-slate-300 text-sm font-semibold leading-normal">Password</label>
                                 <a class="text-primary text-sm font-medium hover:underline" asp-area="" asp-controller="Account" asp-action="ForgotPassword">Forgot password?</a>
                             </div>
                             <div class="relative">
                                 <span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-slate-400">lock</span>
-                                <input name="Password" 
+                                <input asp-for="Password" 
                                        class="form-input flex w-full resize-none overflow-hidden rounded-lg text-slate-900 dark:text-slate-100 focus:outline-0 focus:ring-2 focus:ring-primary/50 border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 focus:border-primary h-12 placeholder:text-slate-400 pl-12 pr-12 text-base font-normal leading-normal transition-all" 
-                                       id="password" 
-                                       placeholder="Enter your password" 
-                                       type="password" 
-                                       required />
+                                       placeholder="Enter your password" />
                                 <button class="absolute right-4 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 focus:outline-none" 
                                         type="button" 
                                         onclick="togglePassword()">
                                     <span class="material-symbols-outlined text-xl" id="toggleIcon">visibility_off</span>
                                 </button>
-                                @* <span asp-validation-for="Password" class="text-red-600 text-xs mt-1"></span> *@
+                                <span asp-validation-for="Password" class="text-red-600 text-xs mt-1"></span>
                             </div>
                         </div>
 
                         <!-- Remember Me -->
                         <div class="flex items-center gap-2 mt-1">
-                            <input name="RememberMe" 
-                                   class="rounded border-slate-300 dark:border-slate-600 text-primary focus:ring-primary bg-white dark:bg-slate-800 w-4 h-4 cursor-pointer" 
-                                   id="remember" 
-                                   type="checkbox" />
-                            <label class="text-slate-600 dark:text-slate-400 text-sm cursor-pointer" for="remember">Remember me</label>
+                            <input asp-for="RememberMe" 
+                                   class="rounded border-slate-300 dark:border-slate-600 text-primary focus:ring-primary bg-white dark:bg-slate-800 w-4 h-4 cursor-pointer" />
+                            <label asp-for="RememberMe" class="text-slate-600 dark:text-slate-400 text-sm cursor-pointer">Remember me</label>
                         </div>
 
                         <!-- Submit Button -->

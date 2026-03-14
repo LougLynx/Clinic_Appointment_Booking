@@ -26,6 +26,7 @@ namespace DataAccess
         public DbSet<Review> Reviews { get; set; }
         public DbSet<ContactMessage> ContactMessages { get; set; }
         public DbSet<Notification> Notifications { get; set; }
+        public DbSet<RefreshToken> RefreshTokens { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -37,13 +38,23 @@ namespace DataAccess
                 // Build connection string from environment variables
                 var server = Environment.GetEnvironmentVariable("DB_SERVER") ?? "(local)";
                 var database = Environment.GetEnvironmentVariable("DB_NAME") ?? "ClinicAppointmentBookingDB";
-                var user = Environment.GetEnvironmentVariable("DB_USER") ?? "sa";
+                var user = Environment.GetEnvironmentVariable("DB_USER") ?? "";
                 var password = Environment.GetEnvironmentVariable("DB_PASSWORD") ?? "";
                 var trustCert = Environment.GetEnvironmentVariable("DB_TRUST_CERTIFICATE") ?? "True";
+                var integratedSecurity = Environment.GetEnvironmentVariable("DB_INTEGRATED_SECURITY") ?? "False";
 
-                var connectionString = $"Server={server};Database={database};Uid={user};Pwd={password};TrustServerCertificate={trustCert}";
+                // Use Windows Authentication if user/password are empty or IntegratedSecurity is True
+                var connectionString = (string.IsNullOrEmpty(user) || integratedSecurity == "True")
+                    ? $"Server={server};Database={database};Integrated Security=True;TrustServerCertificate={trustCert}"
+                    : $"Server={server};Database={database};Uid={user};Pwd={password};TrustServerCertificate={trustCert}";
                 
-                optionsBuilder.UseSqlServer(connectionString);
+                optionsBuilder.UseSqlServer(connectionString, sqlOptions =>
+                {
+                    sqlOptions.EnableRetryOnFailure(
+                        maxRetryCount: 5,
+                        maxRetryDelay: TimeSpan.FromSeconds(10),
+                        errorNumbersToAdd: null);
+                });
             }
         }
 
@@ -56,6 +67,20 @@ namespace DataAccess
             {
                 entity.HasIndex(e => e.Email).IsUnique();
                 entity.HasIndex(e => e.PhoneNumber);
+                entity.HasIndex(e => e.EmailVerificationToken);
+                entity.HasIndex(e => e.PasswordResetToken);
+            });
+
+            // RefreshToken configuration
+            modelBuilder.Entity<RefreshToken>(entity =>
+            {
+                entity.HasOne(rt => rt.User)
+                    .WithMany(u => u.RefreshTokens)
+                    .HasForeignKey(rt => rt.UserId)
+                    .OnDelete(DeleteBehavior.Cascade);
+
+                entity.HasIndex(e => e.Token);
+                entity.HasIndex(e => new { e.UserId, e.ExpiresAt });
             });
 
             // Doctor configuration

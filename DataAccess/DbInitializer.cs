@@ -1,5 +1,6 @@
 using BussinessObjects.Models;
 using Microsoft.EntityFrameworkCore;
+using BCrypt.Net;
 
 namespace DataAccess
 {
@@ -99,11 +100,12 @@ namespace DataAccess
                     FullName = "Admin User",
                     Email = "admin@mediclinic.com",
                     PhoneNumber = "0123456789",
-                    PasswordHash = "$2a$11$XqQqQqQqQqQqQqQqQqQqQeO9Z9Z9Z9Z9Z9Z9Z9Z9Z9Z9Z9Z9Z9", // Password: Admin@123
+                    PasswordHash = BCrypt.Net.BCrypt.HashPassword("Admin@123"),
                     Role = "Admin",
                     DateOfBirth = new DateTime(1980, 1, 1),
                     Gender = "Male",
                     IsActive = true,
+                    EmailVerified = true,
                     CreatedAt = DateTime.Now
                 },
                 // Doctor Users
@@ -112,11 +114,12 @@ namespace DataAccess
                     FullName = "Dr. Emily Chen",
                     Email = "emily.chen@mediclinic.com",
                     PhoneNumber = "0123456701",
-                    PasswordHash = "$2a$11$XqQqQqQqQqQqQqQqQqQqQeO9Z9Z9Z9Z9Z9Z9Z9Z9Z9Z9Z9Z9Z9", // Password: Doctor@123
+                    PasswordHash = BCrypt.Net.BCrypt.HashPassword("Doctor@123"),
                     Role = "Doctor",
                     DateOfBirth = new DateTime(1985, 5, 15),
                     Gender = "Female",
                     IsActive = true,
+                    EmailVerified = true,
                     CreatedAt = DateTime.Now
                 },
                 new User
@@ -124,11 +127,12 @@ namespace DataAccess
                     FullName = "Dr. Marcus Johnson",
                     Email = "marcus.johnson@mediclinic.com",
                     PhoneNumber = "0123456702",
-                    PasswordHash = "$2a$11$XqQqQqQqQqQqQqQqQqQqQeO9Z9Z9Z9Z9Z9Z9Z9Z9Z9Z9Z9Z9Z9",
+                    PasswordHash = BCrypt.Net.BCrypt.HashPassword("Doctor@123"),
                     Role = "Doctor",
                     DateOfBirth = new DateTime(1982, 8, 22),
                     Gender = "Male",
                     IsActive = true,
+                    EmailVerified = true,
                     CreatedAt = DateTime.Now
                 },
                 new User
@@ -136,11 +140,12 @@ namespace DataAccess
                     FullName = "Dr. Sarah Patel",
                     Email = "sarah.patel@mediclinic.com",
                     PhoneNumber = "0123456703",
-                    PasswordHash = "$2a$11$XqQqQqQqQqQqQqQqQqQqQeO9Z9Z9Z9Z9Z9Z9Z9Z9Z9Z9Z9Z9Z9",
+                    PasswordHash = BCrypt.Net.BCrypt.HashPassword("Doctor@123"),
                     Role = "Doctor",
                     DateOfBirth = new DateTime(1990, 3, 10),
                     Gender = "Female",
                     IsActive = true,
+                    EmailVerified = true,
                     CreatedAt = DateTime.Now
                 },
                 new User
@@ -148,11 +153,12 @@ namespace DataAccess
                     FullName = "Dr. David Wilson",
                     Email = "david.wilson@mediclinic.com",
                     PhoneNumber = "0123456704",
-                    PasswordHash = "$2a$11$XqQqQqQqQqQqQqQqQqQqQeO9Z9Z9Z9Z9Z9Z9Z9Z9Z9Z9Z9Z9Z9",
+                    PasswordHash = BCrypt.Net.BCrypt.HashPassword("Doctor@123"),
                     Role = "Doctor",
                     DateOfBirth = new DateTime(1978, 11, 5),
                     Gender = "Male",
                     IsActive = true,
+                    EmailVerified = true,
                     CreatedAt = DateTime.Now
                 },
                 // Sample Patient
@@ -161,12 +167,13 @@ namespace DataAccess
                     FullName = "John Doe",
                     Email = "john.doe@example.com",
                     PhoneNumber = "0987654321",
-                    PasswordHash = "$2a$11$XqQqQqQqQqQqQqQqQqQqQeO9Z9Z9Z9Z9Z9Z9Z9Z9Z9Z9Z9Z9Z9", // Password: Patient@123
+                    PasswordHash = BCrypt.Net.BCrypt.HashPassword("Patient@123"),
                     Role = "Patient",
                     DateOfBirth = new DateTime(1990, 6, 15),
                     Gender = "Male",
                     Address = "123 Main Street, City",
                     IsActive = true,
+                    EmailVerified = true,
                     CreatedAt = DateTime.Now
                 }
             };

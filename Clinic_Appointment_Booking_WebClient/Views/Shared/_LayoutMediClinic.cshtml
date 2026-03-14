@@ -60,54 +60,114 @@
                         <a class="@(ViewContext.RouteData.Values["action"]?.ToString() == "Contact" ? "text-primary font-bold border-b-2 border-primary pb-1" : "text-slate-700 dark:text-slate-300") text-sm font-semibold hover:text-primary transition-colors" 
                            asp-area="" asp-controller="Home" asp-action="Contact">Contact</a>
                         
-                        @* Admin Link (visible for demo, should be role-based in production) *@
-                        <a class="@(ViewContext.RouteData.Values["controller"]?.ToString() == "Admin" ? "text-primary font-bold border-b-2 border-primary pb-1" : "text-slate-700 dark:text-slate-300") text-sm font-semibold hover:text-primary transition-colors flex items-center gap-1" 
-                           asp-area="" asp-controller="Admin" asp-action="Dashboard">
-                            <span class="material-symbols-outlined text-[18px]">admin_panel_settings</span>
-                            Admin
-                        </a> 
+                        @{
+                            var navUserRole = Context.Session.GetString("UserRole");
+                        }
                         
-                         @* Doctor Link (visible for demo, should be role-based in production) *@
-                        <a class="@(ViewContext.RouteData.Values["controller"]?.ToString() == "Doctor" ? "text-primary font-bold border-b-2 border-primary pb-1" : "text-slate-700 dark:text-slate-300") text-sm font-semibold hover:text-primary transition-colors flex items-center gap-1" 
-                           asp-area="" asp-controller="Doctor" asp-action="Dashboard">
-                            <span class="material-symbols-outlined text-[18px]">medical_services</span>
-                            Doctor
-                        </a> 
+                        @if (navUserRole == "Admin")
+                        {
+                            <a class="@(ViewContext.RouteData.Values["controller"]?.ToString() == "Admin" ? "text-primary font-bold border-b-2 border-primary pb-1" : "text-slate-700 dark:text-slate-300") text-sm font-semibold hover:text-primary transition-colors flex items-center gap-1" 
+                               asp-area="" asp-controller="Admin" asp-action="Dashboard">
+                                <span class="material-symbols-outlined text-[18px]">admin_panel_settings</span>
+                                Admin
+                            </a>
+                        }
+                        
+                        @if (navUserRole == "Doctor")
+                        {
+                            <a class="@(ViewContext.RouteData.Values["controller"]?.ToString() == "Doctor" ? "text-primary font-bold border-b-2 border-primary pb-1" : "text-slate-700 dark:text-slate-300") text-sm font-semibold hover:text-primary transition-colors flex items-center gap-1" 
+                               asp-area="" asp-controller="Doctor" asp-action="Dashboard">
+                                <span class="material-symbols-outlined text-[18px]">medical_services</span>
+                                Doctor
+                            </a>
+                        }
                     </nav>
 
-                    <!-- Auth Buttons (when not logged in) -->
-                    <div class="flex gap-2 items-center">
-                        <a asp-area="" asp-controller="Account" asp-action="Login" 
-                           class="flex min-w-[84px] cursor-pointer items-center justify-center overflow-hidden rounded-lg h-10 px-4 bg-primary text-white text-sm font-bold hover:bg-primary/90 transition-colors no-underline">
-                            <span class="truncate">Login</span>
-                        </a>
-                        <a asp-area="" asp-controller="Account" asp-action="Register" 
-                           class="flex min-w-[84px] cursor-pointer items-center justify-center overflow-hidden rounded-lg h-10 px-4 bg-primary/10 hover:bg-primary/20 text-primary text-sm font-bold transition-colors no-underline">
-                            <span class="truncate">Sign Up</span>
-                        </a>
-                    </div>
+                    @{
+                        var userName = Context.Session.GetString("UserName");
+                        var userEmail = Context.Session.GetString("UserEmail");
+                        var userRole = Context.Session.GetString("UserRole");
+                        var isLoggedIn = !string.IsNullOrEmpty(userName);
+                    }
 
-                    <!-- User Profile (when logged in - hidden by default, show with backend logic) -->
-                    <div class="hidden items-center gap-3">
-                        <a asp-area="" asp-controller="Appointment" asp-action="Book" 
-                           class="flex cursor-pointer items-center justify-center overflow-hidden rounded-lg h-10 px-5 bg-primary text-white text-sm font-bold shadow-md hover:bg-primary/90 transition-colors no-underline">
-                            <span>Book Appointment</span>
-                        </a>
-                        <div class="relative group">
-                            <button class="flex items-center gap-2 text-slate-600 dark:text-slate-300 hover:text-primary transition-colors">
-                                <span class="material-symbols-outlined text-[32px]">account_circle</span>
-                                <span class="text-sm font-medium hidden xl:inline">John Doe</span>
-                            </button>
-                            <!-- Dropdown Menu -->
-                            <div class="hidden group-hover:block absolute right-0 mt-2 w-48 bg-white dark:bg-slate-800 rounded-lg shadow-lg border border-slate-200 dark:border-slate-700 py-2">
-                                <a href="#" class="block px-4 py-2 text-sm text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700">My Profile</a>
-                                <a asp-area="" asp-controller="Appointment" asp-action="MyAppointments" class="block px-4 py-2 text-sm text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700">My Appointments</a>
-                                <a href="#" class="block px-4 py-2 text-sm text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700">Settings</a>
-                                <hr class="my-2 border-slate-200 dark:border-slate-700" />
-                                <a asp-area="" asp-controller="Account" asp-action="Logout" class="block px-4 py-2 text-sm text-red-600 hover:bg-slate-100 dark:hover:bg-slate-700">Logout</a>
+                    @if (!isLoggedIn)
+                    {
+                        <!-- Auth Buttons (when not logged in) -->
+                        <div class="flex gap-2 items-center">
+                            <a asp-area="" asp-controller="Account" asp-action="Login" 
+                               class="flex min-w-[84px] cursor-pointer items-center justify-center overflow-hidden rounded-lg h-10 px-4 bg-primary text-white text-sm font-bold hover:bg-primary/90 transition-colors no-underline">
+                                <span class="truncate">Login</span>
+                            </a>
+                            <a asp-area="" asp-controller="Account" asp-action="Register" 
+                               class="flex min-w-[84px] cursor-pointer items-center justify-center overflow-hidden rounded-lg h-10 px-4 bg-primary/10 hover:bg-primary/20 text-primary text-sm font-bold transition-colors no-underline">
+                                <span class="truncate">Sign Up</span>
+                            </a>
+                        </div>
+                    }
+                    else
+                    {
+                        <!-- User Profile (when logged in) -->
+                        <div class="flex items-center gap-3">
+                            @if (userRole == "Patient")
+                            {
+                                <a asp-area="" asp-controller="Appointment" asp-action="Book" 
+                                   class="flex cursor-pointer items-center justify-center overflow-hidden rounded-lg h-10 px-5 bg-primary text-white text-sm font-bold shadow-md hover:bg-primary/90 transition-colors no-underline">
+                                    <span>Book Appointment</span>
+                                </a>
+                            }
+                            <div class="relative group">
+                                <button class="flex items-center gap-2 text-slate-600 dark:text-slate-300 hover:text-primary transition-colors">
+                                    <span class="material-symbols-outlined text-[32px]">account_circle</span>
+                                    <span class="text-sm font-medium hidden xl:inline">@userName</span>
+                                    <span class="material-symbols-outlined text-[18px]">expand_more</span>
+                                </button>
+                                <!-- Dropdown Menu -->
+                                <div class="hidden group-hover:block absolute right-0 mt-2 w-56 bg-white dark:bg-slate-800 rounded-lg shadow-lg border border-slate-200 dark:border-slate-700 py-2 z-50">
+                                    <div class="px-4 py-3 border-b border-slate-200 dark:border-slate-700">
+                                        <p class="text-sm font-semibold text-slate-900 dark:text-slate-100">@userName</p>
+                                        <p class="text-xs text-slate-500 dark:text-slate-400 truncate">@userEmail</p>
+                                        <span class="inline-block mt-1 px-2 py-0.5 text-xs font-semibold rounded-full @(userRole == "Admin" ? "bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-400" : userRole == "Doctor" ? "bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-400" : "bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400")">
+                                            @userRole
+                                        </span>
+                                    </div>
+                                    <a href="#" class="flex items-center gap-2 px-4 py-2 text-sm text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700">
+                                        <span class="material-symbols-outlined text-[18px]">person</span>
+                                        My Profile
+                                    </a>
+                                    @if (userRole == "Patient")
+                                    {
+                                        <a asp-area="" asp-controller="Appointment" asp-action="MyAppointments" class="flex items-center gap-2 px-4 py-2 text-sm text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700">
+                                            <span class="material-symbols-outlined text-[18px]">calendar_month</span>
+                                            My Appointments
+                                        </a>
+                                    }
+                                    @if (userRole == "Doctor")
+                                    {
+                                        <a asp-area="" asp-controller="Doctor" asp-action="Dashboard" class="flex items-center gap-2 px-4 py-2 text-sm text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700">
+                                            <span class="material-symbols-outlined text-[18px]">dashboard</span>
+                                            Doctor Dashboard
+                                        </a>
+                                    }
+                                    @if (userRole == "Admin")
+                                    {
+                                        <a asp-area="" asp-controller="Admin" asp-action="Dashboard" class="flex items-center gap-2 px-4 py-2 text-sm text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700">
+                                            <span class="material-symbols-outlined text-[18px]">admin_panel_settings</span>
+                                            Admin Dashboard
+                                        </a>
+                                    }
+                                    <a href="#" class="flex items-center gap-2 px-4 py-2 text-sm text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700">
+                                        <span class="material-symbols-outlined text-[18px]">settings</span>
+                                        Settings
+                                    </a>
+                                    <hr class="my-2 border-slate-200 dark:border-slate-700" />
+                                    <a asp-area="" asp-controller="Account" asp-action="Logout" class="flex items-center gap-2 px-4 py-2 text-sm text-red-600 hover:bg-slate-100 dark:hover:bg-slate-700">
+                                        <span class="material-symbols-outlined text-[18px]">logout</span>
+                                        Logout
+                                    </a>
+                                </div>
                             </div>
                         </div>
-                    </div>
+                    }
                 </div>
 
                 <!-- Mobile Menu Button -->
