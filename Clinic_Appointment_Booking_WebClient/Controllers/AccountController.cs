@@ -19,19 +19,22 @@ namespace Clinic_Appointment_Booking_WebClient.Controllers
         }
 
         // GET: /Account/Login
-        public IActionResult Login()
+        public IActionResult Login(string? returnUrl = null)
         {
-            // If already logged in, redirect to home
+            // If already logged in, redirect to returnUrl or home
             if (HttpContext.Session.GetString("AccessToken") != null)
             {
+                if (!string.IsNullOrEmpty(returnUrl) && Url.IsLocalUrl(returnUrl))
+                    return Redirect(returnUrl);
                 return RedirectToAction("Index", "Home");
             }
             
             // Clear any success messages when accessing login page directly
             TempData.Remove("SuccessMessage");
             
-            // Pass Google Client ID to view
+            // Pass Google Client ID and returnUrl to view
             ViewBag.GoogleClientId = _configuration["GoogleAuth:ClientId"];
+            ViewBag.ReturnUrl = returnUrl;
             
             return View();
         }
@@ -39,10 +42,11 @@ namespace Clinic_Appointment_Booking_WebClient.Controllers
         // POST: /Account/Login
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Login(LoginViewModel model)
+        public async Task<IActionResult> Login(LoginViewModel model, string? returnUrl = null)
         {
             if (!ModelState.IsValid)
             {
+                ViewBag.ReturnUrl = returnUrl;
                 return View(model);
             }
 
@@ -66,11 +70,14 @@ namespace Clinic_Appointment_Booking_WebClient.Controllers
                     HttpContext.Session.SetString("UserName", response.Data.User.FullName);
 
                     TempData["SuccessMessage"] = "Login successful!";
+                    if (!string.IsNullOrEmpty(returnUrl) && Url.IsLocalUrl(returnUrl))
+                        return Redirect(returnUrl);
                     return RedirectToAction("Index", "Home");
                 }
                 else
                 {
                     ModelState.AddModelError("", response?.Message ?? "Login failed");
+                    ViewBag.ReturnUrl = returnUrl;
                     return View(model);
                 }
             }
@@ -78,6 +85,7 @@ namespace Clinic_Appointment_Booking_WebClient.Controllers
             {
                 _logger.LogError($"Login error: {ex.Message}");
                 ModelState.AddModelError("", "An error occurred during login");
+                ViewBag.ReturnUrl = returnUrl;
                 return View(model);
             }
         }

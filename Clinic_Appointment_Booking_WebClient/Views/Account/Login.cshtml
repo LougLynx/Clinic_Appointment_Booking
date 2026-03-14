@@ -100,8 +100,16 @@
                         </div>
                     }
 
+                    @if (ViewBag.ReturnUrl != null)
+                    {
+                        <div class="mb-4 p-4 rounded-lg bg-primary/10 dark:bg-primary/20 border border-primary/30">
+                            <p class="text-slate-700 dark:text-slate-300 text-sm">Please log in to book your appointment.</p>
+                        </div>
+                    }
+
                     <form asp-area="" asp-controller="Account" asp-action="Login" method="post" class="flex flex-col gap-5">
                         @Html.AntiForgeryToken()
+                        <input type="hidden" name="returnUrl" value="@ViewBag.ReturnUrl" />
                         <div asp-validation-summary="ModelOnly" class="text-red-600 text-sm bg-red-50 dark:bg-red-900/20 p-3 rounded-lg"></div>
 
                         <!-- Email Field -->
@@ -279,7 +287,8 @@
                 const data = await result.json();
 
                 if (data.success) {
-                    window.location.href = '@Url.Action("Index", "Home")';
+                    const returnUrl = @Html.Raw(System.Text.Json.JsonSerializer.Serialize(ViewBag.ReturnUrl ?? ""));
+                    window.location.href = (returnUrl && returnUrl.startsWith('/')) ? returnUrl : '@Url.Action("Index", "Home")';
                 } else {
                     alert(data.message || 'Google login failed. Please try again.');
                 }

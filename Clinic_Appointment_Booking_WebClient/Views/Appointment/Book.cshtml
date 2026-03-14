@@ -1,28 +1,77 @@
+@using System.Globalization
+@using System.Text.Json
+@model AppointmentBookViewModel
 @{
     ViewData["Title"] = "Book Appointment";
     Layout = "_LayoutMediClinic";
+
+    DateTime? selectedDateValue = null;
+    TimeSpan? selectedTimeValue = null;
+
+    if (!string.IsNullOrWhiteSpace(Model.SelectedDate) &&
+        DateTime.TryParseExact(Model.SelectedDate, "yyyy-MM-dd", CultureInfo.InvariantCulture, DateTimeStyles.None, out var parsedDate))
+    {
+        selectedDateValue = parsedDate.Date;
+    }
+
+    if (!string.IsNullOrWhiteSpace(Model.SelectedTime) &&
+        TimeSpan.TryParseExact(Model.SelectedTime, "hh\\:mm", CultureInfo.InvariantCulture, out var parsedTime))
+    {
+        selectedTimeValue = parsedTime;
+    }
+
+    var summaryDateText = selectedDateValue.HasValue
+        ? selectedDateValue.Value.ToString("dddd, MMMM dd, yyyy")
+        : "Select a date";
+    var summaryTimeText = selectedTimeValue.HasValue
+        ? DateTime.Today.Add(selectedTimeValue.Value).ToString("hh:mm tt")
+        : "Select a time";
+
+    var appointmentData = new
+    {
+        selectedDate = Model.SelectedDate,
+        selectedTime = Model.SelectedTime,
+        days = Model.Days.Select(d => new
+        {
+            date = d.Date.ToString("yyyy-MM-dd"),
+            slots = d.Slots.Select(s => new
+            {
+                start = s.StartTime.ToString(@"hh\:mm"),
+                end = s.EndTime.ToString(@"hh\:mm"),
+                available = s.IsAvailable
+            })
+        })
+    };
 }
 
 <!-- Page Header with Progress Steps -->
 <div class="mb-8 flex flex-col items-center justify-center px-4">
     <h1 class="text-3xl md:text-4xl font-black leading-tight tracking-tight mb-6 text-slate-900 dark:text-white text-center">Book an Appointment</h1>
     
-    <!-- Progress Indicator -->
+    <!-- Progress Indicator - ticks gradually as user completes each step -->
     <div class="w-full max-w-3xl flex items-center justify-between relative">
-        <div class="absolute left-0 top-1/2 -translate-y-1/2 w-full h-1 bg-slate-200 dark:border-slate-700 -z-10 rounded-full"></div>
-        <div class="absolute left-0 top-1/2 -translate-y-1/2 w-1/3 h-1 bg-primary -z-10 rounded-full"></div>
+        <div class="absolute left-0 top-1/2 -translate-y-1/2 w-full h-1 bg-slate-200 dark:bg-slate-700 -z-10 rounded-full"></div>
+        <div id="progressFill" class="absolute left-0 top-1/2 -translate-y-1/2 h-1 bg-primary -z-10 rounded-full transition-all duration-300" style="width: 0%"></div>
         
-        <div class="flex flex-col items-center gap-2">
-            <div class="w-8 h-8 rounded-full bg-primary text-white font-bold flex items-center justify-center border-4 border-white dark:border-background-dark shadow-sm">1</div>
-            <span class="text-xs font-semibold text-primary">Date &amp; Time</span>
+        <div id="step1" class="flex flex-col items-center gap-2">
+            <div class="step-circle w-8 h-8 rounded-full bg-slate-200 dark:bg-slate-700 text-slate-500 dark:text-slate-400 font-bold flex items-center justify-center border-4 border-white dark:border-background-dark shadow-sm">
+                <span class="step-number">1</span>
+                <span class="step-check material-symbols-outlined text-sm hidden">check</span>
+            </div>
+            <span class="step-label text-xs font-medium text-slate-500 dark:text-slate-400">Date &amp; Time</span>
         </div>
-        <div class="flex flex-col items-center gap-2">
-            <div class="w-8 h-8 rounded-full bg-slate-200 dark:bg-slate-700 text-slate-500 dark:text-slate-400 font-bold flex items-center justify-center border-4 border-white dark:border-background-dark shadow-sm">2</div>
-            <span class="text-xs font-medium text-slate-500 dark:text-slate-400">Patient Info</span>
+        <div id="step2" class="flex flex-col items-center gap-2">
+            <div class="step-circle w-8 h-8 rounded-full bg-slate-200 dark:bg-slate-700 text-slate-500 dark:text-slate-400 font-bold flex items-center justify-center border-4 border-white dark:border-background-dark shadow-sm">
+                <span class="step-number">2</span>
+                <span class="step-check material-symbols-outlined text-sm hidden">check</span>
+            </div>
+            <span class="step-label text-xs font-medium text-slate-500 dark:text-slate-400">Patient Info</span>
         </div>
-        <div class="flex flex-col items-center gap-2">
-            <div class="w-8 h-8 rounded-full bg-slate-200 dark:bg-slate-700 text-slate-500 dark:text-slate-400 font-bold flex items-center justify-center border-4 border-white dark:border-background-dark shadow-sm">3</div>
-            <span class="text-xs font-medium text-slate-500 dark:text-slate-400">Confirmation</span>
+        <div id="step3" class="flex flex-col items-center gap-2">
+            <div class="step-circle w-8 h-8 rounded-full bg-slate-200 dark:bg-slate-700 text-slate-500 dark:text-slate-400 font-bold flex items-center justify-center border-4 border-white dark:border-background-dark shadow-sm">
+                <span class="step-number">3</span>
+            </div>
+            <span class="step-label text-xs font-medium text-slate-500 dark:text-slate-400">Confirmation</span>
         </div>
     </div>
 </div>
@@ -30,7 +79,14 @@
 <!-- Main Content -->
 <div class="flex flex-col lg:flex-row gap-8 px-4">
     <!-- Left Column - Booking Form -->
-    <div class="flex-1 flex flex-col gap-8">
+    <form asp-action="Book" method="post" class="flex-1 flex flex-col gap-8">
+        @Html.AntiForgeryToken()
+        <input asp-for="DoctorId" type="hidden" />
+        <input asp-for="SelectedDate" type="hidden" id="SelectedDate" />
+        <input asp-for="SelectedTime" type="hidden" id="SelectedTime" />
+
+        <div asp-validation-summary="ModelOnly" class="text-red-600 text-sm"></div>
+
         <!-- Date & Time Selection -->
         <div class="bg-white dark:bg-slate-900 rounded-2xl p-6 border border-slate-200 dark:border-slate-700 shadow-sm">
             <h2 class="text-xl font-bold text-slate-900 dark:text-white mb-6 flex items-center gap-2">
@@ -42,11 +98,11 @@
                 <!-- Calendar -->
                 <div>
                     <div class="flex items-center justify-between mb-4">
-                        <button class="w-8 h-8 flex items-center justify-center rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-600 dark:text-slate-400 transition-colors">
+                        <button type="button" id="calendarPrevBtn" class="w-8 h-8 flex items-center justify-center rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-600 dark:text-slate-400 transition-colors">
                             <span class="material-symbols-outlined">chevron_left</span>
                         </button>
-                        <h3 class="text-base font-bold text-slate-900 dark:text-white">October 2023</h3>
-                        <button class="w-8 h-8 flex items-center justify-center rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-600 dark:text-slate-400 transition-colors">
+                        <h3 id="calendarMonthLabel" class="text-base font-bold text-slate-900 dark:text-white"></h3>
+                        <button type="button" id="calendarNextBtn" class="w-8 h-8 flex items-center justify-center rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-600 dark:text-slate-400 transition-colors">
                             <span class="material-symbols-outlined">chevron_right</span>
                         </button>
                     </div>
@@ -61,58 +117,32 @@
                         <div class="text-xs font-semibold text-slate-500 py-2">Fr</div>
                         <div class="text-xs font-semibold text-slate-500 py-2">Sa</div>
                     </div>
-                    <div class="grid grid-cols-7 gap-1 text-center">
-                        @for (int i = 1; i <= 31; i++)
-                        {
-                            if (i < 4)
-                            {
-                                <button class="h-10 w-10 mx-auto rounded-full flex items-center justify-center text-sm text-slate-400 dark:text-slate-600" disabled>@i</button>
-                            }
-                            else if (i == 12)
-                            {
-                                <button class="h-10 w-10 mx-auto rounded-full flex items-center justify-center text-sm bg-primary text-white font-bold shadow-md">@i</button>
-                            }
-                            else
-                            {
-                                <button class="h-10 w-10 mx-auto rounded-full flex items-center justify-center text-sm text-slate-700 dark:text-slate-300 hover:bg-primary/10 dark:hover:bg-primary/20 transition-colors">@i</button>
-                            }
-                        }
-                    </div>
+                    <div id="calendarGrid" class="grid grid-cols-7 gap-1 text-center"></div>
+                    <div class="mt-2 text-sm text-red-600" asp-validation-for="SelectedDate"></div>
                 </div>
 
                 <!-- Time Slots -->
                 <div>
                     <h3 class="text-sm font-semibold text-slate-700 dark:text-slate-300 mb-4 pb-2 border-b border-slate-100 dark:border-slate-800">Available Time Slots</h3>
                     
+                    <p id="noSlotsMessage" class="hidden text-sm text-slate-500 dark:text-slate-400">No available slots for this date.</p>
+
                     <!-- Morning -->
-                    <div class="mb-5">
+                    <div id="morningSection" class="mb-5">
                         <h4 class="text-xs font-semibold text-slate-500 uppercase tracking-wider mb-3 flex items-center gap-1">
                             <span class="material-symbols-outlined text-[16px]">wb_sunny</span> Morning
                         </h4>
-                        <div class="grid grid-cols-3 gap-2">
-                            <button class="py-2 px-3 rounded-lg border border-slate-200 dark:border-slate-700 text-sm text-slate-700 dark:text-slate-300 hover:border-primary hover:text-primary transition-colors">09:00 AM</button>
-                            <button class="py-2 px-3 rounded-lg border border-slate-200 dark:border-slate-700 text-sm text-slate-700 dark:text-slate-300 hover:border-primary hover:text-primary transition-colors">09:30 AM</button>
-                            <button class="py-2 px-3 rounded-lg border border-slate-200 dark:border-slate-700 text-sm text-slate-700 dark:text-slate-300 hover:border-primary hover:text-primary transition-colors">10:00 AM</button>
-                            <button class="py-2 px-3 rounded-lg border border-slate-200 dark:border-slate-700 text-sm text-slate-700 dark:text-slate-300 hover:border-primary hover:text-primary transition-colors">10:30 AM</button>
-                            <button class="py-2 px-3 rounded-lg border border-slate-200 dark:border-slate-700 text-sm text-slate-700 dark:text-slate-300 hover:border-primary hover:text-primary transition-colors">11:00 AM</button>
-                            <button class="py-2 px-3 rounded-lg border-2 border-primary bg-primary/10 dark:bg-primary/20 text-sm font-semibold text-slate-900 dark:text-white transition-colors">11:30 AM</button>
-                        </div>
+                        <div id="morningSlots" class="grid grid-cols-3 gap-2"></div>
                     </div>
 
                     <!-- Afternoon -->
-                    <div class="mb-5">
+                    <div id="afternoonSection" class="mb-5">
                         <h4 class="text-xs font-semibold text-slate-500 uppercase tracking-wider mb-3 flex items-center gap-1">
                             <span class="material-symbols-outlined text-[16px]">sunny</span> Afternoon
                         </h4>
-                        <div class="grid grid-cols-3 gap-2">
-                            <button class="py-2 px-3 rounded-lg border border-slate-200 dark:border-slate-700 text-sm text-slate-700 dark:text-slate-300 hover:border-primary hover:text-primary transition-colors">01:00 PM</button>
-                            <button class="py-2 px-3 rounded-lg border border-slate-200 dark:border-slate-700 text-sm text-slate-700 dark:text-slate-300 hover:border-primary hover:text-primary transition-colors">01:30 PM</button>
-                            <button class="py-2 px-3 rounded-lg border border-slate-200 dark:border-slate-700 text-sm text-slate-700 dark:text-slate-300 hover:border-primary hover:text-primary transition-colors">02:00 PM</button>
-                            <button class="py-2 px-3 rounded-lg border border-slate-200 dark:border-slate-700 text-sm text-slate-700 dark:text-slate-300 hover:border-primary hover:text-primary transition-colors">03:00 PM</button>
-                            <button class="py-2 px-3 rounded-lg border border-slate-200 dark:border-slate-700 text-sm text-slate-400 dark:text-slate-600 bg-slate-50 dark:bg-slate-800/50 cursor-not-allowed" disabled>03:30 PM</button>
-                            <button class="py-2 px-3 rounded-lg border border-slate-200 dark:border-slate-700 text-sm text-slate-700 dark:text-slate-300 hover:border-primary hover:text-primary transition-colors">04:00 PM</button>
-                        </div>
+                        <div id="afternoonSlots" class="grid grid-cols-3 gap-2"></div>
                     </div>
+                    <div class="mt-2 text-sm text-red-600" asp-validation-for="SelectedTime"></div>
                 </div>
             </div>
         </div>
@@ -124,56 +154,53 @@
                 Patient Details
             </h2>
             
-            <form class="space-y-5">
+            <div class="space-y-5">
                 <div>
-                    <label class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2" for="reason">
+                    <label class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2" for="Reason">
                         Reason for Visit <span class="text-red-500">*</span>
                     </label>
-                    <select class="w-full rounded-lg border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-white focus:ring-primary focus:border-primary shadow-sm" id="reason" name="reason">
+                    <select asp-for="Reason" class="w-full rounded-lg border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-white focus:ring-primary focus:border-primary shadow-sm">
                         <option value="">Select a reason</option>
                         <option value="routine">Routine Checkup</option>
                         <option value="consultation">Initial Consultation</option>
                         <option value="followup">Follow-up Visit</option>
                         <option value="urgent">Urgent Concern</option>
                     </select>
+                    <span class="text-sm text-red-600" asp-validation-for="Reason"></span>
                 </div>
                 
                 <div>
-                    <label class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2" for="notes">
+                    <label class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2" for="Notes">
                         Additional Notes (Optional)
                     </label>
-                    <textarea class="w-full rounded-lg border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-white focus:ring-primary focus:border-primary shadow-sm placeholder:text-slate-400" 
-                              id="notes" 
-                              name="notes" 
+                    <textarea asp-for="Notes"
+                              class="w-full rounded-lg border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-white focus:ring-primary focus:border-primary shadow-sm placeholder:text-slate-400" 
                               placeholder="Please describe your symptoms or any specific concerns you'd like to address during the visit." 
                               rows="4"></textarea>
                 </div>
                 
                 <div class="flex items-center gap-3 pt-2">
-                    <input class="w-4 h-4 rounded border-slate-300 text-primary focus:ring-primary dark:border-slate-600 dark:bg-slate-800" 
-                           id="first-time" 
-                           name="first-time" 
-                           type="checkbox" />
-                    <label class="text-sm text-slate-600 dark:text-slate-400" for="first-time">
+                    <input asp-for="IsFirstTime" class="w-4 h-4 rounded border-slate-300 text-primary focus:ring-primary dark:border-slate-600 dark:bg-slate-800" />
+                    <label class="text-sm text-slate-600 dark:text-slate-400" asp-for="IsFirstTime">
                         I am a first-time patient with this doctor
                     </label>
                 </div>
-            </form>
+            </div>
         </div>
 
         <!-- Action Buttons -->
         <div class="flex justify-end gap-4">
-            <a asp-area="" asp-controller="Doctors" asp-action="Details" asp-route-id="1" 
+            <a asp-area="" asp-controller="Doctors" asp-action="Details" asp-route-id="@Model.DoctorId"
                class="px-6 py-3 rounded-lg border border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-300 font-semibold hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors no-underline flex items-center">
                 Cancel
             </a>
-            <a asp-area="" asp-controller="Appointment" asp-action="Confirm" 
-               class="px-8 py-3 rounded-lg bg-primary text-white font-bold hover:bg-primary/90 transition-colors shadow-md no-underline flex items-center gap-2">
+            <button type="submit"
+                    class="px-8 py-3 rounded-lg bg-primary text-white font-bold hover:bg-primary/90 transition-colors shadow-md flex items-center gap-2">
                 Continue
                 <span class="material-symbols-outlined text-[20px]">arrow_forward</span>
-            </a>
+            </button>
         </div>
-    </div>
+    </form>
 
     <!-- Right Column - Appointment Summary -->
     <aside class="w-full lg:w-[350px] shrink-0">
@@ -183,20 +210,29 @@
                 <h3 class="font-bold text-slate-900 dark:text-white text-lg mb-4">Appointment Summary</h3>
                 <div class="flex items-center gap-4 mb-4">
                     <div class="w-16 h-16 rounded-full overflow-hidden bg-slate-200 dark:bg-slate-800 shrink-0 border-2 border-primary/20">
-                        <img alt="Dr. Emily Chen" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuA6wrTt341E3yA-wcu7p1aezUUzdiU1W6-T8VcCSRJDUz30gdlsrDhEkuQ81u3wwgHfpxjPy8qPB4Vs67aLJOmkK9fxlE09vNYcwPv82Z0wAPTVv3FU43V2XurmRI90S5d_WpTxuti53EFIOo1TVob_7CzaY8-egib308iyVTAfuKpsfCH_zq1rxrZpmZAuA8qXs0teRnfvMPOYnJleqCFK6gPIeS9EJQ42w4zNrXgEEKuRKrqSSNwUwWmWtTSEf2_nuTPWKE0Q2CSB" />
+                        @if (!string.IsNullOrEmpty(Model.Doctor.ProfilePictureUrl))
+                        {
+                            <img alt="@Model.Doctor.FullName" class="w-full h-full object-cover" src="@Model.Doctor.ProfilePictureUrl" />
+                        }
+                        else
+                        {
+                            <div class="w-full h-full flex items-center justify-center text-slate-400 text-sm font-semibold">
+                                @(string.IsNullOrEmpty(Model.Doctor.FullName) ? "?" : Model.Doctor.FullName.Substring(0, 1))
+                            </div>
+                        }
                     </div>
                     <div>
-                        <h4 class="font-bold text-slate-900 dark:text-white text-base">Dr. Emily Chen</h4>
-                        <p class="text-sm text-primary font-medium">Cardiology</p>
+                        <h4 class="font-bold text-slate-900 dark:text-white text-base">@Model.Doctor.FullName</h4>
+                        <p class="text-sm text-primary font-medium">@Model.Doctor.SpecialtyName</p>
                         <div class="flex items-center gap-1 mt-1 text-xs text-slate-500">
                             <span class="material-symbols-outlined text-[14px] text-yellow-400" style="font-variation-settings: 'FILL' 1;">star</span>
-                            <span>4.9 (120 reviews)</span>
+                            <span>@Model.Doctor.Rating.ToString("0.0") (@Model.Doctor.ReviewCount reviews)</span>
                         </div>
                     </div>
                 </div>
                 <div class="flex items-start gap-3 text-sm text-slate-600 dark:text-slate-400 mt-4">
                     <span class="material-symbols-outlined text-[18px] text-slate-400 mt-0.5">location_on</span>
-                    <span>Main Campus, Wing A<br />123 Health Ave, Medical District</span>
+                    <span>@(string.IsNullOrEmpty(Model.Doctor.Location) ? "Location not provided" : Model.Doctor.Location)</span>
                 </div>
             </div>
 
@@ -209,7 +245,7 @@
                         </div>
                         <div>
                             <p class="text-xs font-medium text-slate-500 uppercase tracking-wider mb-1">Date</p>
-                            <p class="text-sm font-semibold text-slate-900 dark:text-white">Thursday, Oct 12, 2023</p>
+                            <p id="summaryDate" class="text-sm font-semibold text-slate-900 dark:text-white">@summaryDateText</p>
                         </div>
                     </div>
                     <div class="flex items-start gap-3">
@@ -218,7 +254,7 @@
                         </div>
                         <div>
                             <p class="text-xs font-medium text-slate-500 uppercase tracking-wider mb-1">Time</p>
-                            <p class="text-sm font-semibold text-slate-900 dark:text-white">11:30 AM</p>
+                            <p id="summaryTime" class="text-sm font-semibold text-slate-900 dark:text-white">@summaryTimeText</p>
                             <p class="text-xs text-slate-500 mt-0.5">Estimated duration: 30-45 min</p>
                         </div>
                     </div>
@@ -228,7 +264,9 @@
                         </div>
                         <div>
                             <p class="text-xs font-medium text-slate-500 uppercase tracking-wider mb-1">Consultation Fee</p>
-                            <p class="text-sm font-semibold text-slate-900 dark:text-white">$150.00</p>
+                            <p class="text-sm font-semibold text-slate-900 dark:text-white">
+                                @(Model.Doctor.ConsultationFee.HasValue ? $"${Model.Doctor.ConsultationFee.Value:N2}" : "Contact for pricing")
+                            </p>
                             <p class="text-xs text-slate-500 mt-0.5">Covered by most insurances</p>
                         </div>
                     </div>
@@ -237,3 +275,272 @@
         </div>
     </aside>
 </div>
+
+<script id="appointmentData" type="application/json">
+@Html.Raw(JsonSerializer.Serialize(appointmentData))
+</script>
+
+@section Scripts {
+    <script>
+        (function () {
+            const dataElement = document.getElementById('appointmentData');
+            if (!dataElement) return;
+
+            const payload = JSON.parse(dataElement.textContent || '{}');
+            const days = Array.isArray(payload.days) ? payload.days : [];
+            const daysByDate = new Map(days.map(day => [day.date, day]));
+            const availableDates = new Set(days.map(day => day.date));
+
+            const selectedDateInput = document.getElementById('SelectedDate');
+            const selectedTimeInput = document.getElementById('SelectedTime');
+            const summaryDate = document.getElementById('summaryDate');
+            const summaryTime = document.getElementById('summaryTime');
+            const calendarGrid = document.getElementById('calendarGrid');
+            const calendarMonthLabel = document.getElementById('calendarMonthLabel');
+            const prevBtn = document.getElementById('calendarPrevBtn');
+            const nextBtn = document.getElementById('calendarNextBtn');
+            const morningSlots = document.getElementById('morningSlots');
+            const afternoonSlots = document.getElementById('afternoonSlots');
+            const morningSection = document.getElementById('morningSection');
+            const afternoonSection = document.getElementById('afternoonSection');
+            const noSlotsMessage = document.getElementById('noSlotsMessage');
+
+            let selectedDate = payload.selectedDate || (days[0] ? days[0].date : null);
+            let selectedTime = payload.selectedTime || null;
+
+            let currentMonth = selectedDate ? new Date(selectedDate) : (days[0] ? new Date(days[0].date) : new Date());
+            currentMonth = new Date(currentMonth.getFullYear(), currentMonth.getMonth(), 1);
+
+            function pad(value) {
+                return String(value).padStart(2, '0');
+            }
+
+            function formatDateLabel(dateStr) {
+                if (!dateStr) return 'Select a date';
+                const date = new Date(dateStr + 'T00:00:00');
+                return date.toLocaleDateString(undefined, {
+                    weekday: 'long',
+                    month: 'long',
+                    day: '2-digit',
+                    year: 'numeric'
+                });
+            }
+
+            function formatTimeLabel(timeStr) {
+                if (!timeStr) return 'Select a time';
+                const [hour, minute] = timeStr.split(':').map(Number);
+                const date = new Date();
+                date.setHours(hour, minute, 0, 0);
+                return date.toLocaleTimeString(undefined, {
+                    hour: '2-digit',
+                    minute: '2-digit'
+                });
+            }
+
+            function updateSummary() {
+                if (summaryDate) summaryDate.textContent = formatDateLabel(selectedDate);
+                if (summaryTime) summaryTime.textContent = formatTimeLabel(selectedTime);
+            }
+
+            function updateProgressIndicator() {
+                const step1El = document.getElementById('step1');
+                const step2El = document.getElementById('step2');
+                const step3El = document.getElementById('step3');
+                const progressFill = document.getElementById('progressFill');
+
+                const step1Done = !!(selectedDate && selectedTime);
+                const reasonSelect = document.getElementById('Reason');
+                const step2Done = !!(reasonSelect && reasonSelect.value);
+
+                const completedCount = (step1Done ? 1 : 0) + (step2Done ? 1 : 0);
+                const progressPercent = (completedCount / 2) * 66;
+
+                if (progressFill) progressFill.style.width = progressPercent + '%';
+
+                const setStepState = (el, completed, isCurrent, stepNum) => {
+                    if (!el) return;
+                    const circle = el.querySelector('.step-circle');
+                    const label = el.querySelector('.step-label');
+                    const numSpan = el.querySelector('.step-number');
+                    const checkSpan = el.querySelector('.step-check');
+                    if (!circle || !label) return;
+
+                    circle.classList.remove('bg-primary', 'bg-slate-200', 'dark:bg-slate-700', 'text-white', 'text-slate-500', 'dark:text-slate-400');
+                    label.classList.remove('text-primary', 'font-semibold', 'text-slate-500', 'dark:text-slate-400', 'font-medium');
+                    if (numSpan) numSpan.classList.remove('hidden');
+                    if (checkSpan) checkSpan.classList.add('hidden');
+
+                    if (completed) {
+                        circle.classList.add('bg-primary', 'text-white');
+                        if (numSpan) numSpan.classList.add('hidden');
+                        if (checkSpan) { checkSpan.classList.remove('hidden'); checkSpan.classList.add('!block'); }
+                        label.classList.add('text-primary', 'font-semibold');
+                    } else if (isCurrent) {
+                        circle.classList.add('bg-primary', 'text-white');
+                        if (numSpan) numSpan.textContent = stepNum;
+                        label.classList.add('text-primary', 'font-semibold');
+                    } else {
+                        circle.classList.add('bg-slate-200', 'dark:bg-slate-700', 'text-slate-500', 'dark:text-slate-400');
+                        if (numSpan) numSpan.textContent = stepNum;
+                        label.classList.add('text-slate-500', 'dark:text-slate-400', 'font-medium');
+                    }
+                };
+
+                setStepState(step1El, step1Done, !step1Done, 1);
+                setStepState(step2El, step2Done, step1Done && !step2Done, 2);
+                setStepState(step3El, false, false, 3);
+            }
+
+            function setSelectedDate(dateStr) {
+                selectedDate = dateStr;
+                if (selectedDateInput) selectedDateInput.value = dateStr || '';
+                selectedTime = null;
+                if (selectedTimeInput) selectedTimeInput.value = '';
+                renderCalendar();
+                renderTimeSlots();
+                updateSummary();
+                updateProgressIndicator();
+            }
+
+            function setSelectedTime(timeStr) {
+                selectedTime = timeStr;
+                if (selectedTimeInput) selectedTimeInput.value = timeStr || '';
+                updateSummary();
+                highlightSelectedTime();
+                updateProgressIndicator();
+            }
+
+            function renderCalendar() {
+                if (!calendarGrid || !calendarMonthLabel) return;
+                calendarGrid.innerHTML = '';
+                calendarMonthLabel.textContent = currentMonth.toLocaleDateString(undefined, { month: 'long', year: 'numeric' });
+
+                const firstDay = new Date(currentMonth.getFullYear(), currentMonth.getMonth(), 1);
+                const startDay = firstDay.getDay();
+                const daysInMonth = new Date(currentMonth.getFullYear(), currentMonth.getMonth() + 1, 0).getDate();
+
+                for (let i = 0; i < startDay; i++) {
+                    const spacer = document.createElement('div');
+                    calendarGrid.appendChild(spacer);
+                }
+
+                for (let day = 1; day <= daysInMonth; day++) {
+                    const dateKey = `${currentMonth.getFullYear()}-${pad(currentMonth.getMonth() + 1)}-${pad(day)}`;
+                    const hasSlots = availableDates.has(dateKey);
+                    const isSelected = selectedDate === dateKey;
+
+                    const button = document.createElement('button');
+                    button.type = 'button';
+                    button.textContent = day;
+                    button.className = 'h-10 w-10 mx-auto rounded-full flex items-center justify-center text-sm transition-colors';
+
+                    if (!hasSlots) {
+                        button.disabled = true;
+                        button.className += ' text-slate-300 dark:text-slate-600 cursor-not-allowed';
+                    } else if (isSelected) {
+                        button.className += ' bg-primary text-white font-bold shadow-md';
+                    } else {
+                        button.className += ' text-slate-700 dark:text-slate-300 hover:bg-primary/10 dark:hover:bg-primary/20 cursor-pointer';
+                    }
+
+                    if (hasSlots) {
+                        button.addEventListener('click', function () {
+                            setSelectedDate(dateKey);
+                        });
+                    }
+
+                    calendarGrid.appendChild(button);
+                }
+            }
+
+            function clearSlots() {
+                if (morningSlots) morningSlots.innerHTML = '';
+                if (afternoonSlots) afternoonSlots.innerHTML = '';
+            }
+
+            function highlightSelectedTime() {
+                document.querySelectorAll('[data-timeslot]').forEach(button => {
+                    if (button.dataset.timeslot === selectedTime) {
+                        button.classList.add('border-2', 'border-primary', 'bg-primary/10', 'dark:bg-primary/20', 'text-slate-900', 'dark:text-white', 'font-semibold');
+                        button.classList.remove('border-slate-200', 'dark:border-slate-700', 'text-slate-700', 'dark:text-slate-300');
+                    } else {
+                        button.className = 'py-2 px-3 rounded-lg border border-slate-200 dark:border-slate-700 text-sm text-slate-700 dark:text-slate-300 hover:border-primary hover:text-primary transition-colors';
+                    }
+                });
+            }
+
+            function renderTimeSlots() {
+                clearSlots();
+
+                if (!selectedDate || !daysByDate.has(selectedDate)) {
+                    if (noSlotsMessage) noSlotsMessage.classList.remove('hidden');
+                    if (morningSection) morningSection.classList.add('hidden');
+                    if (afternoonSection) afternoonSection.classList.add('hidden');
+                    return;
+                }
+
+                const day = daysByDate.get(selectedDate);
+                const availableSlots = day.slots.filter(slot => slot.available);
+
+                if (availableSlots.length === 0) {
+                    if (noSlotsMessage) noSlotsMessage.classList.remove('hidden');
+                    if (morningSection) morningSection.classList.add('hidden');
+                    if (afternoonSection) afternoonSection.classList.add('hidden');
+                    return;
+                }
+
+                if (noSlotsMessage) noSlotsMessage.classList.add('hidden');
+                if (morningSection) morningSection.classList.remove('hidden');
+                if (afternoonSection) afternoonSection.classList.remove('hidden');
+
+                availableSlots.forEach(slot => {
+                    const hour = parseInt(slot.start.split(':')[0], 10);
+                    const container = hour < 12 ? morningSlots : afternoonSlots;
+                    if (!container) return;
+
+                    const button = document.createElement('button');
+                    button.type = 'button';
+                    button.dataset.timeslot = slot.start;
+                    button.textContent = formatTimeLabel(slot.start);
+                    button.className = 'py-2 px-3 rounded-lg border border-slate-200 dark:border-slate-700 text-sm text-slate-700 dark:text-slate-300 hover:border-primary hover:text-primary transition-colors';
+                    button.addEventListener('click', function () {
+                        setSelectedTime(slot.start);
+                    });
+                    container.appendChild(button);
+                });
+
+                if (!selectedTime && availableSlots.length > 0) {
+                    setSelectedTime(availableSlots[0].start);
+                } else {
+                    highlightSelectedTime();
+                }
+            }
+
+            if (selectedDateInput) selectedDateInput.value = selectedDate || '';
+            if (selectedTimeInput && selectedTime) selectedTimeInput.value = selectedTime;
+
+            renderCalendar();
+            renderTimeSlots();
+            updateSummary();
+            updateProgressIndicator();
+
+            const reasonSelect = document.querySelector('select[name="Reason"]') || document.getElementById('Reason');
+            if (reasonSelect) reasonSelect.addEventListener('change', updateProgressIndicator);
+            if (reasonSelect) reasonSelect.addEventListener('input', updateProgressIndicator);
+
+            if (prevBtn) {
+                prevBtn.addEventListener('click', function () {
+                    currentMonth = new Date(currentMonth.getFullYear(), currentMonth.getMonth() - 1, 1);
+                    renderCalendar();
+                });
+            }
+
+            if (nextBtn) {
+                nextBtn.addEventListener('click', function () {
+                    currentMonth = new Date(currentMonth.getFullYear(), currentMonth.getMonth() + 1, 1);
+                    renderCalendar();
+                });
+            }
+        })();
+    </script>
+}

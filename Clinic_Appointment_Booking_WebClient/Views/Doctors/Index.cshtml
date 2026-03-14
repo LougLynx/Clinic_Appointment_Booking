@@ -1,6 +1,15 @@
+@model BussinessObjects.DTOs.DoctorSearchResponseDTO
 @{
     ViewData["Title"] = "Our Doctors Directory";
     Layout = "_LayoutMediClinic";
+    
+    var searchTerm = ViewBag.SearchTerm as string ?? "";
+    var specialtyId = ViewBag.SpecialtyId as int?;
+    var gender = ViewBag.Gender as string ?? "";
+    var availableToday = ViewBag.AvailableToday as bool?;
+    var sortBy = ViewBag.SortBy as string ?? "rating_desc";
+    var specialties = ViewBag.Specialties as List<BussinessObjects.DTOs.SpecialtyDTO> ?? new List<BussinessObjects.DTOs.SpecialtyDTO>();
+    var isLoggedIn = Context.Session.GetString("AccessToken") != null;
 }
 
 <!-- Page Header -->
@@ -13,319 +22,356 @@
 <div class="flex flex-col lg:flex-row gap-8 px-4">
     <!-- Sidebar Filters -->
     <aside class="w-full lg:w-64 shrink-0 flex flex-col gap-6">
-        <!-- Search Box -->
-        <div>
-            <label class="flex flex-col w-full h-12">
-                <div class="flex w-full flex-1 items-stretch rounded-lg h-full border border-slate-200 dark:border-slate-700 overflow-hidden bg-white dark:bg-slate-900 focus-within:ring-2 focus-within:ring-primary focus-within:border-primary">
-                    <div class="text-slate-400 dark:text-slate-500 flex items-center justify-center pl-4 bg-transparent">
-                        <span class="material-symbols-outlined text-[20px]">search</span>
+        <form method="get" asp-controller="Doctors" asp-action="Index" id="filterForm">
+            <!-- Search Box -->
+            <div>
+                <label class="flex flex-col w-full h-12">
+                    <div class="flex w-full flex-1 items-stretch rounded-lg h-full border border-slate-200 dark:border-slate-700 overflow-hidden bg-white dark:bg-slate-900 focus-within:ring-2 focus-within:ring-primary focus-within:border-primary">
+                        <div class="text-slate-400 dark:text-slate-500 flex items-center justify-center pl-4 bg-transparent">
+                            <svg class="h-5 w-5" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                                <path d="M10 2a8 8 0 0 1 6.32 12.9l3.39 3.39a1 1 0 1 1-1.42 1.42l-3.39-3.39A8 8 0 1 1 10 2Zm0 2a6 6 0 1 0 0 12 6 6 0 0 0 0-12Z"/>
+                            </svg>
+                        </div>
+                        <input name="searchTerm" 
+                               value="@searchTerm"
+                               class="form-input flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-r-lg text-slate-900 dark:text-white focus:outline-0 focus:ring-0 border-none bg-transparent h-full placeholder:text-slate-400 dark:placeholder:text-slate-500 px-3 text-sm font-normal leading-normal" 
+                               placeholder="Search by name..." 
+                               type="text" />
                     </div>
-                    <input class="form-input flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-r-lg text-slate-900 dark:text-white focus:outline-0 focus:ring-0 border-none bg-transparent h-full placeholder:text-slate-400 dark:placeholder:text-slate-500 px-3 text-sm font-normal leading-normal" 
-                           placeholder="Search by name..." 
-                           type="text" />
-                </div>
-            </label>
-        </div>
-
-        <!-- Filters Panel -->
-        <div class="bg-white dark:bg-slate-900 rounded-xl p-5 border border-slate-200 dark:border-slate-700 shadow-sm">
-            <h3 class="font-bold text-slate-900 dark:text-white mb-4">Filters</h3>
-
-            <!-- Specialty Filter -->
-            <div class="mb-5">
-                <h4 class="text-sm font-semibold text-slate-700 dark:text-slate-300 mb-3 flex items-center justify-between">
-                    Specialty
-                    <span class="material-symbols-outlined text-[18px]">expand_more</span>
-                </h4>
-                <div class="flex flex-col gap-2">
-                    <label class="flex items-center gap-3">
-                        <input checked class="form-checkbox h-4 w-4 rounded border-slate-300 text-primary focus:ring-primary dark:border-slate-600 dark:bg-slate-800" type="checkbox" />
-                        <span class="text-sm text-slate-600 dark:text-slate-400">All Specialties</span>
-                    </label>
-                    <label class="flex items-center gap-3">
-                        <input class="form-checkbox h-4 w-4 rounded border-slate-300 text-primary focus:ring-primary dark:border-slate-600 dark:bg-slate-800" type="checkbox" />
-                        <span class="text-sm text-slate-600 dark:text-slate-400">Cardiology</span>
-                    </label>
-                    <label class="flex items-center gap-3">
-                        <input class="form-checkbox h-4 w-4 rounded border-slate-300 text-primary focus:ring-primary dark:border-slate-600 dark:bg-slate-800" type="checkbox" />
-                        <span class="text-sm text-slate-600 dark:text-slate-400">Dermatology</span>
-                    </label>
-                    <label class="flex items-center gap-3">
-                        <input class="form-checkbox h-4 w-4 rounded border-slate-300 text-primary focus:ring-primary dark:border-slate-600 dark:bg-slate-800" type="checkbox" />
-                        <span class="text-sm text-slate-600 dark:text-slate-400">Neurology</span>
-                    </label>
-                    <label class="flex items-center gap-3">
-                        <input class="form-checkbox h-4 w-4 rounded border-slate-300 text-primary focus:ring-primary dark:border-slate-600 dark:bg-slate-800" type="checkbox" />
-                        <span class="text-sm text-slate-600 dark:text-slate-400">Pediatrics</span>
-                    </label>
-                    <a class="text-xs text-primary font-medium mt-1 hover:underline" href="#">Show more</a>
-                </div>
+                </label>
             </div>
 
-            <!-- Availability Filter -->
-            <div class="mb-5 border-t border-slate-100 dark:border-slate-800 pt-5">
-                <h4 class="text-sm font-semibold text-slate-700 dark:text-slate-300 mb-3 flex items-center justify-between">
-                    Availability
-                    <span class="material-symbols-outlined text-[18px]">expand_more</span>
-                </h4>
-                <div class="flex flex-col gap-2">
-                    <label class="flex items-center gap-3">
-                        <input checked class="form-radio h-4 w-4 border-slate-300 text-primary focus:ring-primary dark:border-slate-600 dark:bg-slate-800" name="availability" type="radio" />
-                        <span class="text-sm text-slate-600 dark:text-slate-400">Anytime</span>
-                    </label>
-                    <label class="flex items-center gap-3">
-                        <input class="form-radio h-4 w-4 border-slate-300 text-primary focus:ring-primary dark:border-slate-600 dark:bg-slate-800" name="availability" type="radio" />
-                        <span class="text-sm text-slate-600 dark:text-slate-400">Available Today</span>
-                    </label>
-                    <label class="flex items-center gap-3">
-                        <input class="form-radio h-4 w-4 border-slate-300 text-primary focus:ring-primary dark:border-slate-600 dark:bg-slate-800" name="availability" type="radio" />
-                        <span class="text-sm text-slate-600 dark:text-slate-400">Available Tomorrow</span>
-                    </label>
-                    <label class="flex items-center gap-3">
-                        <input class="form-radio h-4 w-4 border-slate-300 text-primary focus:ring-primary dark:border-slate-600 dark:bg-slate-800" name="availability" type="radio" />
-                        <span class="text-sm text-slate-600 dark:text-slate-400">Next 7 Days</span>
-                    </label>
+            <!-- Filters Panel -->
+            <div class="bg-white dark:bg-slate-900 rounded-xl p-5 border border-slate-200 dark:border-slate-700 shadow-sm">
+                <h3 class="font-bold text-slate-900 dark:text-white mb-4">Filters</h3>
+
+                <!-- Specialty Filter -->
+                <div class="mb-5">
+                    <h4 class="text-sm font-semibold text-slate-700 dark:text-slate-300 mb-3">
+                        Specialty
+                    </h4>
+                    <div class="flex flex-col gap-2">
+                        <label class="flex items-center gap-3">
+                            <input @(specialtyId == null ? "checked" : "") 
+                                   class="form-radio h-4 w-4 border-slate-300 text-primary focus:ring-primary dark:border-slate-600 dark:bg-slate-800" 
+                                   name="specialtyId" 
+                                   type="radio" 
+                                   value=""
+                                   onchange="document.getElementById('filterForm').submit()" />
+                            <span class="text-sm text-slate-600 dark:text-slate-400">All Specialties</span>
+                        </label>
+                        @foreach (var specialty in specialties)
+                        {
+                            <label class="flex items-center gap-3">
+                                <input @(specialtyId == specialty.SpecialtyId ? "checked" : "") 
+                                       class="form-radio h-4 w-4 border-slate-300 text-primary focus:ring-primary dark:border-slate-600 dark:bg-slate-800" 
+                                       name="specialtyId" 
+                                       type="radio" 
+                                   value="@specialty.SpecialtyId"
+                                   onchange="document.getElementById('filterForm').submit()" />
+                            <span class="text-sm text-slate-600 dark:text-slate-400">@specialty.Name</span>
+                            </label>
+                        }
+                    </div>
                 </div>
+
+                <!-- Availability Filter -->
+                <div class="mb-5 border-t border-slate-100 dark:border-slate-800 pt-5">
+                    <h4 class="text-sm font-semibold text-slate-700 dark:text-slate-300 mb-3">
+                        Availability
+                    </h4>
+                    <div class="flex flex-col gap-2">
+                        <label class="flex items-center gap-3">
+                            <input @(availableToday == null ? "checked" : "") 
+                                   class="form-radio h-4 w-4 border-slate-300 text-primary focus:ring-primary dark:border-slate-600 dark:bg-slate-800" 
+                                   name="availableToday" 
+                                   type="radio" 
+                                   value=""
+                                   onchange="document.getElementById('filterForm').submit()" />
+                            <span class="text-sm text-slate-600 dark:text-slate-400">Anytime</span>
+                        </label>
+                        <label class="flex items-center gap-3">
+                            <input @(availableToday == true ? "checked" : "") 
+                                   class="form-radio h-4 w-4 border-slate-300 text-primary focus:ring-primary dark:border-slate-600 dark:bg-slate-800" 
+                                   name="availableToday" 
+                                   type="radio" 
+                                   value="true"
+                                   onchange="document.getElementById('filterForm').submit()" />
+                            <span class="text-sm text-slate-600 dark:text-slate-400">Available Today</span>
+                        </label>
+                    </div>
+                </div>
+
+                <!-- Gender Filter -->
+                <div class="border-t border-slate-100 dark:border-slate-800 pt-5">
+                    <h4 class="text-sm font-semibold text-slate-700 dark:text-slate-300 mb-3">
+                        Gender
+                    </h4>
+                    <div class="flex flex-col gap-2">
+                        <label class="flex items-center gap-3">
+                            <input @(string.IsNullOrEmpty(gender) ? "checked" : "") 
+                                   class="form-radio h-4 w-4 border-slate-300 text-primary focus:ring-primary dark:border-slate-600 dark:bg-slate-800" 
+                                   name="gender" 
+                                   type="radio" 
+                                   value=""
+                                   onchange="document.getElementById('filterForm').submit()" />
+                            <span class="text-sm text-slate-600 dark:text-slate-400">Any</span>
+                        </label>
+                        <label class="flex items-center gap-3">
+                            <input @(gender == "Female" ? "checked" : "") 
+                                   class="form-radio h-4 w-4 border-slate-300 text-primary focus:ring-primary dark:border-slate-600 dark:bg-slate-800" 
+                                   name="gender" 
+                                   type="radio" 
+                                   value="Female"
+                                   onchange="document.getElementById('filterForm').submit()" />
+                            <span class="text-sm text-slate-600 dark:text-slate-400">Female</span>
+                        </label>
+                        <label class="flex items-center gap-3">
+                            <input @(gender == "Male" ? "checked" : "") 
+                                   class="form-radio h-4 w-4 border-slate-300 text-primary focus:ring-primary dark:border-slate-600 dark:bg-slate-800" 
+                                   name="gender" 
+                                   type="radio" 
+                                   value="Male"
+                                   onchange="document.getElementById('filterForm').submit()" />
+                            <span class="text-sm text-slate-600 dark:text-slate-400">Male</span>
+                        </label>
+                    </div>
+                </div>
+
+                <!-- Hidden fields to preserve sort -->
+                <input type="hidden" name="sortBy" value="@sortBy" />
             </div>
 
-            <!-- Gender Filter -->
-            <div class="border-t border-slate-100 dark:border-slate-800 pt-5">
-                <h4 class="text-sm font-semibold text-slate-700 dark:text-slate-300 mb-3 flex items-center justify-between">
-                    Gender
-                    <span class="material-symbols-outlined text-[18px]">expand_more</span>
-                </h4>
-                <div class="flex flex-col gap-2">
-                    <label class="flex items-center gap-3">
-                        <input checked class="form-checkbox h-4 w-4 rounded border-slate-300 text-primary focus:ring-primary dark:border-slate-600 dark:bg-slate-800" type="checkbox" />
-                        <span class="text-sm text-slate-600 dark:text-slate-400">Any</span>
-                    </label>
-                    <label class="flex items-center gap-3">
-                        <input class="form-checkbox h-4 w-4 rounded border-slate-300 text-primary focus:ring-primary dark:border-slate-600 dark:bg-slate-800" type="checkbox" />
-                        <span class="text-sm text-slate-600 dark:text-slate-400">Female</span>
-                    </label>
-                    <label class="flex items-center gap-3">
-                        <input class="form-checkbox h-4 w-4 rounded border-slate-300 text-primary focus:ring-primary dark:border-slate-600 dark:bg-slate-800" type="checkbox" />
-                        <span class="text-sm text-slate-600 dark:text-slate-400">Male</span>
-                    </label>
-                </div>
-            </div>
-        </div>
+            <!-- Apply Filters Button (Mobile) -->
+            <button type="submit" class="lg:hidden w-full flex items-center justify-center rounded-lg h-10 px-4 bg-primary text-white text-sm font-bold hover:bg-primary/90 transition-colors">
+                Apply Filters
+            </button>
+        </form>
     </aside>
 
     <!-- Main Content Area -->
     <div class="flex-1 flex flex-col gap-6">
         <!-- Results Header -->
-        <div class="flex justify-between items-center bg-white dark:bg-slate-900 p-4 rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm">
+        <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 bg-white dark:bg-slate-900 p-4 rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm">
             <p class="text-sm text-slate-500 dark:text-slate-400">
-                Showing <span class="font-bold text-slate-900 dark:text-white">1-4</span> of <span class="font-bold text-slate-900 dark:text-white">42</span> doctors
+                @if (Model?.Doctors != null && Model.Doctors.Any())
+                {
+                    var startIndex = ((Model.CurrentPage - 1) * Model.PageSize) + 1;
+                    var endIndex = Math.Min(Model.CurrentPage * Model.PageSize, Model.TotalCount);
+                    <text>Showing <span class="font-bold text-slate-900 dark:text-white">@startIndex-@endIndex</span> of <span class="font-bold text-slate-900 dark:text-white">@Model.TotalCount</span> doctors</text>
+                }
+                else
+                {
+                    <text>No doctors found</text>
+                }
             </p>
             <div class="flex items-center gap-2">
                 <span class="text-sm text-slate-500 dark:text-slate-400">Sort by:</span>
-                <button class="flex items-center gap-1 text-sm font-medium text-slate-700 dark:text-slate-300 hover:text-primary dark:hover:text-primary transition-colors">
-                    Recommended
-                    <span class="material-symbols-outlined text-[18px]">swap_vert</span>
-                </button>
+                <select name="sortBy" 
+                        class="text-sm font-medium text-slate-700 dark:text-slate-300 bg-transparent border-none focus:ring-0 hover:text-primary dark:hover:text-primary transition-colors cursor-pointer"
+                        onchange="updateSort(this.value)">
+                    <option value="rating_desc" selected="@(sortBy == "rating_desc")">Rating (High to Low)</option>
+                    <option value="rating_asc" selected="@(sortBy == "rating_asc")">Rating (Low to High)</option>
+                    <option value="name_asc" selected="@(sortBy == "name_asc")">Name (A-Z)</option>
+                    <option value="name_desc" selected="@(sortBy == "name_desc")">Name (Z-A)</option>
+                    <option value="experience_desc" selected="@(sortBy == "experience_desc")">Experience (High to Low)</option>
+                    <option value="experience_asc" selected="@(sortBy == "experience_asc")">Experience (Low to High)</option>
+                    <option value="fee_asc" selected="@(sortBy == "fee_asc")">Fee (Low to High)</option>
+                    <option value="fee_desc" selected="@(sortBy == "fee_desc")">Fee (High to Low)</option>
+                </select>
             </div>
         </div>
 
-        <!-- Doctor Cards Grid -->
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-1 xl:grid-cols-2 gap-6">
-            <!-- Doctor Card 1 -->
-            <div class="flex flex-col lg:flex-row bg-white dark:bg-slate-900 rounded-xl overflow-hidden border border-slate-200 dark:border-slate-700 shadow-sm hover:shadow-md hover:border-primary/50 transition-all duration-300">
-                <div class="w-full lg:w-48 h-48 lg:h-auto bg-slate-200 dark:bg-slate-800 relative">
-                    <img alt="Dr. Emily Chen, Cardiologist" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuA6wrTt341E3yA-wcu7p1aezUUzdiU1W6-T8VcCSRJDUz30gdlsrDhEkuQ81u3wwgHfpxjPy8qPB4Vs67aLJOmkK9fxlE09vNYcwPv82Z0wAPTVv3FU43V2XurmRI90S5d_WpTxuti53EFIOo1TVob_7CzaY8-egib308iyVTAfuKpsfCH_zq1rxrZpmZAuA8qXs0teRnfvMPOYnJleqCFK6gPIeS9EJQ42w4zNrXgEEKuRKrqSSNwUwWmWtTSEf2_nuTPWKE0Q2CSB" />
-                    <div class="absolute top-3 left-3 bg-white/90 dark:bg-slate-900/90 backdrop-blur-sm px-2 py-1 rounded-md text-xs font-bold text-primary flex items-center gap-1">
-                        <span class="material-symbols-outlined text-[14px]">star</span> 4.9
-                    </div>
-                </div>
-                <div class="p-5 flex-1 flex flex-col justify-between">
-                    <div>
-                        <div class="flex justify-between items-start mb-1">
-                            <h3 class="text-lg font-bold text-slate-900 dark:text-white leading-tight">Dr. Emily Chen</h3>
-                            <button class="text-slate-400 hover:text-red-500 transition-colors">
-                                <span class="material-symbols-outlined text-[20px]">favorite_border</span>
-                            </button>
-                        </div>
-                        <p class="text-primary text-sm font-medium mb-2">Cardiology</p>
-                        <div class="flex flex-col gap-2 mb-4">
-                            <div class="flex items-center gap-2 text-sm text-slate-600 dark:text-slate-400">
-                                <span class="material-symbols-outlined text-[16px] text-slate-400">work</span>
-                                15 Years Experience
-                            </div>
-                            <div class="flex items-center gap-2 text-sm text-slate-600 dark:text-slate-400">
-                                <span class="material-symbols-outlined text-[16px] text-slate-400">location_on</span>
-                                Main Campus, Wing A
-                            </div>
-                            <div class="flex items-center gap-2 text-sm text-slate-600 dark:text-slate-400">
-                                <span class="material-symbols-outlined text-[16px] text-slate-400">language</span>
-                                English, Mandarin
+        @if (Model?.Doctors != null && Model.Doctors.Any())
+        {
+            <!-- Doctor Cards Grid -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-1 xl:grid-cols-2 gap-6">
+                @foreach (var doctor in Model.Doctors)
+                {
+                    <div class="flex flex-col lg:flex-row bg-white dark:bg-slate-900 rounded-xl overflow-hidden border border-slate-200 dark:border-slate-700 shadow-sm hover:shadow-md hover:border-primary/50 transition-all duration-300">
+                        <div class="w-full lg:w-48 h-48 lg:h-auto bg-slate-200 dark:bg-slate-800 relative">
+                            @if (!string.IsNullOrEmpty(doctor.ProfilePictureUrl))
+                            {
+                                <img alt="@doctor.FullName, @doctor.SpecialtyName" class="w-full h-full object-cover" src="@doctor.ProfilePictureUrl" />
+                            }
+                            else
+                            {
+                                <div class="w-full h-full flex items-center justify-center text-slate-400">
+                                    <svg class="h-16 w-16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                                        <path d="M12 12a4 4 0 1 0-4-4 4 4 0 0 0 4 4Zm0 2c-4.418 0-8 2.239-8 5v1a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-1c0-2.761-3.582-5-8-5Z"/>
+                                    </svg>
+                                </div>
+                            }
+                            <div class="absolute top-3 left-3 bg-white/90 dark:bg-slate-900/90 backdrop-blur-sm px-2 py-1 rounded-md text-xs font-bold text-primary flex items-center gap-1">
+                                <svg class="h-3.5 w-3.5" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                                    <path d="M12 3.5 9.25 9.3 3 10l4.6 4.2L6.4 20.5 12 17.2l5.6 3.3-1.2-6.3L21 10l-6.25-.7L12 3.5Z"/>
+                                </svg>
+                                @doctor.Rating.ToString("0.0")
                             </div>
                         </div>
+                        <div class="p-5 flex-1 flex flex-col justify-between">
+                            <div>
+                                <div class="flex justify-between items-start mb-1">
+                                    <h3 class="text-lg font-bold text-slate-900 dark:text-white leading-tight">@doctor.FullName</h3>
+                                </div>
+                                <p class="text-primary text-sm font-medium mb-2">@doctor.SpecialtyName</p>
+                                <div class="flex flex-col gap-2 mb-4">
+                                    <div class="flex items-center gap-2 text-sm text-slate-600 dark:text-slate-400">
+                                        <svg class="h-4 w-4 text-slate-400" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                                            <path d="M9 4a2 2 0 0 0-2 2v1H5a3 3 0 0 0-3 3v6a3 3 0 0 0 3 3h14a3 3 0 0 0 3-3v-6a3 3 0 0 0-3-3h-2V6a2 2 0 0 0-2-2H9Zm0 2h6v1H9V6Zm-5 6h16v4a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1v-4Z"/>
+                                        </svg>
+                                        @doctor.YearsOfExperience Years Experience
+                                    </div>
+                                    @if (!string.IsNullOrEmpty(doctor.Location))
+                                    {
+                                        <div class="flex items-center gap-2 text-sm text-slate-600 dark:text-slate-400">
+                                            <svg class="h-4 w-4 text-slate-400" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                                                <path d="M12 2a7 7 0 0 0-7 7c0 5.25 6.2 11.5 6.45 11.76a1 1 0 0 0 1.42 0C12.8 20.5 19 14.25 19 9a7 7 0 0 0-7-7Zm0 9.5a2.5 2.5 0 1 1 0-5 2.5 2.5 0 0 1 0 5Z"/>
+                                            </svg>
+                                            @doctor.Location
+                                        </div>
+                                    }
+                                    @if (doctor.ConsultationFee.HasValue)
+                                    {
+                                        <div class="flex items-center gap-2 text-sm text-slate-600 dark:text-slate-400">
+                                            <svg class="h-4 w-4 text-slate-400" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                                                <path d="M3 6a3 3 0 0 1 3-3h12a3 3 0 0 1 3 3v2H3V6Zm0 4h18v8a3 3 0 0 1-3 3H6a3 3 0 0 1-3-3v-8Zm4 4a1 1 0 0 0 0 2h6a1 1 0 0 0 0-2H7Z"/>
+                                            </svg>
+                                            $@doctor.ConsultationFee.Value.ToString("N0") consultation fee
+                                        </div>
+                                    }
+                                </div>
+                            </div>
+                            <div class="flex gap-2 mt-4">
+                                <a asp-area="" asp-controller="Doctors" asp-action="Details" asp-route-id="@doctor.DoctorId" 
+                                   class="flex-1 flex items-center justify-center cursor-pointer rounded-lg h-10 px-2 bg-primary/10 dark:bg-primary/20 text-primary text-xs sm:text-sm font-semibold hover:bg-primary/20 transition-colors no-underline whitespace-nowrap">
+                                    View Profile
+                                </a>
+                                @if (isLoggedIn)
+                                {
+                                    <a asp-area="" asp-controller="Appointment" asp-action="Book" asp-route-doctorId="@doctor.DoctorId" 
+                                       class="flex-1 flex items-center justify-center cursor-pointer rounded-lg h-10 px-2 bg-primary text-white text-xs sm:text-sm font-bold hover:bg-primary/90 transition-colors shadow-sm no-underline whitespace-nowrap">
+                                        Book Now
+                                    </a>
+                                }
+                                else
+                                {
+                                    <a asp-area="" asp-controller="Account" asp-action="Login" asp-route-returnUrl="@Url.Action("Book", "Appointment", new { doctorId = doctor.DoctorId })" 
+                                       class="flex-1 flex items-center justify-center cursor-pointer rounded-lg h-10 px-2 bg-primary/80 text-white text-xs sm:text-sm font-bold hover:bg-primary/90 transition-colors shadow-sm no-underline whitespace-nowrap">
+                                        Login to Book
+                                    </a>
+                                }
+                            </div>
+                        </div>
                     </div>
-                    <div class="flex gap-3 mt-4">
-                        <a asp-area="" asp-controller="Doctors" asp-action="Details" asp-route-id="1" 
-                           class="flex-1 flex items-center justify-center cursor-pointer rounded-lg h-10 px-4 bg-primary/10 dark:bg-primary/20 text-primary text-sm font-semibold hover:bg-primary/20 transition-colors no-underline">
-                            View Profile
-                        </a>
-                        <a asp-area="" asp-controller="Appointment" asp-action="Book" asp-route-doctorId="1" 
-                           class="flex-1 flex items-center justify-center cursor-pointer rounded-lg h-10 px-4 bg-primary text-white text-sm font-bold hover:bg-primary/90 transition-colors shadow-sm no-underline">
-                            Book Now
-                        </a>
-                    </div>
-                </div>
+                }
             </div>
 
-            <!-- Doctor Card 2 -->
-            <div class="flex flex-col lg:flex-row bg-white dark:bg-slate-900 rounded-xl overflow-hidden border border-slate-200 dark:border-slate-700 shadow-sm hover:shadow-md hover:border-primary/50 transition-all duration-300">
-                <div class="w-full lg:w-48 h-48 lg:h-auto bg-slate-200 dark:bg-slate-800 relative">
-                    <img alt="Dr. Marcus Johnson, Neurologist" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCqwIgMbGcY96gevDFCIo-w_AO6bicyVlqwdSnci0dC8pTAVaPeeloMbZBWe1Ze5rtptK6u1O0BM0N7fmQv5yh_JZBxKOrgW-DzgFeRXi6_eoCfYDCYbwhN2UcnBJni1deqsP2E2uL3b7jDYlpxdeJavx0eGme7N_f20sxJyi3cjubpzelNX8sLUn2vBEW_nPQ-YomdymMzghv3tkVO86k8ctFsoSZpnXSvgWNY4xO4g6n7Y2lkjXgk-I3VdyYt1uLJFc_eQr0hLTmV" />
-                    <div class="absolute top-3 left-3 bg-white/90 dark:bg-slate-900/90 backdrop-blur-sm px-2 py-1 rounded-md text-xs font-bold text-primary flex items-center gap-1">
-                        <span class="material-symbols-outlined text-[14px]">star</span> 4.8
-                    </div>
-                </div>
-                <div class="p-5 flex-1 flex flex-col justify-between">
-                    <div>
-                        <div class="flex justify-between items-start mb-1">
-                            <h3 class="text-lg font-bold text-slate-900 dark:text-white leading-tight">Dr. Marcus Johnson</h3>
-                            <button class="text-slate-400 hover:text-red-500 transition-colors">
-                                <span class="material-symbols-outlined text-[20px]">favorite_border</span>
+            <!-- Pagination -->
+            @if (Model.TotalPages > 1)
+            {
+                <div class="flex justify-center mt-8">
+                    <nav class="flex items-center gap-2">
+                        @if (Model.CurrentPage > 1)
+                        {
+                            <a href="@Url.Action("Index", new { searchTerm, specialtyId, gender, availableToday, sortBy, pageNumber = Model.CurrentPage - 1 })" 
+                               class="w-10 h-10 flex items-center justify-center rounded-lg border border-slate-200 dark:border-slate-700 text-slate-500 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors">
+                                <span class="material-symbols-outlined">chevron_left</span>
+                            </a>
+                        }
+                        else
+                        {
+                            <button class="w-10 h-10 flex items-center justify-center rounded-lg border border-slate-200 dark:border-slate-700 text-slate-300 dark:text-slate-600 cursor-not-allowed" disabled>
+                                <span class="material-symbols-outlined">chevron_left</span>
                             </button>
-                        </div>
-                        <p class="text-primary text-sm font-medium mb-2">Neurology</p>
-                        <div class="flex flex-col gap-2 mb-4">
-                            <div class="flex items-center gap-2 text-sm text-slate-600 dark:text-slate-400">
-                                <span class="material-symbols-outlined text-[16px] text-slate-400">work</span>
-                                12 Years Experience
-                            </div>
-                            <div class="flex items-center gap-2 text-sm text-slate-600 dark:text-slate-400">
-                                <span class="material-symbols-outlined text-[16px] text-slate-400">location_on</span>
-                                North Clinic, Suite 302
-                            </div>
-                            <div class="flex items-center gap-2 text-sm text-slate-600 dark:text-slate-400">
-                                <span class="material-symbols-outlined text-[16px] text-slate-400">language</span>
-                                English, Spanish
-                            </div>
-                        </div>
-                    </div>
-                    <div class="flex gap-3 mt-4">
-                        <a asp-area="" asp-controller="Doctors" asp-action="Details" asp-route-id="2" 
-                           class="flex-1 flex items-center justify-center cursor-pointer rounded-lg h-10 px-4 bg-primary/10 dark:bg-primary/20 text-primary text-sm font-semibold hover:bg-primary/20 transition-colors no-underline">
-                            View Profile
-                        </a>
-                        <a asp-area="" asp-controller="Appointment" asp-action="Book" asp-route-doctorId="2" 
-                           class="flex-1 flex items-center justify-center cursor-pointer rounded-lg h-10 px-4 bg-primary text-white text-sm font-bold hover:bg-primary/90 transition-colors shadow-sm no-underline">
-                            Book Now
-                        </a>
-                    </div>
-                </div>
-            </div>
+                        }
 
-            <!-- Doctor Card 3 -->
-            <div class="flex flex-col lg:flex-row bg-white dark:bg-slate-900 rounded-xl overflow-hidden border border-slate-200 dark:border-slate-700 shadow-sm hover:shadow-md hover:border-primary/50 transition-all duration-300">
-                <div class="w-full lg:w-48 h-48 lg:h-auto bg-slate-200 dark:bg-slate-800 relative">
-                    <img alt="Dr. Sarah Patel, Dermatologist" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCxFkEg4MvatjF5Jt30_e1V_1uHOAljZ6PumLEN75ruIXZ3uvcyX1Xxiw82_fIvn9Nqyq5rijetXlpEM6jFDy12ZyWxs1wv1MKGvobPLxkg3EpJeJ4SqkPPcUIGL14zeoDjds8TKwLTPvP3AdQ9EVOQl0NKK3Qy12r7yhJpOUUN2fyetyVvmCC8Tj7fh8OWIq5SagzulPwLAVBJnC3i4vHSVq126IwJnLy-TAZ49IdIZNR-baA5Gl6hTB392w2sa7dgnv0-cEg5Gz8V" />
-                    <div class="absolute top-3 left-3 bg-white/90 dark:bg-slate-900/90 backdrop-blur-sm px-2 py-1 rounded-md text-xs font-bold text-primary flex items-center gap-1">
-                        <span class="material-symbols-outlined text-[14px]">star</span> 5.0
-                    </div>
-                </div>
-                <div class="p-5 flex-1 flex flex-col justify-between">
-                    <div>
-                        <div class="flex justify-between items-start mb-1">
-                            <h3 class="text-lg font-bold text-slate-900 dark:text-white leading-tight">Dr. Sarah Patel</h3>
-                            <button class="text-slate-400 hover:text-red-500 transition-colors">
-                                <span class="material-symbols-outlined text-[20px]">favorite_border</span>
+                        @{
+                            var startPage = Math.Max(1, Model.CurrentPage - 2);
+                            var endPage = Math.Min(Model.TotalPages, Model.CurrentPage + 2);
+                        }
+
+                        @if (startPage > 1)
+                        {
+                            <a href="@Url.Action("Index", new { searchTerm, specialtyId, gender, availableToday, sortBy, pageNumber = 1 })" 
+                               class="w-10 h-10 flex items-center justify-center rounded-lg border border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors">1</a>
+                            @if (startPage > 2)
+                            {
+                                <span class="text-slate-500 dark:text-slate-400">...</span>
+                            }
+                        }
+
+                        @for (int i = startPage; i <= endPage; i++)
+                        {
+                            if (i == Model.CurrentPage)
+                            {
+                                <button class="w-10 h-10 flex items-center justify-center rounded-lg bg-primary text-white font-bold">@i</button>
+                            }
+                            else
+                            {
+                                <a href="@Url.Action("Index", new { searchTerm, specialtyId, gender, availableToday, sortBy, pageNumber = i })" 
+                                   class="w-10 h-10 flex items-center justify-center rounded-lg border border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors">@i</a>
+                            }
+                        }
+
+                        @if (endPage < Model.TotalPages)
+                        {
+                            @if (endPage < Model.TotalPages - 1)
+                            {
+                                <span class="text-slate-500 dark:text-slate-400">...</span>
+                            }
+                            <a href="@Url.Action("Index", new { searchTerm, specialtyId, gender, availableToday, sortBy, pageNumber = Model.TotalPages })" 
+                               class="w-10 h-10 flex items-center justify-center rounded-lg border border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors">@Model.TotalPages</a>
+                        }
+
+                        @if (Model.CurrentPage < Model.TotalPages)
+                        {
+                            <a href="@Url.Action("Index", new { searchTerm, specialtyId, gender, availableToday, sortBy, pageNumber = Model.CurrentPage + 1 })" 
+                               class="w-10 h-10 flex items-center justify-center rounded-lg border border-slate-200 dark:border-slate-700 text-slate-500 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors">
+                                <span class="material-symbols-outlined">chevron_right</span>
+                            </a>
+                        }
+                        else
+                        {
+                            <button class="w-10 h-10 flex items-center justify-center rounded-lg border border-slate-200 dark:border-slate-700 text-slate-300 dark:text-slate-600 cursor-not-allowed" disabled>
+                                <span class="material-symbols-outlined">chevron_right</span>
                             </button>
-                        </div>
-                        <p class="text-primary text-sm font-medium mb-2">Dermatology</p>
-                        <div class="flex flex-col gap-2 mb-4">
-                            <div class="flex items-center gap-2 text-sm text-slate-600 dark:text-slate-400">
-                                <span class="material-symbols-outlined text-[16px] text-slate-400">work</span>
-                                8 Years Experience
-                            </div>
-                            <div class="flex items-center gap-2 text-sm text-slate-600 dark:text-slate-400">
-                                <span class="material-symbols-outlined text-[16px] text-slate-400">location_on</span>
-                                Main Campus, Wing B
-                            </div>
-                            <div class="flex items-center gap-2 text-sm text-slate-600 dark:text-slate-400">
-                                <span class="material-symbols-outlined text-[16px] text-slate-400">language</span>
-                                English, Hindi
-                            </div>
-                        </div>
-                    </div>
-                    <div class="flex gap-3 mt-4">
-                        <a asp-area="" asp-controller="Doctors" asp-action="Details" asp-route-id="3" 
-                           class="flex-1 flex items-center justify-center cursor-pointer rounded-lg h-10 px-4 bg-primary/10 dark:bg-primary/20 text-primary text-sm font-semibold hover:bg-primary/20 transition-colors no-underline">
-                            View Profile
-                        </a>
-                        <a asp-area="" asp-controller="Appointment" asp-action="Book" asp-route-doctorId="3" 
-                           class="flex-1 flex items-center justify-center cursor-pointer rounded-lg h-10 px-4 bg-primary text-white text-sm font-bold hover:bg-primary/90 transition-colors shadow-sm no-underline">
-                            Book Now
-                        </a>
-                    </div>
+                        }
+                    </nav>
                 </div>
+            }
+        }
+        else
+        {
+            <!-- No Results -->
+            <div class="flex flex-col items-center justify-center py-16 px-4">
+                <span class="material-symbols-outlined text-[64px] text-slate-300 dark:text-slate-700 mb-4">person_search</span>
+                <h3 class="text-xl font-bold text-slate-900 dark:text-white mb-2">No doctors found</h3>
+                <p class="text-slate-500 dark:text-slate-400 text-center mb-6">Try adjusting your filters or search terms</p>
+                <a asp-area="" asp-controller="Doctors" asp-action="Index" 
+                   class="flex items-center justify-center rounded-lg h-10 px-6 bg-primary text-white text-sm font-bold hover:bg-primary/90 transition-colors no-underline">
+                    Clear All Filters
+                </a>
             </div>
-
-            <!-- Doctor Card 4 -->
-            <div class="flex flex-col lg:flex-row bg-white dark:bg-slate-900 rounded-xl overflow-hidden border border-slate-200 dark:border-slate-700 shadow-sm hover:shadow-md hover:border-primary/50 transition-all duration-300">
-                <div class="w-full lg:w-48 h-48 lg:h-auto bg-slate-200 dark:bg-slate-800 relative">
-                    <img alt="Dr. David Wilson, Pediatrician" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDXQZna2h6VMsuzhgfuErgB60Vw3raDH9krDGMNUMh0P6uBLUTDqKnoj_7x0V4eUDnf9SmHwzrT15jo1xk922e4VOXTZDG-uf1nAU24cn6YjXlzvOUB88rLchU-S_yrQ97kl1JNtwWHucgUcCw0fsGtp-j1z6zY8eBaGjc0dgfPIAzJfdtlaUqetaOJDbBmc2iGCKtK9X-TikTW4wzu28gdlkQJPXJP4-BqKN_4v2SjJLCzgYFAOaGGq5Bcb2Q-IMghQqvQrioeD2-T" />
-                    <div class="absolute top-3 left-3 bg-white/90 dark:bg-slate-900/90 backdrop-blur-sm px-2 py-1 rounded-md text-xs font-bold text-primary flex items-center gap-1">
-                        <span class="material-symbols-outlined text-[14px]">star</span> 4.7
-                    </div>
-                </div>
-                <div class="p-5 flex-1 flex flex-col justify-between">
-                    <div>
-                        <div class="flex justify-between items-start mb-1">
-                            <h3 class="text-lg font-bold text-slate-900 dark:text-white leading-tight">Dr. David Wilson</h3>
-                            <button class="text-slate-400 hover:text-red-500 transition-colors">
-                                <span class="material-symbols-outlined text-[20px]">favorite_border</span>
-                            </button>
-                        </div>
-                        <p class="text-primary text-sm font-medium mb-2">Pediatrics</p>
-                        <div class="flex flex-col gap-2 mb-4">
-                            <div class="flex items-center gap-2 text-sm text-slate-600 dark:text-slate-400">
-                                <span class="material-symbols-outlined text-[16px] text-slate-400">work</span>
-                                20 Years Experience
-                            </div>
-                            <div class="flex items-center gap-2 text-sm text-slate-600 dark:text-slate-400">
-                                <span class="material-symbols-outlined text-[16px] text-slate-400">location_on</span>
-                                East Wing Children's Center
-                            </div>
-                            <div class="flex items-center gap-2 text-sm text-slate-600 dark:text-slate-400">
-                                <span class="material-symbols-outlined text-[16px] text-slate-400">language</span>
-                                English
-                            </div>
-                        </div>
-                    </div>
-                    <div class="flex gap-3 mt-4">
-                        <a asp-area="" asp-controller="Doctors" asp-action="Details" asp-route-id="4" 
-                           class="flex-1 flex items-center justify-center cursor-pointer rounded-lg h-10 px-4 bg-primary/10 dark:bg-primary/20 text-primary text-sm font-semibold hover:bg-primary/20 transition-colors no-underline">
-                            View Profile
-                        </a>
-                        <a asp-area="" asp-controller="Appointment" asp-action="Book" asp-route-doctorId="4" 
-                           class="flex-1 flex items-center justify-center cursor-pointer rounded-lg h-10 px-4 bg-primary text-white text-sm font-bold hover:bg-primary/90 transition-colors shadow-sm no-underline">
-                            Book Now
-                        </a>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Pagination -->
-        <div class="flex justify-center mt-8">
-            <nav class="flex items-center gap-2">
-                <button class="w-10 h-10 flex items-center justify-center rounded-lg border border-slate-200 dark:border-slate-700 text-slate-500 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors" disabled>
-                    <span class="material-symbols-outlined">chevron_left</span>
-                </button>
-                <button class="w-10 h-10 flex items-center justify-center rounded-lg bg-primary text-white font-bold">1</button>
-                <button class="w-10 h-10 flex items-center justify-center rounded-lg border border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors">2</button>
-                <button class="w-10 h-10 flex items-center justify-center rounded-lg border border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors">3</button>
-                <span class="text-slate-500 dark:text-slate-400">...</span>
-                <button class="w-10 h-10 flex items-center justify-center rounded-lg border border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors">9</button>
-                <button class="w-10 h-10 flex items-center justify-center rounded-lg border border-slate-200 dark:border-slate-700 text-slate-500 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors">
-                    <span class="material-symbols-outlined">chevron_right</span>
-                </button>
-            </nav>
-        </div>
+        }
     </div>
 </div>
+
+@section Scripts {
+    <script>
+        function updateSort(sortValue) {
+            const url = new URL(window.location.href);
+            url.searchParams.set('sortBy', sortValue);
+            url.searchParams.set('pageNumber', '1');
+            window.location.href = url.toString();
+        }
+
+        // Auto-submit search on Enter key
+        document.querySelector('input[name="searchTerm"]').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                e.preventDefault();
+                document.getElementById('filterForm').submit();
+            }
+        });
+    </script>
+}
