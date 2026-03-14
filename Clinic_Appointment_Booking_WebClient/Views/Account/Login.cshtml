@@ -218,6 +218,7 @@
 
         window.onload = function () {
             const customButton = document.getElementById('google-signin-button');
+            const hiddenContainer = document.getElementById('google-signin-hidden');
             
             if (!GOOGLE_CLIENT_ID || GOOGLE_CLIENT_ID === '') {
                 console.error('Google Client ID is not configured. Please add GOOGLE_CLIENT_ID to DataAccess/.env file');
@@ -226,7 +227,7 @@
                 return;
             }
 
-            // Initialize Google Sign-In with hidden container
+            // Initialize Google Sign-In
             google.accounts.id.initialize({
                 client_id: GOOGLE_CLIENT_ID,
                 callback: handleGoogleSignIn,
@@ -234,15 +235,32 @@
                 cancel_on_tap_outside: true
             });
 
-            // Render hidden button for Google's functionality
+            // Render the actual Google button in hidden container
             google.accounts.id.renderButton(
-                document.getElementById('google-signin-hidden'),
-                { theme: 'outline', size: 'large' }
+                hiddenContainer,
+                { 
+                    theme: 'outline', 
+                    size: 'large',
+                    type: 'standard',
+                    text: 'signin_with'
+                }
             );
 
-            // Add click handler to custom button
-            customButton.addEventListener('click', function() {
-                google.accounts.id.prompt();
+            // When custom button is clicked, trigger the hidden Google button
+            customButton.addEventListener('click', function(e) {
+                e.preventDefault();
+                console.log('Custom button clicked');
+                
+                // Find and click the actual Google button
+                const googleButton = hiddenContainer.querySelector('[role="button"]');
+                if (googleButton) {
+                    console.log('Clicking hidden Google button');
+                    googleButton.click();
+                } else {
+                    console.error('Google button not found');
+                    // Fallback to prompt
+                    google.accounts.id.prompt();
+                }
             });
         };
 

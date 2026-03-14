@@ -262,10 +262,11 @@ namespace Clinic_Appointment_Booking.Services
         {
             try
             {
-                var googleClientId = Environment.GetEnvironmentVariable("GOOGLE_CLIENT_ID");
+                var googleClientId = _configuration["GoogleAuth:ClientId"] ?? Environment.GetEnvironmentVariable("GOOGLE_CLIENT_ID");
                 
                 if (string.IsNullOrEmpty(googleClientId))
                 {
+                    _logger.LogError("Google Client ID is not configured. Please set GOOGLE_CLIENT_ID in DataAccess/.env file");
                     throw new InvalidOperationException("Google Client ID is not configured");
                 }
 

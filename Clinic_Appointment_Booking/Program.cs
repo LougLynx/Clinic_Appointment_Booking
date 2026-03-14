@@ -16,10 +16,31 @@ namespace Clinic_Appointment_Booking
     {
         public static void Main(string[] args)
         {
-            // Load .env file
-            Env.Load();
+            // Load .env file and set environment variables
+            var envPath = Path.Combine(Directory.GetCurrentDirectory(), "..", "DataAccess", ".env");
+            if (File.Exists(envPath))
+            {
+                DotNetEnv.Env.Load(envPath);
+            }
+            else
+            {
+                DotNetEnv.Env.Load();
+            }
 
             var builder = WebApplication.CreateBuilder(args);
+            
+            // Add environment variables to configuration
+            var googleClientId = Environment.GetEnvironmentVariable("GOOGLE_CLIENT_ID");
+            var googleClientSecret = Environment.GetEnvironmentVariable("GOOGLE_CLIENT_SECRET");
+            
+            if (!string.IsNullOrEmpty(googleClientId))
+            {
+                builder.Configuration["GoogleAuth:ClientId"] = googleClientId;
+            }
+            if (!string.IsNullOrEmpty(googleClientSecret))
+            {
+                builder.Configuration["GoogleAuth:ClientSecret"] = googleClientSecret;
+            }
 
             // Add services to the container.
             var jwtSettings = builder.Configuration.GetSection("JwtSettings");
