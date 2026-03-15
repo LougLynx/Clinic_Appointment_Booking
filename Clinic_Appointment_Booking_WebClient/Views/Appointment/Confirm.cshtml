@@ -72,7 +72,7 @@
                     </div>
                     <label class="relative inline-flex items-center cursor-pointer">
                         <input checked class="sr-only peer" type="checkbox" />
-                        <div class="w-11 h-6 bg-slate-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-primary/30 dark:peer-focus:ring-primary/20 rounded-full peer dark:bg-slate-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-slate-600 peer-checked:bg-primary"></div>
+                        <span class="inline-block w-11 h-6 bg-slate-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-primary/30 dark:peer-focus:ring-primary/20 rounded-full peer dark:bg-slate-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-slate-600 peer-checked:bg-primary"></span>
                     </label>
                 </div>
 
@@ -242,25 +242,25 @@
                     <!-- QR Code Payment -->
                     <label class="flex items-center gap-3 p-4 border-2 border-slate-200 dark:border-slate-700 rounded-xl cursor-pointer hover:border-primary transition-colors payment-option" data-payment="qr">
                         <input type="radio" name="paymentMethod" value="qr" class="w-5 h-5 text-primary focus:ring-primary" checked />
-                        <div class="flex-1">
-                            <div class="flex items-center gap-2">
+                        <span class="flex-1 block">
+                            <span class="flex items-center gap-2">
                                 <span class="material-symbols-outlined text-primary">qr_code_2</span>
                                 <span class="font-semibold text-slate-900 dark:text-white">Pay with QR Code</span>
-                            </div>
-                            <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">Scan QR to pay via banking app</p>
-                        </div>
+                            </span>
+                            <span class="block text-xs text-slate-500 dark:text-slate-400 mt-1">Scan QR to pay via banking app</span>
+                        </span>
                     </label>
                     
                     <!-- Pay Later -->
                     <label class="flex items-center gap-3 p-4 border-2 border-slate-200 dark:border-slate-700 rounded-xl cursor-pointer hover:border-primary transition-colors payment-option" data-payment="later">
                         <input type="radio" name="paymentMethod" value="later" class="w-5 h-5 text-primary focus:ring-primary" />
-                        <div class="flex-1">
-                            <div class="flex items-center gap-2">
+                        <span class="flex-1 block">
+                            <span class="flex items-center gap-2">
                                 <span class="material-symbols-outlined text-primary">schedule</span>
                                 <span class="font-semibold text-slate-900 dark:text-white">Pay at Clinic</span>
-                            </div>
-                            <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">Pay when you arrive for appointment</p>
-                        </div>
+                            </span>
+                            <span class="block text-xs text-slate-500 dark:text-slate-400 mt-1">Pay when you arrive for appointment</span>
+                        </span>
                     </label>
                 </div>
             </div>

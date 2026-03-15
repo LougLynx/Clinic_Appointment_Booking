@@ -48,7 +48,7 @@ namespace Clinic_Appointment_Booking_WebClient.Controllers
                     gender,
                     availableToday,
                     pageNumber,
-                    12); // 12 doctors per page
+                    4); // 4 doctors per page
 
                 if (response?.Success == true && response.Data != null)
                 {
