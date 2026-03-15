@@ -1,14 +1,13 @@
+using System.Text;
 using Clinic_Appointment_Booking.Models;
 using Clinic_Appointment_Booking.Services;
 using Clinic_Appointment_Booking.Services.Interfaces;
 using DataAccess;
-using DotNetEnv;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
 using Repositories;
 using Repositories.Interfaces;
-using System.Text;
 
 namespace Clinic_Appointment_Booking
 {
@@ -28,11 +27,11 @@ namespace Clinic_Appointment_Booking
             }
 
             var builder = WebApplication.CreateBuilder(args);
-            
+
             // Add environment variables to configuration
             var googleClientId = Environment.GetEnvironmentVariable("GOOGLE_CLIENT_ID");
             var googleClientSecret = Environment.GetEnvironmentVariable("GOOGLE_CLIENT_SECRET");
-            
+
             if (!string.IsNullOrEmpty(googleClientId))
             {
                 builder.Configuration["GoogleAuth:ClientId"] = googleClientId;
@@ -56,6 +55,7 @@ namespace Clinic_Appointment_Booking
             builder.Services.AddScoped<ISpecialtyRepository, SpecialtyRepository>();
             builder.Services.AddScoped<IAppointmentRepository, AppointmentRepository>();
             builder.Services.AddScoped<IContactRepository, ContactRepository>();
+            builder.Services.AddScoped<IAdminRepository, AdminRepository>();
 
             // Services
             builder.Services.AddScoped<ITokenService, TokenService>();
