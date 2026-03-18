@@ -1,4 +1,4 @@
-﻿using BussinessObjects.DTOs.admin;
+﻿using BussinessObjects.DTOs.admin.dashboard;
 using Microsoft.AspNetCore.Mvc;
 using Repositories.Interfaces;
 
@@ -62,6 +62,29 @@ namespace Clinic_Appointment_Booking_WebAPI.Controllers
             }
 
             return Ok(new { message = "Status updated successfully" });
+        }
+
+        [HttpGet("patients-stats")]
+        public async Task<IActionResult> GetPatientStats() => Ok(await _adminRepo.GetPatientManagementStatsAsync());
+
+        [HttpGet("patients")]
+        public async Task<IActionResult> GetPatients(
+    [FromQuery] string? search,
+    [FromQuery] int page = 1,
+    [FromQuery] int pageSize = 5,
+    [FromQuery] string? sortBy = "Last Visit (Newest)")
+=> Ok(await _adminRepo.GetPagedPatientsAsync(search, page, pageSize, sortBy));
+
+        [HttpPatch("users/{id}/toggle-status")]
+        public async Task<IActionResult> ToggleUserStatus(int id)
+        {
+            var success = await _adminRepo.ToggleUserStatusAsync(id);
+            if (!success)
+            {
+                return NotFound();
+            }
+
+            return Ok();
         }
     }
 }
