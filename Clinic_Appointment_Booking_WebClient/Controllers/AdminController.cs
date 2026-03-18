@@ -26,6 +26,10 @@ namespace Clinic_Appointment_Booking_WebClient.Controllers
         // GET: /Admin/DoctorManagement
         public IActionResult DoctorManagement()
         {
+            var baseUrl = _configuration["ApiSettings:BaseUrl"];
+
+            // Truyền vào ViewData để bên HTML có thể lấy được
+            ViewData["ApiBaseUrl"] = baseUrl;
             // TODO: Implement doctor management
             return View();
         }
