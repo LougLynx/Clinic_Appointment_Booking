@@ -1,5 +1,5 @@
-using Clinic_Appointment_Booking_WebClient.Services;
 using Clinic_Appointment_Booking_WebClient.Models.ViewModels;
+using Clinic_Appointment_Booking_WebClient.Services;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Clinic_Appointment_Booking_WebClient.Controllers
@@ -7,24 +7,33 @@ namespace Clinic_Appointment_Booking_WebClient.Controllers
     public class AdminController : Controller
     {
         private readonly ILogger<AdminController> _logger;
+        private readonly IConfiguration _configuration;
         private readonly IDoctorApiService _doctorApiService;
 
-        public AdminController(ILogger<AdminController> logger, IDoctorApiService doctorApiService)
+        public AdminController(ILogger<AdminController> logger, IConfiguration configuration, IDoctorApiService doctorApiService)
         {
             _logger = logger;
+            _configuration = configuration;
             _doctorApiService = doctorApiService;
         }
 
         // GET: /Admin/Dashboard
         public IActionResult Dashboard()
         {
-            // TODO: Check if user is authenticated and has Admin role
+            var baseUrl = _configuration["ApiSettings:BaseUrl"];
+
+            // Truyền vào ViewData để bên HTML có thể lấy được
+            ViewData["ApiBaseUrl"] = baseUrl;
             return View();
         }
 
         // GET: /Admin/DoctorManagement
         public IActionResult DoctorManagement()
         {
+            var baseUrl = _configuration["ApiSettings:BaseUrl"];
+
+            // Truyền vào ViewData để bên HTML có thể lấy được
+            ViewData["ApiBaseUrl"] = baseUrl;
             // TODO: Implement doctor management
             return View();
         }
@@ -54,6 +63,10 @@ namespace Clinic_Appointment_Booking_WebClient.Controllers
         // GET: /Admin/PatientRecords
         public IActionResult PatientRecords()
         {
+            var baseUrl = _configuration["ApiSettings:BaseUrl"];
+
+            // Truyền vào ViewData để bên HTML có thể lấy được
+            ViewData["ApiBaseUrl"] = baseUrl;
             // TODO: Implement patient records management
             return View();
         }

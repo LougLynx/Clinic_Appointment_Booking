@@ -1,4 +1,4 @@
-@{
+﻿@{
     ViewData["Title"] = "Admin Dashboard";
     Layout = null;
 }
@@ -133,7 +133,7 @@
                     <p class="text-slate-500 text-sm mt-1">Monitor daily operations and financial performance.</p>
                 </div>
                 <div class="flex gap-2">
-                    <select class="text-sm border-slate-200 rounded-lg text-slate-600 focus:ring-primary focus:border-primary bg-white shadow-sm">
+                    <select id="period-filter" class="text-sm border-slate-200 rounded-lg text-slate-600 focus:ring-primary focus:border-primary bg-white shadow-sm">
                         <option>Last 7 Days</option>
                         <option>This Month</option>
                         <option>This Year</option>
@@ -202,7 +202,7 @@
                         </span>
                     </div>
                     <div>
-                        <p class="text-slate-500 text-sm font-medium mb-1">Active Doctors</p>
+                        <p class="text-slate-500 text-sm font-medium mb-1">New Active Doctors</p>
                         <h3 class="text-2xl font-bold text-slate-900">45</h3>
                     </div>
                 </div>
@@ -225,7 +225,7 @@
                         <div class="absolute w-full border-b border-dashed border-slate-200 bottom-[75%]"></div>
                         
                         <!-- Bar Chart -->
-                        <div class="w-full flex justify-between items-end h-full z-10 pt-4">
+                        <div id="chart-container" class="w-full flex justify-between items-end h-full z-10 pt-4">
                             <div class="w-[8%] bg-primary/20 rounded-t-sm h-[40%] relative hover:bg-primary/40 transition-colors">
                                 <div class="absolute bottom-0 w-full bg-primary rounded-t-sm h-[60%]"></div>
                             </div>
@@ -262,7 +262,7 @@
                             <span class="material-symbols-outlined">more_horiz</span>
                         </button>
                     </div>
-                    <div class="flex-1 flex flex-col justify-center gap-6">
+                    <div class="flex-1 flex flex-col justify-center gap-6" id="department-list">
                         <!-- Cardiology -->
                         <div>
                             <div class="flex justify-between text-sm mb-1">
@@ -270,7 +270,7 @@
                                 <span class="text-slate-500">35%</span>
                             </div>
                             <div class="w-full bg-slate-100 rounded-full h-2">
-                                <div class="bg-teal-500 h-2 rounded-full" style="width: 35%"></div>
+                                <div id="dept-cardiology" class="bg-teal-500 h-2 rounded-full" style="width: 35%"></div>
                             </div>
                         </div>
                         <!-- Pediatrics -->
@@ -280,7 +280,7 @@
                                 <span class="text-slate-500">28%</span>
                             </div>
                             <div class="w-full bg-slate-100 rounded-full h-2">
-                                <div class="bg-blue-500 h-2 rounded-full" style="width: 28%"></div>
+                                <div id="dept-Pediatrics" class="bg-blue-500 h-2 rounded-full" style="width: 28%"></div>
                             </div>
                         </div>
                         <!-- Orthopedics -->
@@ -290,7 +290,7 @@
                                 <span class="text-slate-500">22%</span>
                             </div>
                             <div class="w-full bg-slate-100 rounded-full h-2">
-                                <div class="bg-indigo-500 h-2 rounded-full" style="width: 22%"></div>
+                                <div id="dept-Orthopedics" class="bg-indigo-500 h-2 rounded-full" style="width: 22%"></div>
                             </div>
                         </div>
                         <!-- Neurology -->
@@ -300,7 +300,7 @@
                                 <span class="text-slate-500">15%</span>
                             </div>
                             <div class="w-full bg-slate-100 rounded-full h-2">
-                                <div class="bg-amber-500 h-2 rounded-full" style="width: 15%"></div>
+                                <div id="dept-cardiology" class="bg-amber-500 h-2 rounded-full" style="width: 15%"></div>
                             </div>
                         </div>
                     </div>
@@ -325,7 +325,7 @@
                                     <th class="px-6 py-4">Status</th>
                                 </tr>
                             </thead>
-                            <tbody class="divide-y divide-slate-100">
+                            <tbody id="staff-table-body" class="divide-y divide-slate-100">
                                 <!-- Doctor 1 -->
                                 <tr class="hover:bg-slate-50 transition-colors">
                                     <td class="px-6 py-4 flex items-center gap-3">
@@ -436,3 +436,265 @@
     </div>
 </body>
 </html>
+
+<script>
+    const API_BASE = "@ViewData["ApiBaseUrl"]";
+    const BASE_URL = `${API_BASE}/api/Admin`;
+
+    // Hàm định dạng tiền tệ
+    const formatCurrency = (amount) => {
+        return new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(amount);
+    };
+
+    // 1. Load Stats Cards
+    async function loadStats() {
+        try {
+            const response = await fetch(`${BASE_URL}/stats`);
+            const data = await response.json();
+
+            // Cập nhật lên giao diện (Sử dụng ID hoặc thứ tự các thẻ)
+            document.querySelectorAll('h3.text-2xl.font-bold')[0].innerText = formatCurrency(data.monthlyRevenue);
+            document.querySelectorAll('h3.text-2xl.font-bold')[1].innerText = data.totalAppointments.toLocaleString();
+            document.querySelectorAll('h3.text-2xl.font-bold')[2].innerText = data.newPatients.toLocaleString();
+            document.querySelectorAll('h3.text-2xl.font-bold')[3].innerText = data.activeDoctors.toLocaleString();
+        } catch (error) {
+            console.error("Error loading stats:", error);
+        }
+    }
+    // 1. Cập nhật Staff Table
+    async function loadStaff() {
+        try {
+            const response = await fetch(`${BASE_URL}/staff-overview`);
+            const staff = await response.json();
+            const tbody = document.getElementById('staff-table-body'); // Đảm bảo đã thêm id này vào HTML
+
+            if (!staff || staff.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="4" class="px-6 py-10 text-center text-slate-400">No doctors found</td></tr>`;
+                return;
+            }
+
+            tbody.innerHTML = '';
+            staff.forEach(doc => {
+                const initials = doc.fullName.split(' ').map(n => n[0]).join('').toUpperCase().substring(0, 2);
+                const statusColor = doc.status === 'Active' ? 'emerald' : 'amber';
+                tbody.innerHTML += `
+                    <tr class="hover:bg-slate-50 transition-colors">
+                        <td class="px-6 py-4 flex items-center gap-3">
+                            <div class="w-8 h-8 rounded-full bg-teal-100 text-teal-700 flex items-center justify-center font-bold text-xs">${initials}</div>
+                            <span class="font-medium text-slate-800">${doc.fullName}</span>
+                        </td>
+                        <td class="px-6 py-4">${doc.specialty}</td>
+                        <td class="px-6 py-4 font-medium">${doc.todayAppointments}</td>
+                        <td class="px-6 py-4">
+                            <span class="inline-flex items-center gap-1.5 py-1 px-2.5 rounded-full text-xs font-medium bg-${statusColor}-50 text-${statusColor}-700">
+                                <span class="w-1.5 h-1.5 rounded-full bg-${statusColor}-500"></span> ${doc.status}
+                            </span>
+                        </td>
+                    </tr>`;
+            });
+        } catch (error) { console.error(error); }
+    }
+
+    // 2. Cập nhật Biểu đồ cột
+                  async function loadTrends(period = "last 7 days") {
+        try {
+            const response = await fetch(`${BASE_URL}/trends?period=${period}`);
+            const trends = await response.json();
+            const chartContainer = document.getElementById('chart-container');
+
+            if (!trends || trends.length === 0) {
+                chartContainer.innerHTML = `<div class="w-full h-full flex items-center justify-center text-slate-400 text-sm">No data available</div>`;
+                return;
+            }
+
+            chartContainer.innerHTML = '';
+
+            const maxAppts = Math.max(...trends.map(t => t.appointments), 1);
+            const maxRev = Math.max(...trends.map(t => t.revenue), 1);
+
+            // Mảng định nghĩa tên Thứ
+            const dayNames = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+
+            trends.forEach((t, index) => {
+                const apptHeight = (t.appointments / maxAppts) * 100;
+                const revHeight = (t.revenue / maxRev) * 100;
+
+                // Logic chuyển đổi nhãn "DD/MM" hoặc "MM" từ API sang Thứ
+                let displayLabel = t.label;
+
+                // Chỉ thực hiện chuyển đổi nếu là chế độ "Last 7 days" hoặc "This month"
+                if (t.label.includes('/')) {
+                    const [day, month] = t.label.split('/');
+                    const dateObj = new Date(new Date().getFullYear(), month - 1, day);
+                    displayLabel = dayNames[dateObj.getDay()];
+                }
+
+                const colHtml = `
+                    <div class="w-[15%] h-full flex items-end justify-between gap-[2px] group relative">
+                        <div id="rev-bar-${index}" class="w-1/2 bg-accent-blue rounded-t-sm transition-all duration-700 ease-out" style="height: 0%"></div>
+                        <div id="appt-bar-${index}" class="w-1/2 bg-primary rounded-t-sm transition-all duration-700 ease-out" style="height: 0%"></div>
+
+                        <div class="absolute -top-16 left-1/2 -translate-x-1/2 bg-slate-800 text-white text-[10px] p-2 rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap z-30 shadow-xl pointer-events-none">
+                            <p class="font-bold border-b border-slate-600 mb-1">${t.label} (${displayLabel})</p>
+                            <p class="flex items-center gap-1"><span class="w-2 h-2 bg-accent-blue rounded-full"></span> Rev: ${formatCurrency(t.revenue)}</p>
+                            <p class="flex items-center gap-1"><span class="w-2 h-2 bg-primary rounded-full"></span> Appt: ${t.appointments}</p>
+                        </div>
+                    </div>`;
+
+                chartContainer.insertAdjacentHTML('beforeend', colHtml);
+
+                setTimeout(() => {
+                    const apptBar = document.getElementById(`appt-bar-${index}`);
+                    const revBar = document.getElementById(`rev-bar-${index}`);
+                    if (apptBar) apptBar.style.height = `${apptHeight}%`;
+                    if (revBar) revBar.style.height = `${revHeight}%`;
+                }, 100 + (index * 20));
+            });
+
+            // CẬP NHẬT NHÃN DƯỚI CHÂN BIỂU ĐỒ (Dòng quan trọng nhất)
+            const labelContainer = document.querySelector('main .h-64').nextElementSibling;
+            if (labelContainer) {
+                labelContainer.innerHTML = trends.map(t => {
+                    let lbl = t.label;
+                    if (t.label.includes('/')) {
+                        const [day, month] = t.label.split('/');
+                        const dateObj = new Date(new Date().getFullYear(), month - 1, day);
+                        lbl = dayNames[dateObj.getDay()];
+                    }
+                    return `<span class="w-[8%] text-center font-medium">${lbl}</span>`;
+                }).join('');
+            }
+
+        } catch (e) { console.error("Error:", e); }
+    }
+
+    // 3. Cập nhật Recent Activity
+    async function loadActivities() {
+        try {
+            const response = await fetch(`${BASE_URL}/recent-activities`);
+            const activities = await response.json();
+            const container = document.querySelector('.relative.border-l.border-slate-200');
+
+            if (!activities || activities.length === 0) {
+                container.innerHTML = `<p class="pl-6 text-slate-400 text-sm">No recent activities</p>`;
+                return;
+            }
+
+            container.innerHTML = '';
+            activities.forEach(act => {
+                const date = new Date(act.timeAgo || act.createdAt);
+                const timeString = date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+                container.innerHTML += `
+                    <div class="relative pl-6">
+                        <div class="absolute -left-1.5 top-1.5 w-3 h-3 rounded-full bg-blue-500 border-2 border-white"></div>
+                        <div>
+                            <p class="text-sm font-medium text-slate-800">${act.title}</p>
+                            <p class="text-xs text-slate-500 mt-0.5">${act.message}</p>
+                            <p class="text-xs text-slate-400 mt-1">${timeString}</p>
+                        </div>
+                    </div>`;
+            });
+        } catch (error) { console.error(error); }
+    }
+
+        async function loadStats(period = "last 7 days") {
+        try {
+            const response = await fetch(`${BASE_URL}/stats?period=${period}`);
+            const data = await response.json();
+
+            // 1. Cập nhật con số tổng quát
+            const h3s = document.querySelectorAll('h3.text-2xl.font-bold');
+            h3s[0].innerText = formatCurrency(data.monthlyRevenue);
+            h3s[1].innerText = data.totalAppointments.toLocaleString();
+            h3s[2].innerText = data.newPatients.toLocaleString();
+            h3s[3].innerText = data.activeDoctors.toLocaleString();
+
+            // 2. Cập nhật màu sắc và icon cho các thẻ Growth
+            const growthSpans = document.querySelectorAll('main .grid .bg-surface-light span.flex.items-center');
+
+            updateGrowthBadge(growthSpans[0], data.revenueGrowth);
+            updateGrowthBadge(growthSpans[1], data.appointmentGrowth);
+            updateGrowthBadge(growthSpans[2], data.patientGrowth);
+            updateGrowthBadge(growthSpans[3], data.doctorGrowth);
+            // Thẻ bác sĩ thường không có growth hoặc fix 0%
+        } catch (error) {
+            console.error("Lỗi cập nhật stats:", error);
+        }
+    }
+
+        async function loadDepartmentPerformance(period = "last 7 days") {
+        try {
+            const response = await fetch(`${BASE_URL}/department-performance?period=${period}`);
+            const data = await response.json();
+            const container = document.getElementById('department-list');
+
+            // Nếu rỗng thì hiện thông báo
+            if (!data || data.length === 0) {
+                container.innerHTML = `<p class="text-center text-slate-400 text-sm">No data available</p>`;
+                return;
+            }
+
+            container.innerHTML = '';
+            const colors = ['bg-teal-500', 'bg-blue-500', 'bg-indigo-500', 'bg-amber-500'];
+
+            data.forEach((item, index) => {
+                const html = `
+                    <div>
+                        <div class="flex justify-between text-sm mb-1">
+                            <span class="font-medium text-slate-700">${item.departmentName}</span>
+                            <span class="text-slate-500">${item.percentage}%</span>
+                        </div>
+                        <div class="w-full bg-slate-100 rounded-full h-2">
+                            <div id="dept-bar-${index}"
+                                 class="${colors[index % colors.length]} h-2 rounded-full transition-all duration-1000 ease-out"
+                                 style="width: 0%">
+                            </div>
+                        </div>
+                    </div>`;
+
+                container.insertAdjacentHTML('beforeend', html);
+
+                // Hiệu ứng chạy thanh bar từ 0% đến giá trị thật
+                setTimeout(() => {
+                    const bar = document.getElementById(`dept-bar-${index}`);
+                    if (bar) bar.style.width = `${item.percentage}%`;
+                }, 100);
+            });
+        } catch (e) { console.error("Lỗi load Department Chart:", e); }
+    }
+
+    
+
+    function updateGrowthBadge(element, value) {
+        const isPositive = value >= 0;
+        // Đổi màu background và text dựa trên giá trị âm/dương
+        element.className = `flex items-center text-xs font-medium px-2 py-1 rounded-full ${
+            isPositive ? 'text-emerald-600 bg-emerald-50' : 'text-rose-600 bg-rose-50'
+        }`;
+        // Đổi icon và giá trị %
+        element.innerHTML = `
+            <span class="material-symbols-outlined text-[14px] mr-1">
+                ${isPositive ? 'trending_up' : 'trending_down'}
+            </span>
+            ${Math.abs(value)}%
+        `;
+    }
+
+    // Bắt sự kiện Dropdown thay đổi
+    document.getElementById('period-filter').addEventListener('change', (e) => {
+        const period = e.target.value;
+        loadStats(period);
+        loadTrends(period);
+        loadDepartmentPerformance(period); // Cập nhật lại biểu đồ ngang
+    });
+
+    // Khởi tạo trang lần đầu
+    document.addEventListener('DOMContentLoaded', () => {
+        const defaultPeriod = "last 7 days";
+        loadStats(defaultPeriod);
+        loadTrends(defaultPeriod); // Chạy chart lần đầu
+        loadStaff();
+        loadActivities();
+        loadDepartmentPerformance();
+    });
+</script>

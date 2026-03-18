@@ -159,7 +159,7 @@
                             </div>
                             <div>
                                 <p class="text-xs text-slate-500">Total Doctors</p>
-                                <p class="text-xl font-bold">42</p>
+                                <p id="stat-total-doctors" class="text-xl font-bold">42</p>
                             </div>
                         </div>
 
@@ -170,7 +170,7 @@
                             </div>
                             <div>
                                 <p class="text-xs text-slate-500">Active Now</p>
-                                <p class="text-xl font-bold">38</p>
+                                <p id="stat-active-doctors" class="text-xl font-bold">38</p>
                             </div>
                         </div>
 
@@ -181,7 +181,7 @@
                             </div>
                             <div>
                                 <p class="text-xs text-slate-500">On Leave</p>
-                                <p class="text-xl font-bold">4</p>
+                                <p id="stat-on-leave" class="text-xl font-bold">4</p>
                             </div>
                         </div>
 
@@ -192,7 +192,7 @@
                             </div>
                             <div>
                                 <p class="text-xs text-slate-500">Specialties</p>
-                                <p class="text-xl font-bold">12</p>
+                                <p id="stat-specialties"     class="text-xl font-bold">12</p>
                             </div>
                         </div>
                     </div>
@@ -236,164 +236,10 @@
                                         <th class="px-6 py-4 text-xs font-bold uppercase tracking-wider text-slate-500 text-right">Actions</th>
                                     </tr>
                                 </thead>
-                                <tbody class="divide-y divide-slate-200 dark:divide-slate-800">
-                                    <!-- Row 1 -->
-                                    <tr class="hover:bg-slate-50/50 dark:hover:bg-slate-800/30 transition-colors">
-                                        <td class="px-6 py-4">
-                                            <div class="flex items-center gap-3">
-                                                <a asp-area="" asp-controller="Admin" asp-action="DoctorDetails" asp-route-id="1" class="no-underline">
-                                                    <img class="w-10 h-10 rounded-full object-cover" 
-                                                         src="https://images.unsplash.com/photo-1559839734-2b71ea197ec2?w=100&h=100&fit=crop" 
-                                                         alt="Dr. Sarah Jenkins" />
-                                                </a>
-                                                <div>
-                                                    <a asp-area="" asp-controller="Admin" asp-action="DoctorDetails" asp-route-id="1" class="font-bold text-sm text-slate-900 hover:text-primary no-underline">
-                                                        Dr. Sarah Jenkins
-                                                    </a>
-                                                    <p class="text-xs text-slate-500">ID: DOC-2024-001</p>
-                                                </div>
-                                            </div>
-                                        </td>
-                                        <td class="px-6 py-4">
-                                            <span class="px-2.5 py-1 rounded-full text-[11px] font-bold bg-blue-100 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400">Cardiology</span>
-                                        </td>
-                                        <td class="px-6 py-4">
-                                            <div class="flex items-center gap-1.5 text-green-600 dark:text-green-400">
-                                                <span class="w-2 h-2 rounded-full bg-green-500"></span>
-                                                <span class="text-sm font-medium">Active</span>
-                                            </div>
-                                        </td>
-                                        <td class="px-6 py-4">
-                                            <div class="space-y-0.5">
-                                                <p class="text-sm">sarah.j@clinic.com</p>
-                                                <p class="text-xs text-slate-500">+1 (555) 012-3456</p>
-                                            </div>
-                                        </td>
-                                        <td class="px-6 py-4 text-right">
-                                            <a asp-area="" asp-controller="Admin" asp-action="DoctorDetails" asp-route-id="1"
-                                               class="inline-flex items-center justify-center px-3 py-1.5 rounded-lg border border-slate-200 hover:border-primary bg-white hover:bg-slate-50 text-slate-700 text-xs font-bold transition-colors no-underline">
-                                                View
-                                            </a>
-                                        </td>
-                                    </tr>
-
-                                    <!-- Row 2 -->
-                                    <tr class="hover:bg-slate-50/50 dark:hover:bg-slate-800/30 transition-colors">
-                                        <td class="px-6 py-4">
-                                            <div class="flex items-center gap-3">
-                                                <a asp-area="" asp-controller="Admin" asp-action="DoctorDetails" asp-route-id="2" class="no-underline">
-                                                    <img class="w-10 h-10 rounded-full object-cover" 
-                                                         src="https://images.unsplash.com/photo-1622253692010-333f2da6031d?w=100&h=100&fit=crop" 
-                                                         alt="Dr. Mark Thompson" />
-                                                </a>
-                                                <div>
-                                                    <a asp-area="" asp-controller="Admin" asp-action="DoctorDetails" asp-route-id="2" class="font-bold text-sm text-slate-900 hover:text-primary no-underline">
-                                                        Dr. Mark Thompson
-                                                    </a>
-                                                    <p class="text-xs text-slate-500">ID: DOC-2024-042</p>
-                                                </div>
-                                            </div>
-                                        </td>
-                                        <td class="px-6 py-4">
-                                            <span class="px-2.5 py-1 rounded-full text-[11px] font-bold bg-purple-100 dark:bg-purple-900/30 text-purple-600 dark:text-purple-400">Pediatrics</span>
-                                        </td>
-                                        <td class="px-6 py-4">
-                                            <div class="flex items-center gap-1.5 text-slate-500">
-                                                <span class="w-2 h-2 rounded-full bg-slate-400"></span>
-                                                <span class="text-sm font-medium">On Leave</span>
-                                            </div>
-                                        </td>
-                                        <td class="px-6 py-4">
-                                            <div class="space-y-0.5">
-                                                <p class="text-sm">m.thompson@clinic.com</p>
-                                                <p class="text-xs text-slate-500">+1 (555) 012-7890</p>
-                                            </div>
-                                        </td>
-                                        <td class="px-6 py-4 text-right">
-                                            <a asp-area="" asp-controller="Admin" asp-action="DoctorDetails" asp-route-id="2"
-                                               class="inline-flex items-center justify-center px-3 py-1.5 rounded-lg border border-slate-200 hover:border-primary bg-white hover:bg-slate-50 text-slate-700 text-xs font-bold transition-colors no-underline">
-                                                View
-                                            </a>
-                                        </td>
-                                    </tr>
-
-                                    <!-- Row 3 -->
-                                    <tr class="hover:bg-slate-50/50 dark:hover:bg-slate-800/30 transition-colors">
-                                        <td class="px-6 py-4">
-                                            <div class="flex items-center gap-3">
-                                                <a asp-area="" asp-controller="Admin" asp-action="DoctorDetails" asp-route-id="3" class="no-underline">
-                                                    <img class="w-10 h-10 rounded-full object-cover" 
-                                                         src="https://images.unsplash.com/photo-1594824476967-48c8b964273f?w=100&h=100&fit=crop" 
-                                                         alt="Dr. Elena Rodriguez" />
-                                                </a>
-                                                <div>
-                                                    <a asp-area="" asp-controller="Admin" asp-action="DoctorDetails" asp-route-id="3" class="font-bold text-sm text-slate-900 hover:text-primary no-underline">
-                                                        Dr. Elena Rodriguez
-                                                    </a>
-                                                    <p class="text-xs text-slate-500">ID: DOC-2024-015</p>
-                                                </div>
-                                            </div>
-                                        </td>
-                                        <td class="px-6 py-4">
-                                            <span class="px-2.5 py-1 rounded-full text-[11px] font-bold bg-cyan-100 dark:bg-cyan-900/30 text-cyan-600 dark:text-cyan-400">Neurology</span>
-                                        </td>
-                                        <td class="px-6 py-4">
-                                            <div class="flex items-center gap-1.5 text-green-600 dark:text-green-400">
-                                                <span class="w-2 h-2 rounded-full bg-green-500"></span>
-                                                <span class="text-sm font-medium">Active</span>
-                                            </div>
-                                        </td>
-                                        <td class="px-6 py-4">
-                                            <div class="space-y-0.5">
-                                                <p class="text-sm">elena.r@clinic.com</p>
-                                                <p class="text-xs text-slate-500">+1 (555) 012-5566</p>
-                                            </div>
-                                        </td>
-                                        <td class="px-6 py-4 text-right">
-                                            <a asp-area="" asp-controller="Admin" asp-action="DoctorDetails" asp-route-id="3"
-                                               class="inline-flex items-center justify-center px-3 py-1.5 rounded-lg border border-slate-200 hover:border-primary bg-white hover:bg-slate-50 text-slate-700 text-xs font-bold transition-colors no-underline">
-                                                View
-                                            </a>
-                                        </td>
-                                    </tr>
-
-                                    <!-- Row 4 -->
-                                    <tr class="hover:bg-slate-50/50 dark:hover:bg-slate-800/30 transition-colors border-none">
-                                        <td class="px-6 py-4">
-                                            <div class="flex items-center gap-3">
-                                                <a asp-area="" asp-controller="Admin" asp-action="DoctorDetails" asp-route-id="4" class="no-underline">
-                                                    <img class="w-10 h-10 rounded-full object-cover" 
-                                                         src="https://images.unsplash.com/photo-1537368910025-700350fe46c7?w=100&h=100&fit=crop" 
-                                                         alt="Dr. James Wilson" />
-                                                </a>
-                                                <div>
-                                                    <a asp-area="" asp-controller="Admin" asp-action="DoctorDetails" asp-route-id="4" class="font-bold text-sm text-slate-900 hover:text-primary no-underline">
-                                                        Dr. James Wilson
-                                                    </a>
-                                                    <p class="text-xs text-slate-500">ID: DOC-2024-009</p>
-                                                </div>
-                                            </div>
-                                        </td>
-                                        <td class="px-6 py-4">
-                                            <span class="px-2.5 py-1 rounded-full text-[11px] font-bold bg-amber-100 dark:bg-amber-900/30 text-amber-600 dark:text-amber-400">General Medicine</span>
-                                        </td>
-                                        <td class="px-6 py-4">
-                                            <div class="flex items-center gap-1.5 text-green-600 dark:text-green-400">
-                                                <span class="w-2 h-2 rounded-full bg-green-500"></span>
-                                                <span class="text-sm font-medium">Active</span>
-                                            </div>
-                                        </td>
-                                        <td class="px-6 py-4">
-                                            <div class="space-y-0.5">
-                                                <p class="text-sm">j.wilson@clinic.com</p>
-                                                <p class="text-xs text-slate-500">+1 (555) 012-1122</p>
-                                            </div>
-                                        </td>
-                                        <td class="px-6 py-4 text-right">
-                                            <a asp-area="" asp-controller="Admin" asp-action="DoctorDetails" asp-route-id="4"
-                                               class="inline-flex items-center justify-center px-3 py-1.5 rounded-lg border border-slate-200 hover:border-primary bg-white hover:bg-slate-50 text-slate-700 text-xs font-bold transition-colors no-underline">
-                                                View
-                                            </a>
+                                <tbody id="doctorTableBody" class="divide-y divide-slate-200 dark:divide-slate-800">
+                                    <tr>
+                                        <td colspan="5" class="text-center py-10 text-slate-400">
+                                            <span class="animate-pulse">Loading medical staff...</span>
                                         </td>
                                     </tr>
                                 </tbody>
@@ -402,8 +248,8 @@
 
                         <!-- Pagination -->
                         <div class="px-6 py-4 bg-slate-50 dark:bg-slate-800/50 flex items-center justify-between border-t border-slate-200 dark:border-slate-800">
-                            <p class="text-xs text-slate-500 font-medium">Showing 1 to 4 of 42 results</p>
-                            <div class="flex gap-2">
+                            <p id="showing-info" class="text-xs text-slate-500 font-medium">Showing 1 to 4 of 42 results</p>
+                            <div id="pagination-controls" class="flex gap-2">
                                 <button class="px-3 py-1 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded text-xs font-semibold text-slate-600 dark:text-slate-400 hover:bg-slate-50 transition-colors">Previous</button>
                                 <button class="px-3 py-1 bg-primary text-white border border-primary rounded text-xs font-semibold">1</button>
                                 <button class="px-3 py-1 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded text-xs font-semibold text-slate-600 dark:text-slate-400 hover:bg-slate-50 transition-colors">2</button>
@@ -417,3 +263,223 @@
     </div>
 </body>
 </html>
+
+<script>
+    // 1. Cấu hình đường dẫn API (Dùng đường dẫn tương đối để an toàn nhất)
+    const API_BASE = "@ViewData["ApiBaseUrl"]";
+    const BASE_URL = `${API_BASE}/api/Admin`;
+    let currentPage = 1;
+    const pageSize = 5;
+
+    // 2. Sự kiện khởi tạo khi trang load xong
+    document.addEventListener("DOMContentLoaded", function () {
+        console.log("DOM fully loaded. Initializing Dashboard...");
+
+        // Gọi dữ liệu ban đầu
+        loadManagementStats();
+        loadDoctors(1);
+
+        document.querySelectorAll('select').forEach(select => {
+            select.addEventListener('change', () => loadDoctors(1));
+        });
+
+        // Gắn sự kiện cho các bộ lọc (Dropdowns)
+        const filterSelects = document.querySelectorAll('select');
+        filterSelects.forEach(select => {
+            select.addEventListener('change', () => {
+                console.log("Filter changed, reloading doctors...");
+                loadDoctors();
+            });
+        });
+
+        // Gắn sự kiện tìm kiếm cho ô input ở header
+        const searchInput = document.querySelector('header input');
+        if (searchInput) {
+            searchInput.addEventListener('input', debounce(() => {
+                loadDoctors(searchInput.value);
+            }, 500));
+        }
+    });
+
+    // 3. Hàm lấy các con số thống kê hàng đầu
+    async function loadManagementStats() {
+        try {
+            console.log("Fetching management stats...");
+            const response = await fetch(`${BASE_URL}/management-stats`);
+            if (!response.ok) throw new Error("Failed to fetch stats");
+
+            const stats = await response.json();
+
+            // Đổ dữ liệu vào các thẻ ID đã thiết lập trong HTML
+            document.getElementById('stat-total-doctors').innerText = stats.totalDoctors || 0;
+            document.getElementById('stat-active-doctors').innerText = stats.activeDoctors || 0;
+            document.getElementById('stat-on-leave').innerText = stats.onLeaveDoctors || 0;
+            document.getElementById('stat-specialties').innerText = stats.totalSpecialties || 0;
+
+        } catch (error) {
+            console.error("Error in loadManagementStats:", error);
+        }
+    }
+
+    // 4. Hàm lấy danh sách bác sĩ và hiển thị lên bảng
+    async function loadDoctors(page = 1, searchName = "") {
+        currentPage = page;
+        const tbody = document.getElementById('doctorTableBody');
+        const selects = document.querySelectorAll('select');
+        const specialty = selects[0]?.value || "All Specialties";
+        const status = selects[1]?.value || "Any Status";
+
+        tbody.innerHTML = '<tr><td colspan="5" class="text-center py-10 text-slate-400">Loading...</td></tr>';
+
+        try {
+            const url = `${BASE_URL}/doctors?specialty=${encodeURIComponent(specialty)}&status=${encodeURIComponent(status)}&page=${page}&pageSize=${pageSize}`;
+            const response = await fetch(url);
+            const result = await response.json(); // Bây giờ result chứa { data, totalPages, totalRecords, currentPage }
+
+            renderTable(result.data);
+            renderPagination(result.totalPages, result.currentPage);
+            updateShowingText(result.totalRecords, result.data.length, page);
+
+        } catch (error) {
+            console.error("Error:", error);
+            tbody.innerHTML = '<tr><td colspan="5" class="text-center text-red-500">Failed to load data.</td></tr>';
+        }
+    }
+
+    function renderTable(doctors) {
+        const tbody = document.getElementById('doctorTableBody');
+        tbody.innerHTML = '';
+        if (!doctors || doctors.length === 0) {
+            tbody.innerHTML = '<tr><td colspan="5" class="text-center py-10">No doctors found.</td></tr>';
+            return;
+        }
+
+        doctors.forEach(doc => {
+            const isActive = doc.status === 'Active';
+            const detailsUrl = `/Admin/DoctorDetails/${doc.doctorId}`;
+            const safePhone = doc.phoneNumber || '';
+            const safeEmail = doc.email || '';
+            const safeImage = doc.profileImage || 'https://via.placeholder.com/100';
+            const row = `
+                <tr class="hover:bg-slate-50/50 transition-colors border-b border-slate-100 last:border-none">
+                    <td class="px-6 py-4">
+                        <div class="flex items-center gap-3">
+                            <a href="${detailsUrl}" class="no-underline">
+                                <img class="w-10 h-10 rounded-full object-cover border border-slate-200" src="${safeImage}" alt="${doc.fullName}" />
+                            </a>
+                            <div>
+                                <a href="${detailsUrl}" class="font-bold text-sm text-slate-900 hover:text-primary no-underline">${doc.fullName}</a>
+                                <p class="text-xs text-slate-500">ID: DOC-${doc.doctorId}</p>
+                            </div>
+                        </div>
+                    </td>
+                    <td class="px-6 py-4"><span class="px-2.5 py-1 rounded-full text-[11px] font-bold ${getSpecialtyBadgeClass(doc.specialty)}">${doc.specialty}</span></td>
+                    <td class="px-6 py-4">
+                        <div id="status-badge-${doc.doctorId}" class="flex items-center gap-1.5 ${isActive ? 'text-green-600' : 'text-slate-500'}">
+                            <span class="w-2 h-2 rounded-full ${isActive ? 'bg-green-500' : 'bg-slate-400'}"></span>
+                            <span class="text-sm font-medium">${doc.status}</span>
+                        </div>
+                    </td>
+                    <td class="px-6 py-4">
+                        <div class="text-sm">${safeEmail}</div>
+                        <div class="text-xs text-slate-500">${safePhone}</div>
+                    </td>
+                    <td class="px-6 py-4 text-right">
+                        <div class="inline-flex items-center gap-3 justify-end">
+                            <a href="${detailsUrl}" class="inline-flex items-center justify-center px-3 py-1.5 rounded-lg border border-slate-200 hover:border-primary bg-white hover:bg-slate-50 text-slate-700 text-xs font-bold transition-colors no-underline">
+                                View
+                            </a>
+                            <label class="relative inline-flex items-center cursor-pointer">
+                                <input type="checkbox" value="" class="sr-only peer" ${isActive ? 'checked' : ''} onchange="toggleDoctorStatus(${doc.doctorId}, this)">
+                                <div class="w-11 h-6 bg-slate-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary"></div>
+                            </label>
+                        </div>
+                    </td>
+                </tr>`;
+            tbody.insertAdjacentHTML('beforeend', row);
+        });
+    }
+
+    function renderPagination(totalPages, current) {
+        const container = document.getElementById('pagination-controls');
+        container.innerHTML = '';
+
+        if (totalPages <= 1) return;
+
+        // Nút Previous
+        container.innerHTML += `<button onclick="loadDoctors(${current - 1})" ${current === 1 ? 'disabled' : ''} class="px-3 py-1 bg-white border border-slate-200 rounded text-xs font-semibold hover:bg-slate-50 disabled:opacity-50">Previous</button>`;
+
+        // Các nút số trang
+        for (let i = 1; i <= totalPages; i++) {
+            container.innerHTML += `
+                <button onclick="loadDoctors(${i})" class="px-3 py-1 border rounded text-xs font-semibold ${i === current ? 'bg-primary text-white border-primary' : 'bg-white border-slate-200 hover:bg-slate-50'}">
+                    ${i}
+                </button>`;
+        }
+
+        // Nút Next
+        container.innerHTML += `<button onclick="loadDoctors(${current + 1})" ${current === totalPages ? 'disabled' : ''} class="px-3 py-1 bg-white border border-slate-200 rounded text-xs font-semibold hover:bg-slate-50 disabled:opacity-50">Next</button>`;
+    }
+
+    function updateShowingText(total, count, page) {
+        const start = (page - 1) * pageSize + 1;
+        const end = start + count - 1;
+        document.getElementById('showing-info').innerText = `Showing ${total === 0 ? 0 : start} to ${end} of ${total} results`;
+    }
+
+    // 5. Hàm phụ: Phân loại màu sắc chuyên khoa
+    function getSpecialtyBadgeClass(specialty) {
+        const maps = {
+            'Cardiology': 'bg-blue-100 text-blue-600',
+            'Pediatrics': 'bg-purple-100 text-purple-600',
+            'Neurology': 'bg-cyan-100 text-cyan-600',
+            'Dermatology': 'bg-pink-100 text-pink-600',
+            'General Medicine': 'bg-amber-100 text-amber-600',
+            'Orthopedics': 'bg-indigo-100 text-indigo-600'
+        };
+        return maps[specialty] || 'bg-slate-100 text-slate-600';
+    }
+
+    // (removed duplicated renderTable implementation)
+
+        async function toggleDoctorStatus(doctorId, checkboxElement) {
+        // Lưu lại trạng thái cũ để nếu lỗi thì quay lại
+        const originalState = !checkboxElement.checked;
+
+        try {
+            const response = await fetch(`${BASE_URL}/doctors/${doctorId}/toggle-status`, {
+                method: 'PATCH',
+                headers: { 'Content-Type': 'application/json' }
+            });
+
+            if (!response.ok) throw new Error("Update failed");
+
+            // Cập nhật lại UI ngay lập tức (Badge và số liệu) mà không cần load lại cả bảng
+            const statusBadge = document.getElementById(`status-badge-${doctorId}`);
+            const isNowActive = checkboxElement.checked;
+
+            statusBadge.className = `flex items-center gap-1.5 ${isNowActive ? 'text-green-600' : 'text-slate-500'}`;
+            statusBadge.innerHTML = `
+                <span class="w-2 h-2 rounded-full ${isNowActive ? 'bg-green-500' : 'bg-slate-400'}"></span>
+                <span class="text-sm font-medium">${isNowActive ? 'Active' : 'On Leave'}</span>
+            `;
+
+            // Load lại stats trên cùng để cập nhật số lượng Active/On Leave
+            loadManagementStats();
+
+        } catch (error) {
+            console.error("Error:", error);
+            alert("Could not update status. Please try again.");
+            checkboxElement.checked = originalState; // Hoàn tác checkbox nếu lỗi
+        }
+    }
+
+    // 6. Hàm chống rung (Debounce) để tìm kiếm không bị giật
+    function debounce(func, timeout = 300) {
+        let timer;
+        return (...args) => {
+            clearTimeout(timer);
+            timer = setTimeout(() => { func.apply(this, args); }, timeout);
+        };
+    }
+</script>

@@ -1,6 +1,5 @@
-using BussinessObjects.Models;
+﻿using BussinessObjects.Models;
 using Microsoft.EntityFrameworkCore;
-using BCrypt.Net;
 
 namespace DataAccess
 {
@@ -20,6 +19,14 @@ namespace DataAccess
             SeedSpecialties(context);
             SeedUsers(context);
             SeedDoctors(context);
+
+            SeedSchedules(context);
+            SeedAppointments(context);
+            SeedMedicalRecords(context);
+            SeedPayments(context);
+            SeedReviews(context);
+            SeedNotifications(context);
+            SeedContactMessages(context);
 
             context.SaveChanges();
         }
@@ -596,6 +603,151 @@ namespace DataAccess
 
             context.Doctors.AddRange(doctors);
             context.SaveChanges();
+        }
+
+        private static void SeedSchedules(ClinicDbContext context)
+        {
+            var doctors = context.Doctors.Take(5).ToList();
+            var schedules = new List<DoctorSchedule>();
+
+            foreach (var doc in doctors)
+            {
+                // Thêm lịch Thứ 2, 4, 6
+                int[] days = { 1, 3, 5 };
+                foreach (var day in days)
+                {
+                    schedules.Add(new DoctorSchedule
+                    {
+                        DoctorId = doc.DoctorId,
+                        DayOfWeek = (DayOfWeek)day,
+                        StartTime = new TimeSpan(8, 0, 0),
+                        EndTime = new TimeSpan(12, 0, 0),
+                        SlotDurationMinutes = 30,
+                        IsAvailable = true
+                    });
+                }
+            }
+            context.DoctorSchedules.AddRange(schedules);
+            context.SaveChanges();
+        }
+
+        private static void SeedAppointments(ClinicDbContext context)
+        {
+            var docs = context.Doctors.Take(3).ToList();
+            var patients = context.Users.Where(u => u.Role == "Patient").Take(3).ToList();
+
+            var appointments = new List<Appointment>
+    {
+        new Appointment { PatientId = patients[0].UserId, DoctorId = docs[0].DoctorId, AppointmentDate = DateTime.Now.AddDays(1).Date, AppointmentTime = new TimeSpan(9, 0, 0), Status = "Confirmed", ReasonForVisit = "General Checkup", ConsultationFee = 150, CreatedAt = DateTime.Now },
+        new Appointment { PatientId = patients[1].UserId, DoctorId = docs[1].DoctorId, AppointmentDate = DateTime.Now.AddDays(2).Date, AppointmentTime = new TimeSpan(10, 30, 0), Status = "Pending", ReasonForVisit = "Skin Rash", ConsultationFee = 200, CreatedAt = DateTime.Now },
+        new Appointment { PatientId = patients[2].UserId, DoctorId = docs[2].DoctorId, AppointmentDate = DateTime.Now.AddDays(-2).Date, AppointmentTime = new TimeSpan(14, 0, 0), Status = "Completed", ReasonForVisit = "Follow up", ConsultationFee = 120, CreatedAt = DateTime.Now.AddDays(-5) },
+        new Appointment { PatientId = patients[0].UserId, DoctorId = docs[1].DoctorId, AppointmentDate = DateTime.Now.AddDays(-5).Date, AppointmentTime = new TimeSpan(15, 30, 0), Status = "Completed", ReasonForVisit = "Headache", ConsultationFee = 180, CreatedAt = DateTime.Now.AddDays(-10) },
+        new Appointment { PatientId = patients[1].UserId, DoctorId = docs[0].DoctorId, AppointmentDate = DateTime.Now.AddDays(3).Date, AppointmentTime = new TimeSpan(8, 0, 0), Status = "Cancelled", ReasonForVisit = "Consultation", CancellationReason = "Patient busy", ConsultationFee = 150, CreatedAt = DateTime.Now }
+    };
+            context.Appointments.AddRange(appointments);
+            context.SaveChanges();
+        }
+
+        private static void SeedMedicalRecords(ClinicDbContext context)
+        {
+            var completedAppts = context.Appointments.Where(a => a.Status == "Completed").ToList();
+            var records = new List<MedicalRecord>();
+
+            foreach (var appt in completedAppts)
+            {
+                records.Add(new MedicalRecord
+                {
+                    AppointmentId = appt.AppointmentId,
+                    PatientId = appt.PatientId,
+                    DoctorId = appt.DoctorId,
+                    Symptoms = "Common symptoms related to " + appt.ReasonForVisit,
+                    Diagnosis = "Diagnosed condition for " + appt.ReasonForVisit,
+                    Prescription = "Medicine A 500mg, Medicine B",
+                    TreatmentPlan = "Follow up in 2 weeks",
+                    CreatedAt = DateTime.Now
+                });
+            }
+            context.MedicalRecords.AddRange(records);
+        }
+
+        private static void SeedPayments(ClinicDbContext context)
+        {
+            var appts = context.Appointments.Take(4).ToList();
+            var payments = new List<Payment>();
+
+            for (int i = 0; i < appts.Count; i++)
+            {
+                payments.Add(new Payment
+                {
+                    AppointmentId = appts[i].AppointmentId,
+                    PatientId = appts[i].PatientId,
+                    Amount = appts[i].ConsultationFee,
+                    PaymentMethod = i % 2 == 0 ? "Credit Card" : "Cash",
+                    PaymentStatus = i == 3 ? "Pending" : "Completed",
+                    TransactionId = "TXN" + Guid.NewGuid().ToString().Substring(0, 8).ToUpper(),
+                    PaymentDate = DateTime.Now.AddDays(-i),
+                    CreatedAt = DateTime.Now
+                });
+            }
+            context.Payments.AddRange(payments);
+        }
+
+        private static void SeedReviews(ClinicDbContext context)
+        {
+            var completedAppts = context.Appointments.Where(a => a.Status == "Completed").ToList();
+            var reviews = new List<Review>();
+
+            int rating = 5;
+            foreach (var appt in completedAppts)
+            {
+                reviews.Add(new Review
+                {
+                    DoctorId = appt.DoctorId,
+                    PatientId = appt.PatientId,
+                    AppointmentId = appt.AppointmentId,
+                    Rating = rating--,
+                    Comment = "Feedback for doctor " + appt.DoctorId,
+                    IsVerified = true,
+                    CreatedAt = DateTime.Now
+                });
+                if (rating < 3)
+                {
+                    rating = 5;
+                }
+            }
+            context.Reviews.AddRange(reviews);
+        }
+
+        private static void SeedNotifications(ClinicDbContext context)
+        {
+            var patients = context.Users.Where(u => u.Role == "Patient").Take(3).ToList();
+            var notifications = new List<Notification>();
+
+            foreach (var p in patients)
+            {
+                notifications.Add(new Notification { UserId = p.UserId, Title = "Health Tip", Message = "Remember to drink 2L of water daily.", Type = "Info", CreatedAt = DateTime.Now });
+                notifications.Add(new Notification { UserId = p.UserId, Title = "Update", Message = "Your profile has been updated.", Type = "Success", CreatedAt = DateTime.Now });
+            }
+            context.Notifications.AddRange(notifications);
+        }
+
+        private static void SeedContactMessages(ClinicDbContext context)
+        {
+            var messages = new List<ContactMessage>();
+            for (int i = 1; i <= 5; i++)
+            {
+                messages.Add(new ContactMessage
+                {
+                    FirstName = "User" + i,
+                    LastName = "Test",
+                    Email = $"user{i}@test.com",
+                    Subject = "Inquiry " + i,
+                    Message = "This is a test message number " + i,
+                    Status = i % 2 == 0 ? "Read" : "New",
+                    CreatedAt = DateTime.Now
+                });
+            }
+            context.ContactMessages.AddRange(messages);
         }
     }
 }
