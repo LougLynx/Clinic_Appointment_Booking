@@ -1,0 +1,188 @@
+@model Clinic_Appointment_Booking_WebClient.Models.ViewModels.AdminPatientProfileViewModel
+@{
+    ViewData["Title"] = $"{Model.FullName} - Patient Profile";
+    Layout = "_LayoutMediClinic";
+
+    var patientIdDisplay = $"#{Model.PatientCode}";
+    var lastVisitDisplay = Model.LastVisitAt?.ToString("MMM dd, yyyy") ?? "—";
+    var initials = string.Join("", (Model.FullName ?? "")
+        .Split(' ', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries)
+        .Take(2)
+        .Select(s => s[0]))
+        .ToUpperInvariant();
+}
+
+<main class="flex flex-1 flex-col lg:flex-row p-6 gap-6 max-w-[1600px] mx-auto w-full">
+    <aside class="w-full lg:w-80 flex flex-col gap-6">
+        <div class="bg-white dark:bg-slate-900 rounded-xl p-6 shadow-sm border border-slate-200 dark:border-slate-800">
+            <div class="flex flex-col items-center text-center mb-6">
+                <div class="relative mb-4">
+                    @if (!string.IsNullOrWhiteSpace(Model.AvatarUrl))
+                    {
+                        <img alt="@Model.FullName" class="size-32 rounded-xl object-cover shadow-md border-4 border-white dark:border-slate-800" src="@Model.AvatarUrl" />
+                    }
+                    else
+                    {
+                        <div class="size-32 rounded-xl shadow-md border-4 border-white dark:border-slate-800 bg-primary/10 flex items-center justify-center text-primary text-3xl font-black">
+                            @initials
+                        </div>
+                    }
+                    <div class="absolute -bottom-2 -right-2 size-8 @(Model.IsActive ? "bg-green-500" : "bg-slate-400") border-4 border-white dark:border-slate-900 rounded-full"></div>
+                </div>
+                <h2 class="text-xl font-bold">@Model.FullName</h2>
+                <p class="text-sm text-slate-500">Last visit: @lastVisitDisplay</p>
+            </div>
+
+            <div class="space-y-4">
+                <div class="flex justify-between items-center py-2 border-b border-slate-100 dark:border-slate-800">
+                    <span class="text-sm text-slate-500">Age</span>
+                    <span class="text-sm font-semibold">@Model.Age Yrs</span>
+                </div>
+                <div class="flex justify-between items-center py-2 border-b border-slate-100 dark:border-slate-800">
+                    <span class="text-sm text-slate-500">Gender</span>
+                    <span class="text-sm font-semibold">@Model.Gender</span>
+                </div>
+                <div class="flex justify-between items-center py-2 border-b border-slate-100 dark:border-slate-800">
+                    <span class="text-sm text-slate-500">Blood Type</span>
+                    <span class="text-sm font-semibold text-primary">@Model.BloodType</span>
+                </div>
+                <div class="flex justify-between items-center py-2">
+                    <span class="text-sm text-slate-500">Allergies</span>
+                    <span class="text-sm font-semibold text-red-500">@Model.Allergies</span>
+                </div>
+            </div>
+
+            <div class="mt-8 pt-6 border-t border-slate-100 dark:border-slate-800">
+                <h3 class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-4">Primary Contact</h3>
+                <div class="flex items-center gap-3 mb-3">
+                    <span class="material-symbols-outlined text-primary">call</span>
+                    <span class="text-sm">@Model.PhoneNumber</span>
+                </div>
+                <div class="flex items-center gap-3">
+                    <span class="material-symbols-outlined text-primary">mail</span>
+                    <span class="text-sm">@Model.Email</span>
+                </div>
+            </div>
+
+            <button type="button" disabled class="w-full mt-8 bg-primary text-white font-bold py-3 rounded-lg opacity-60 cursor-not-allowed flex items-center justify-center gap-2">
+                <span class="material-symbols-outlined">edit</span>
+                Edit Profile
+            </button>
+        </div>
+
+        <div class="flex flex-col gap-4">
+            <h3 class="text-sm font-bold text-slate-600 dark:text-slate-400 px-1">Recent Vitals</h3>
+            <div class="grid grid-cols-1 gap-4">
+                @foreach (var v in Model.RecentVitals)
+                {
+                    <div class="bg-white dark:bg-slate-900 p-4 rounded-xl border border-slate-200 dark:border-slate-800 flex items-center gap-4">
+                        <div class="size-12 rounded-lg @v.ColorClass flex items-center justify-center">
+                            <span class="material-symbols-outlined">@v.Icon</span>
+                        </div>
+                        <div>
+                            <p class="text-xs text-slate-500">@v.Title</p>
+                            <p class="text-lg font-bold">@v.Value</p>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+    </aside>
+
+    <div class="flex-1 flex flex-col gap-6">
+        <div class="bg-white dark:bg-slate-900 rounded-xl p-2 shadow-sm border border-slate-200 dark:border-slate-800 flex overflow-x-auto">
+            <button type="button" class="px-6 py-2.5 rounded-lg text-sm font-semibold bg-primary text-white flex-shrink-0">Medical History</button>
+            <button type="button" class="px-6 py-2.5 rounded-lg text-sm font-semibold text-slate-500 hover:bg-slate-100 dark:hover:bg-slate-800 flex-shrink-0 transition-colors cursor-not-allowed opacity-70">Lab Results</button>
+            <button type="button" class="px-6 py-2.5 rounded-lg text-sm font-semibold text-slate-500 hover:bg-slate-100 dark:hover:bg-slate-800 flex-shrink-0 transition-colors cursor-not-allowed opacity-70">Prescriptions</button>
+            <button type="button" class="px-6 py-2.5 rounded-lg text-sm font-semibold text-slate-500 hover:bg-slate-100 dark:hover:bg-slate-800 flex-shrink-0 transition-colors cursor-not-allowed opacity-70">Appointment Timeline</button>
+        </div>
+
+        <div class="bg-white dark:bg-slate-900 rounded-xl p-6 shadow-sm border border-slate-200 dark:border-slate-800">
+            <div class="flex items-center justify-between mb-8">
+                <h3 class="text-lg font-bold">Past Visit Timeline</h3>
+                <button type="button" disabled class="text-primary text-sm font-semibold flex items-center gap-1 opacity-60 cursor-not-allowed">
+                    <span class="material-symbols-outlined text-sm">add</span>
+                    Add Entry
+                </button>
+            </div>
+
+            <div class="relative space-y-8 before:absolute before:inset-0 before:ml-5 before:-translate-x-px md:before:mx-auto md:before:translate-x-0 before:h-full before:w-0.5 before:bg-gradient-to-b before:from-transparent before:via-slate-200 dark:before:via-slate-800 before:to-transparent">
+                @foreach (var item in Model.Timeline)
+                {
+                    <div class="relative flex items-center justify-between md:justify-normal md:odd:flex-row-reverse group">
+                        <div class="flex items-center justify-center w-10 h-10 rounded-full border border-white dark:border-slate-900 bg-primary text-white shadow md:order-1 md:group-odd:-translate-x-1/2 md:group-even:translate-x-1/2 shrink-0">
+                            <span class="material-symbols-outlined text-sm">@item.Icon</span>
+                        </div>
+                        <div class="w-[calc(100%-4rem)] md:w-[calc(50%-2.5rem)] bg-slate-50 dark:bg-slate-800/50 p-4 rounded-xl border border-slate-200 dark:border-slate-800">
+                            <div class="flex items-center justify-between mb-1">
+                                <time class="text-xs font-bold text-primary uppercase">@item.Date.ToString("MMM dd, yyyy")</time>
+                                <span class="text-[10px] px-2 py-0.5 rounded-full @item.TypeBadgeClass font-bold uppercase">@item.TypeLabel</span>
+                            </div>
+                            <h4 class="font-bold text-slate-900 dark:text-white mb-2">@item.Title</h4>
+                            <p class="text-sm text-slate-600 dark:text-slate-400 mb-3">@item.Notes</p>
+                            <div class="flex items-center gap-2">
+                                <div class="size-6 rounded-full bg-slate-200 dark:bg-slate-700 flex items-center justify-center text-slate-600 dark:text-slate-300 text-[10px] font-bold">
+                                    @string.Join("", item.PhysicianName.Split(' ', StringSplitOptions.RemoveEmptyEntries).Take(2).Select(s => s[0])).ToUpperInvariant()
+                                </div>
+                                <span class="text-xs font-medium">@item.PhysicianName</span>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+
+        <div class="bg-white dark:bg-slate-900 rounded-xl shadow-sm border border-slate-200 dark:border-slate-800 overflow-hidden">
+            <div class="p-6 border-b border-slate-100 dark:border-slate-800 flex items-center justify-between">
+                <h3 class="text-lg font-bold">Recent Lab Results</h3>
+                <div class="flex gap-2">
+                    <button type="button" disabled class="flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold rounded bg-slate-100 dark:bg-slate-800 opacity-60 cursor-not-allowed">
+                        <span class="material-symbols-outlined text-sm">filter_alt</span>
+                        Filter
+                    </button>
+                    <button type="button" disabled class="flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold rounded bg-slate-100 dark:bg-slate-800 opacity-60 cursor-not-allowed">
+                        <span class="material-symbols-outlined text-sm">download</span>
+                        Export
+                    </button>
+                </div>
+            </div>
+            <div class="overflow-x-auto">
+                <table class="w-full text-left">
+                    <thead class="bg-slate-50 dark:bg-slate-800/50 text-slate-500 uppercase text-[10px] font-bold tracking-wider">
+                    <tr>
+                        <th class="px-6 py-4">Test Name</th>
+                        <th class="px-6 py-4">Date</th>
+                        <th class="px-6 py-4">Result</th>
+                        <th class="px-6 py-4">Reference</th>
+                        <th class="px-6 py-4">Status</th>
+                        <th class="px-6 py-4">Action</th>
+                    </tr>
+                    </thead>
+                    <tbody class="divide-y divide-slate-100 dark:divide-slate-800">
+                    @foreach (var r in Model.LabResults)
+                    {
+                        <tr class="hover:bg-slate-50 dark:hover:bg-slate-800/30 transition-colors">
+                            <td class="px-6 py-4 text-sm font-semibold">@r.TestName</td>
+                            <td class="px-6 py-4 text-sm text-slate-500">@r.Date.ToString("MMM dd, yyyy")</td>
+                            <td class="px-6 py-4 text-sm @(r.IsCritical ? "text-red-500 font-bold" : "")">@r.Result</td>
+                            <td class="px-6 py-4 text-sm italic text-slate-400">@r.Reference</td>
+                            <td class="px-6 py-4">
+                                <span class="px-2.5 py-1 rounded-full @r.StatusClass text-[10px] font-bold uppercase">@r.StatusLabel</span>
+                            </td>
+                            <td class="px-6 py-4">
+                                <button type="button" disabled class="text-primary opacity-60 cursor-not-allowed">
+                                    <span class="material-symbols-outlined">visibility</span>
+                                </button>
+                            </td>
+                        </tr>
+                    }
+                    </tbody>
+                </table>
+            </div>
+            <div class="p-4 bg-slate-50 dark:bg-slate-800/50 text-center border-t border-slate-100 dark:border-slate-800">
+                <button type="button" disabled class="text-sm font-semibold text-slate-500 opacity-60 cursor-not-allowed">View All Laboratory Results</button>
+            </div>
+        </div>
+    </div>
+</main>
+
