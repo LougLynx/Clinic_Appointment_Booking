@@ -1,4 +1,4 @@
-@{
+﻿@{
     ViewData["Title"] = "Financial Dashboard";
     Layout = null;
 }
@@ -13,6 +13,8 @@
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
     
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
     <!-- Material Symbols -->
     <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet" />
     
@@ -124,7 +126,7 @@
                         <span class="absolute top-0 right-0 w-2 h-2 bg-red-500 rounded-full border border-white"></span>
                     </button>
                     <div class="h-8 w-px bg-slate-200"></div>
-                    <button class="flex items-center gap-2 text-slate-600 hover:text-slate-900 font-medium text-sm">
+                    <button id="btn-export-report" class="flex items-center gap-2 text-slate-600 hover:text-slate-900 font-medium text-sm">
                         <span>Export Report</span>
                         <span class="material-symbols-outlined text-[18px]">download</span>
                     </button>
@@ -141,34 +143,31 @@
 
                 <!-- KPI Cards -->
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-                    <!-- Total Revenue -->
                     <div class="bg-white dark:bg-slate-900 p-6 rounded-xl border border-slate-200 dark:border-slate-800">
                         <div class="flex items-center justify-between mb-4">
                             <span class="text-sm font-medium text-slate-500">Total Revenue</span>
-                            <span class="bg-emerald-100 text-emerald-700 text-xs font-bold px-2 py-1 rounded-full">+12.5%</span>
+                            <span id="revenue-growth-badge" class="text-xs font-bold px-2 py-1 rounded-full">--%</span>
                         </div>
-                        <p class="text-3xl font-bold text-slate-900 dark:text-white">$128,450.00</p>
-                        <p class="text-xs text-slate-400 mt-2">vs. $114,178 last month</p>
+                        <p id="total-revenue" class="text-3xl font-bold text-slate-900 dark:text-white">$0.00</p>
+                        <p id="prev-revenue-text" class="text-xs text-slate-400 mt-2">vs. $0 last month</p>
                     </div>
 
-                    <!-- Operational Expenses -->
                     <div class="bg-white dark:bg-slate-900 p-6 rounded-xl border border-slate-200 dark:border-slate-800">
                         <div class="flex items-center justify-between mb-4">
                             <span class="text-sm font-medium text-slate-500">Operational Expenses</span>
-                            <span class="bg-red-100 text-red-700 text-xs font-bold px-2 py-1 rounded-full">-2.3%</span>
+                            <span id="expenses-growth-badge" class="text-xs font-bold px-2 py-1 rounded-full">--%</span>
                         </div>
-                        <p class="text-3xl font-bold text-slate-900 dark:text-white">$42,300.00</p>
-                        <p class="text-xs text-slate-400 mt-2">vs. $43,295 last month</p>
+                        <p id="total-expenses" class="text-3xl font-bold text-slate-900 dark:text-white">$0.00</p>
+                        <p id="prev-expenses-text" class="text-xs text-slate-400 mt-2">vs. $0 last month</p>
                     </div>
 
-                    <!-- Net Profit -->
                     <div class="bg-white dark:bg-slate-900 p-6 rounded-xl border border-slate-200 dark:border-slate-800">
                         <div class="flex items-center justify-between mb-4">
                             <span class="text-sm font-medium text-slate-500">Net Profit</span>
-                            <span class="bg-emerald-100 text-emerald-700 text-xs font-bold px-2 py-1 rounded-full">+14.8%</span>
+                            <span id="profit-growth-badge" class="text-xs font-bold px-2 py-1 rounded-full">--%</span>
                         </div>
-                        <p class="text-3xl font-bold text-slate-900 dark:text-white">$86,150.00</p>
-                        <p class="text-xs text-slate-400 mt-2">vs. $75,043 last month</p>
+                        <p id="net-profit" class="text-3xl font-bold text-slate-900 dark:text-white">$0.00</p>
+                        <p id="prev-profit-text" class="text-xs text-slate-400 mt-2">vs. $0 last month</p>
                     </div>
                 </div>
 
@@ -181,12 +180,12 @@
                                 <h3 class="font-bold text-slate-900 dark:text-white">Revenue Trends</h3>
                                 <p class="text-sm text-slate-500">Gross earnings over the last 6 months</p>
                             </div>
-                            <select class="bg-slate-50 dark:bg-slate-800 border-none rounded-lg text-sm font-medium text-slate-600 dark:text-slate-400 py-1">
-                                <option>Last 6 Months</option>
-                                <option>Last Year</option>
+                            <select id="revenue-period-select" class="bg-slate-50 dark:bg-slate-800 border-none rounded-lg text-sm font-medium text-slate-600 dark:text-slate-400 py-1">
+                                <option value="last6months">Last 6 Months</option>
+                                <option value="lastyear">Last Year</option>
                             </select>
                         </div>
-                        <div class="relative h-64 w-full">
+                        <div id="revenue-chart-container" class="relative h-64 w-full">
                             <!-- SVG Chart -->
                             <svg class="w-full h-full" preserveAspectRatio="none" viewBox="0 0 400 150">
                                 <defs>
@@ -217,7 +216,7 @@
                                 <p class="text-sm text-slate-500">Distribution of operational costs</p>
                             </div>
                         </div>
-                        <div class="space-y-5">
+                        <div id="expenses-category-list" class="space-y-5">
                             <!-- Staff Salaries -->
                             <div>
                                 <div class="flex justify-between text-sm mb-1">
@@ -290,7 +289,7 @@
                                     <th class="px-6 py-4"></th>
                                 </tr>
                             </thead>
-                            <tbody class="divide-y divide-slate-100 dark:divide-slate-800 text-sm">
+                            <tbody id="transaction-body" class="divide-y divide-slate-100 dark:divide-slate-800 text-sm">
                                 <!-- Transaction 1 -->
                                 <tr class="hover:bg-slate-50 dark:hover:bg-slate-800/30">
                                     <td class="px-6 py-4 font-medium text-slate-900 dark:text-white">#TRX-94821</td>
@@ -351,8 +350,8 @@
                         </table>
                     </div>
                     <div class="p-4 border-t border-slate-200 dark:border-slate-800 flex items-center justify-between text-xs font-medium text-slate-500">
-                        <span>Showing 4 of 1,248 transactions</span>
-                        <div class="flex gap-2">
+                        <span id="showing-text">Showing 0 of 0 transactions</span>
+                        <div id="pagination-container" class="flex gap-2">
                             <button class="px-3 py-1 border border-slate-200 dark:border-slate-800 rounded hover:bg-slate-50 dark:hover:bg-slate-800 disabled:opacity-50" disabled>Previous</button>
                             <button class="px-3 py-1 border border-slate-200 dark:border-slate-800 rounded hover:bg-slate-50 dark:hover:bg-slate-800">Next</button>
                         </div>
@@ -363,3 +362,270 @@
     </div>
 </body>
 </html>
+
+<script>
+    const API_BASE = "@ViewData["ApiBaseUrl"]";
+    const BASE_URL = `${API_BASE}/api/Admin`;
+    let currentPage = 1;
+    const pageSize = 5;
+
+    const formatCurrency = (val) => new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(val);
+
+    document.addEventListener("DOMContentLoaded", () => {
+        loadFinancialStats();
+        initDashboard("last6months");
+        loadTransactions(1);
+
+        const periodSelect = document.getElementById('revenue-period-select');
+    periodSelect.addEventListener('change', (e) => {
+        initDashboard(e.target.value);
+    });
+
+    const btnExport = document.getElementById('btn-export-report');
+    btnExport.addEventListener('click', async () => {
+        // Thêm hiệu ứng loading đơn giản
+        const originalContent = btnExport.innerHTML;
+        btnExport.innerHTML = `<span class="animate-spin material-symbols-outlined text-[18px]">sync</span> <span>Exporting...</span>`;
+        btnExport.disabled = true;
+
+        try {
+            const response = await fetch(`${BASE_URL}/export-financial-report`);
+            if (!response.ok) throw new Error('Export failed');
+
+            // Chuyển response thành file blob để tải về
+            const blob = await response.blob();
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+
+            // Lấy tên file từ header hoặc đặt mặc định
+            a.href = url;
+            a.download = `Financial_Report_${new Date().toISOString().split('T')[0]}.xlsx`;
+            document.body.appendChild(a);
+            a.click();
+            window.URL.revokeObjectURL(url);
+            document.body.removeChild(a);
+
+        } catch (error) {
+            console.error(error);
+            alert("Lỗi khi xuất báo cáo!");
+        } finally {
+            // Hoàn tác trạng thái nút
+            btnExport.innerHTML = originalContent;
+            btnExport.disabled = false;
+        }
+    });
+    });
+
+       async function loadFinancialStats() {
+        try {
+            const res = await fetch(`${BASE_URL}/financial-stats`);
+            const data = await res.json();
+
+            // 1. Cập nhật số tiền hiện tại
+            document.getElementById('total-revenue').innerText = formatCurrency(data.totalRevenue);
+            document.getElementById('total-expenses').innerText = formatCurrency(data.operationalExpenses);
+            document.getElementById('net-profit').innerText = formatCurrency(data.netProfit);
+
+            // 2. Cập nhật text so sánh "vs last month" (Giả định API trả về các giá trị prev)
+            document.getElementById('prev-revenue-text').innerText = `vs. ${formatCurrency(data.prevRevenue || 0)} last month`;
+            document.getElementById('prev-expenses-text').innerText = `vs. ${formatCurrency(data.prevExpenses || 0)} last month`;
+            document.getElementById('prev-profit-text').innerText = `vs. ${formatCurrency(data.prevProfit || 0)} last month`;
+
+            // 3. Hàm phụ cập nhật màu sắc Badge cho nhanh
+            updateBadge('revenue-growth-badge', data.revenueGrowth);
+            updateBadge('expenses-growth-badge', data.expensesGrowth); // Giả định có field này
+            updateBadge('profit-growth-badge', data.profitGrowth);    // Giả định có field này
+
+        } catch (e) { console.error("Lỗi:", e); }
+    }
+
+    // Hàm hỗ trợ đổi màu Badge dựa trên con số
+    function updateBadge(id, value) {
+        const badge = document.getElementById(id);
+        if (!badge) return;
+
+        const isPositive = value >= 0;
+        badge.innerText = (isPositive ? '+' : '') + value + '%';
+
+        if (isPositive) {
+            badge.className = "bg-emerald-100 text-emerald-700 text-xs font-bold px-2 py-1 rounded-full";
+        } else {
+            badge.className = "bg-red-100 text-red-700 text-xs font-bold px-2 py-1 rounded-full";
+        }
+    }
+
+
+        async function loadTransactions(page) {
+        currentPage = page;
+        const tbody = document.getElementById('transaction-body');
+        const showingText = document.getElementById('showing-text');
+        const paginationContainer = document.getElementById('pagination-container');
+
+        tbody.innerHTML = '<tr><td colspan="7" class="text-center py-10 animate-pulse">Loading transactions...</td></tr>';
+
+        try {
+            const res = await fetch(`${BASE_URL}/transactions?page=${page}&pageSize=${pageSize}`);
+            const result = await res.json();
+
+            // 1. Xóa nội dung cũ
+            tbody.innerHTML = '';
+
+            if (!result.data || result.data.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="7" class="text-center py-10 text-slate-400">No transactions found</td></tr>';
+                showingText.innerText = "Showing 0 of 0 transactions";
+                paginationContainer.innerHTML = ''; // Xóa nút phân trang nếu không có data
+                return;
+            }
+
+            // 2. Render các hàng trong bảng
+            result.data.forEach(t => {
+                const isIncome = t.type === 'Income';
+                const statusClass = t.status === 'COMPLETED' ? 'bg-emerald-100 text-emerald-700' : 'bg-amber-100 text-amber-700';
+
+                tbody.innerHTML += `
+                    <tr class="hover:bg-slate-50 transition-colors">
+                        <td class="px-6 py-4 font-medium text-slate-900 dark:text-white">${t.transactionId}</td>
+                        <td class="px-6 py-4">${t.entityName}</td>
+                        <td class="px-6 py-4 text-slate-500">${t.category}</td>
+                        <td class="px-6 py-4 text-slate-500">${new Date(t.date).toLocaleDateString()}</td>
+                        <td class="px-6 py-4 font-semibold ${isIncome ? 'text-emerald-600' : 'text-red-600'}">
+                            ${isIncome ? '+' : '-'}${formatCurrency(t.amount)}
+                        </td>
+                        <td class="px-6 py-4">
+                            <span class="${statusClass} text-[10px] font-bold px-2 py-0.5 rounded-full">
+                                ${t.status}
+                            </span>
+                        </td>
+                        <td class="px-6 py-4 text-right">
+                            <button class="text-slate-400 hover:text-primary"><span class="material-symbols-outlined">more_vert</span></button>
+                        </td>
+                    </tr>`;
+            });
+
+            // 3. Cập nhật dòng chữ hiển thị (Sửa lỗi logic vị trí tại đây)
+            const startIdx = (page - 1) * pageSize + 1;
+            const endIdx = startIdx + result.data.length - 1;
+            showingText.innerHTML = `Showing ${startIdx} to ${endIdx} of ${result.totalRecords} transactions`;
+
+            // 4. Gọi hàm render nút bấm (Phải gọi hàm này cuối cùng)
+            renderPagination(result.totalPages, page);
+
+        } catch (e) {
+            console.error("Lỗi khi load bảng giao dịch:", e);
+            tbody.innerHTML = '<tr><td colspan="7" class="text-center py-10 text-red-500">Failed to load data.</td></tr>';
+        }
+    }
+
+        function renderPagination(total, current) {
+        // Sửa selector từ class chung thành ID duy nhất
+        const container = document.getElementById('pagination-container');
+        if(!container) return;
+
+        container.innerHTML = `
+            <button onclick="loadTransactions(${current - 1})" ${current === 1 ? 'disabled' : ''}
+                    class="px-3 py-1 border rounded hover:bg-slate-50 disabled:opacity-50 transition-colors">
+                Previous
+            </button>
+            <span class="px-3 py-1 text-xs font-bold text-primary bg-primary/10 rounded">
+                Page ${current} of ${total}
+            </span>
+            <button onclick="loadTransactions(${current + 1})" ${current === total || total === 0 ? 'disabled' : ''}
+                    class="px-3 py-1 border rounded hover:bg-slate-50 disabled:opacity-50 transition-colors">
+                Next
+            </button>
+        `;
+    }
+
+           async function initDashboard(period = "last6months") {
+        try {
+    const res = await fetch(`${BASE_URL}/financial-analytics?period=${period}`);
+    const data = await res.json();
+
+            // 1. Cập nhật Biểu đồ SVG (Vẽ lại đường path dựa trên tiền thực tế)
+            updateSvgChart(data.revenueTrends);
+
+            // 2. Cập nhật Danh sách chi phí (Cập nhật text và width của progress bars)
+            updateExpenseBars(data.expenseBreakdown);
+
+        } catch (e) {
+            console.error("Lỗi tải dữ liệu biểu đồ:", e);
+        }
+    }
+
+           function updateSvgChart(trends) {
+        if (!trends || trends.length === 0) return;
+
+        const container = document.getElementById('revenue-chart-container');
+        const pathLine = container.querySelector('svg path:first-of-type');
+        const pathArea = container.querySelector('svg path:last-of-type');
+        const labelsContainer = container.querySelector('div.flex.justify-between');
+
+        const width = 400;
+        const height = 120;
+        const maxVal = Math.max(...trends.map(t => t.value)) * 1.2 || 1000;
+
+        // Render nhãn ngay lập tức
+        labelsContainer.innerHTML = trends.map(t =>
+            `<span class="text-[10px] font-bold text-slate-400 uppercase">${t.label}</span>`
+        ).join('');
+
+        // --- Logic Animation ---
+        let startTime = null;
+        const duration = 1000; // 1 giây animation
+
+        function animate(timestamp) {
+            if (!startTime) startTime = timestamp;
+            let progress = (timestamp - startTime) / duration;
+            if (progress > 1) progress = 1;
+
+            // Tính toán tọa độ dựa trên progress (tạo hiệu ứng từ dưới nhảy lên)
+            const points = trends.map((t, i) => ({
+                x: i * (width / (trends.length - 1)),
+                // Giá trị y thay đổi dựa trên progress (150 là đáy, t.value là đỉnh)
+                y: 150 - ((t.value * progress) / maxVal * height) - 20
+            }));
+
+            let d = `M ${points[0].x} ${points[0].y}`;
+            for (let i = 0; i < points.length - 1; i++) {
+                const midX = (points[i].x + points[i + 1].x) / 2;
+                d += ` Q ${midX} ${points[i].y}, ${points[i + 1].x} ${points[i + 1].y}`;
+            }
+
+            pathLine.setAttribute('d', d);
+            pathArea.setAttribute('d', `${d} V 150 H 0 Z`);
+
+            if (progress < 1) {
+                requestAnimationFrame(animate);
+            }
+        }
+
+        requestAnimationFrame(animate);
+    }
+
+        function updateExpenseBars(breakdown) {
+        const expenseItems = document.querySelectorAll('#expenses-category-list > div');
+
+        breakdown.forEach((item, i) => {
+            if (expenseItems[i]) {
+                // Cập nhật tên và số tiền
+                const nameLabel = expenseItems[i].querySelector('span:first-child');
+                if (nameLabel) nameLabel.innerText = item.name;
+
+                const valueLabel = expenseItems[i].querySelector('span:last-child');
+                if (valueLabel) valueLabel.innerText = `${formatCurrency(item.amount)} (${item.percentage}%)`;
+
+                // Hiệu ứng chạy thanh ngang
+                const progressBar = expenseItems[i].querySelector('.h-full.rounded-full');
+                if (progressBar) {
+                    // Đặt về 0 trước khi chạy để thấy hiệu ứng
+                    progressBar.style.width = '0%';
+                    // Dùng setTimeout để trình duyệt kịp nhận diện trạng thái 0% trước khi update
+                    setTimeout(() => {
+                        progressBar.style.transition = 'width 1.2s cubic-bezier(0.4, 0, 0.2, 1)';
+                        progressBar.style.width = `${item.percentage}%`;
+                    }, 50);
+                }
+            }
+        });
+    }
+</script>

@@ -178,6 +178,10 @@ namespace Clinic_Appointment_Booking_WebClient.Controllers
         // GET: /Admin/Financials
         public IActionResult Financials()
         {
+            var baseUrl = _configuration["ApiSettings:BaseUrl"];
+
+            // Truyền vào ViewData để bên HTML có thể lấy được
+            ViewData["ApiBaseUrl"] = baseUrl;
             // TODO: Implement financial reports
             return View();
         }

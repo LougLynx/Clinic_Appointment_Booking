@@ -1,5 +1,6 @@
 ﻿using BussinessObjects.DTOs.admin;
 using BussinessObjects.DTOs.admin.dashboard;
+using BussinessObjects.DTOs.admin.financial;
 using BussinessObjects.DTOs.admin.patient_records;
 
 namespace Repositories.Interfaces
@@ -19,6 +20,9 @@ namespace Repositories.Interfaces
         Task<PatientManagementStatsDto> GetPatientManagementStatsAsync();
         Task<PagedPatientResponse> GetPagedPatientsAsync(string? searchTerm, int page, int pageSize, string? sortBy = "Last Visit");
         Task<bool> ToggleUserStatusAsync(int userId);
-
+        Task<FinancialStatsDTO> GetFinancialStatsAsync();
+        Task<PagedTransactionResponse> GetTransactionsAsync(int page, int pageSize);
+        Task<FinancialAnalyticsDTO> GetFinancialAnalyticsAsync(string period);
+        Task<byte[]> ExportFinancialReportAsync();
     }
 }
