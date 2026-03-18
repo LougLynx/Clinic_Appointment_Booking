@@ -496,36 +496,76 @@
     }
 
     // 2. Cập nhật Biểu đồ cột
-    async function loadTrends(period = "last 7 days") {
+                  async function loadTrends(period = "last 7 days") {
         try {
             const response = await fetch(`${BASE_URL}/trends?period=${period}`);
             const trends = await response.json();
             const chartContainer = document.getElementById('chart-container');
 
             if (!trends || trends.length === 0) {
-                chartContainer.innerHTML = `<div class="w-full h-full flex items-center justify-center text-slate-400 text-sm">No data for this period</div>`;
+                chartContainer.innerHTML = `<div class="w-full h-full flex items-center justify-center text-slate-400 text-sm">No data available</div>`;
                 return;
             }
 
             chartContainer.innerHTML = '';
-            const maxVal = Math.max(...trends.map(t => t.appointments), 1);
+
+            const maxAppts = Math.max(...trends.map(t => t.appointments), 1);
+            const maxRev = Math.max(...trends.map(t => t.revenue), 1);
+
+            // Mảng định nghĩa tên Thứ
+            const dayNames = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
 
             trends.forEach((t, index) => {
-                const heightPercent = (t.appointments / maxVal) * 100;
+                const apptHeight = (t.appointments / maxAppts) * 100;
+                const revHeight = (t.revenue / maxRev) * 100;
+
+                // Logic chuyển đổi nhãn "DD/MM" hoặc "MM" từ API sang Thứ
+                let displayLabel = t.label;
+
+                // Chỉ thực hiện chuyển đổi nếu là chế độ "Last 7 days" hoặc "This month"
+                if (t.label.includes('/')) {
+                    const [day, month] = t.label.split('/');
+                    const dateObj = new Date(new Date().getFullYear(), month - 1, day);
+                    displayLabel = dayNames[dateObj.getDay()];
+                }
+
                 const colHtml = `
-                    <div class="w-[8%] bg-primary/20 rounded-t-sm relative hover:bg-primary/40 transition-all group" style="height: 100%">
-                        <div id="bar-${index}" class="absolute bottom-0 w-full bg-primary rounded-t-sm transition-all duration-700 ease-out" style="height: 0%"></div>
-                        <span class="absolute -top-10 left-1/2 -translate-x-1/2 bg-slate-800 text-white text-[10px] px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap z-30">
-                            ${t.label}: ${t.appointments} appts
-                        </span>
+                    <div class="w-[15%] h-full flex items-end justify-between gap-[2px] group relative">
+                        <div id="rev-bar-${index}" class="w-1/2 bg-accent-blue rounded-t-sm transition-all duration-700 ease-out" style="height: 0%"></div>
+                        <div id="appt-bar-${index}" class="w-1/2 bg-primary rounded-t-sm transition-all duration-700 ease-out" style="height: 0%"></div>
+
+                        <div class="absolute -top-16 left-1/2 -translate-x-1/2 bg-slate-800 text-white text-[10px] p-2 rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap z-30 shadow-xl pointer-events-none">
+                            <p class="font-bold border-b border-slate-600 mb-1">${t.label} (${displayLabel})</p>
+                            <p class="flex items-center gap-1"><span class="w-2 h-2 bg-accent-blue rounded-full"></span> Rev: ${formatCurrency(t.revenue)}</p>
+                            <p class="flex items-center gap-1"><span class="w-2 h-2 bg-primary rounded-full"></span> Appt: ${t.appointments}</p>
+                        </div>
                     </div>`;
+
                 chartContainer.insertAdjacentHTML('beforeend', colHtml);
+
                 setTimeout(() => {
-                    const bar = document.getElementById(`bar-${index}`);
-                    if (bar) bar.style.height = `${heightPercent}%`;
-                }, 50 + (index * 30));
+                    const apptBar = document.getElementById(`appt-bar-${index}`);
+                    const revBar = document.getElementById(`rev-bar-${index}`);
+                    if (apptBar) apptBar.style.height = `${apptHeight}%`;
+                    if (revBar) revBar.style.height = `${revHeight}%`;
+                }, 100 + (index * 20));
             });
-        } catch (e) { console.error(e); }
+
+            // CẬP NHẬT NHÃN DƯỚI CHÂN BIỂU ĐỒ (Dòng quan trọng nhất)
+            const labelContainer = document.querySelector('main .h-64').nextElementSibling;
+            if (labelContainer) {
+                labelContainer.innerHTML = trends.map(t => {
+                    let lbl = t.label;
+                    if (t.label.includes('/')) {
+                        const [day, month] = t.label.split('/');
+                        const dateObj = new Date(new Date().getFullYear(), month - 1, day);
+                        lbl = dayNames[dateObj.getDay()];
+                    }
+                    return `<span class="w-[8%] text-center font-medium">${lbl}</span>`;
+                }).join('');
+            }
+
+        } catch (e) { console.error("Error:", e); }
     }
 
     // 3. Cập nhật Recent Activity

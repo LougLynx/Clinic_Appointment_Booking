@@ -1,4 +1,4 @@
-@{
+﻿@{
     ViewData["Title"] = "Patient Records";
     Layout = null;
 }
@@ -146,7 +146,7 @@
                         </div>
                         <div>
                             <p class="text-xs font-semibold text-slate-500 uppercase tracking-wider">Total Patients</p>
-                            <p class="text-2xl font-bold">12,482</p>
+                            <p id="stat-total-patients" class="text-2xl font-bold">--</p>
                         </div>
                     </div>
 
@@ -157,7 +157,7 @@
                         </div>
                         <div>
                             <p class="text-xs font-semibold text-slate-500 uppercase tracking-wider">New This Month</p>
-                            <p class="text-2xl font-bold">428</p>
+                            <p id="stat-new-month" class="text-2xl font-bold">--</p>
                         </div>
                     </div>
 
@@ -168,7 +168,7 @@
                         </div>
                         <div>
                             <p class="text-xs font-semibold text-slate-500 uppercase tracking-wider">Pending Follow-up</p>
-                            <p class="text-2xl font-bold">156</p>
+                            <p id="stat-pending-followup" class="text-2xl font-bold">--</p>
                         </div>
                     </div>
 
@@ -179,7 +179,7 @@
                         </div>
                         <div>
                             <p class="text-xs font-semibold text-slate-500 uppercase tracking-wider">Active This Week</p>
-                            <p class="text-2xl font-bold">892</p>
+                            <p id="stat-active-week" class="text-2xl font-bold">--</p>
                         </div>
                     </div>
                 </div>
@@ -193,7 +193,7 @@
                                 <svg class="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
                                     <path d="M10 2a8 8 0 0 1 6.32 12.9l3.39 3.39a1 1 0 1 1-1.42 1.42l-3.39-3.39A8 8 0 1 1 10 2Zm0 2a6 6 0 1 0 0 12 6 6 0 0 0 0-12Z"/>
                                 </svg>
-                                <input class="pl-10 pr-4 py-2 bg-slate-50 dark:bg-slate-800/50 border border-slate-200 dark:border-slate-700 rounded-lg text-sm w-80 focus:ring-1 focus:ring-primary focus:border-primary transition-all" 
+                                <input id="patient-search" class="pl-10 pr-4 py-2 bg-slate-50 dark:bg-slate-800/50 border border-slate-200 dark:border-slate-700 rounded-lg text-sm w-80 focus:ring-1 focus:ring-primary focus:border-primary transition-all"
                                        placeholder="Filter by name, ID, or physician..." 
                                        type="text" />
                             </div>
@@ -204,7 +204,7 @@
                         </div>
                         <div class="flex items-center gap-2">
                             <p class="text-xs font-medium text-slate-500">Sort by:</p>
-                            <select class="bg-transparent border-none text-sm font-semibold text-slate-700 dark:text-slate-300 focus:ring-0 cursor-pointer">
+                            <select id="sort-filter" class="bg-transparent border-none text-sm font-semibold text-slate-700 dark:text-slate-300 focus:ring-0 cursor-pointer">
                                 <option>Last Visit (Newest)</option>
                                 <option>Name (A-Z)</option>
                                 <option>Patient ID</option>
@@ -225,7 +225,7 @@
                                     <th class="px-6 py-4 text-right">Action</th>
                                 </tr>
                             </thead>
-                            <tbody class="divide-y divide-slate-100 dark:divide-slate-800">
+                            <tbody id="patientTableBody" class="divide-y divide-slate-100 dark:divide-slate-800">
                                 <!-- Row 1 -->
                                 <tr class="hover:bg-slate-50 dark:hover:bg-slate-800/30 transition-colors group">
                                     <td class="px-6 py-4 text-sm font-mono text-slate-500 dark:text-slate-400">#PT-8821</td>
@@ -396,8 +396,8 @@
 
                     <!-- Pagination -->
                     <div class="p-4 border-t border-slate-200 dark:border-slate-800 flex items-center justify-between">
-                        <p class="text-xs text-slate-500">Showing 1 to 5 of 12,482 patients</p>
-                        <div class="flex items-center gap-1">
+                        <p id="showing-info" class="text-xs text-slate-500">Showing 0 to 0 of 0 patients</p>
+                        <div id="pagination-controls" class="flex items-center gap-1">
                             <button class="p-1 rounded-md hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-400 transition-colors">
                                 <span class="material-symbols-outlined text-sm">chevron_left</span>
                             </button>
@@ -417,3 +417,203 @@
     </div>
 </body>
 </html>
+
+<script>
+    const API_BASE = "@ViewData["ApiBaseUrl"]";
+    const BASE_URL = `${API_BASE}/api/Admin`;
+    let currentPage = 1;
+    const pageSize = 5;
+
+    document.addEventListener("DOMContentLoaded", function () {
+        loadPatientStats();
+        loadPatients(1);
+
+        document.getElementById('sort-filter').addEventListener('change', () => {
+        loadPatients(1); // Khi đổi kiểu sort, quay về trang 1
+    });
+
+        // Search logic
+        document.getElementById('patient-search').addEventListener('input', debounce((e) => {
+            loadPatients(1, e.target.value);
+        }, 500));
+    });
+
+    async function loadPatientStats() {
+        try {
+            const res = await fetch(`${BASE_URL}/patients-stats`);
+            const stats = await res.json();
+            document.getElementById('stat-total-patients').innerText = stats.totalPatients.toLocaleString();
+            document.getElementById('stat-new-month').innerText = stats.newThisMonth;
+            document.getElementById('stat-pending-followup').innerText = stats.pendingFollowUp;
+            document.getElementById('stat-active-week').innerText = stats.activeThisWeek;
+        } catch (e) { console.error("Error loading stats:", e); }
+    }
+
+    async function loadPatients(page = 1, search = "") {
+        currentPage = page;
+        const tbody = document.getElementById('patientTableBody');
+        const sortBy = document.getElementById('sort-filter').value;
+
+    // Lấy giá trị Search nếu không được truyền vào
+    if (arguments.length < 2) {
+        search = document.getElementById('patient-search').value;
+    }
+        tbody.innerHTML = '<tr><td colspan="6" class="text-center py-10 text-slate-400 font-medium animate-pulse">Loading patient records...</td></tr>';
+
+        try {
+            const url = `${BASE_URL}/patients?search=${encodeURIComponent(search)}&page=${page}&pageSize=${pageSize}&sortBy=${encodeURIComponent(sortBy)}`;
+            const res = await fetch(url);
+            const result = await res.json();
+
+            tbody.innerHTML = '';
+            if (result.data.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="6" class="text-center py-10 text-slate-400">No patient records found.</td></tr>';
+                return;
+            }
+
+               result.data.forEach(p => {
+        let dateDisplay = '--/--/----';
+        if (p.lastVisitDate && !p.lastVisitDate.startsWith('0001')) {
+            dateDisplay = new Date(p.lastVisitDate).toLocaleDateString('en-GB');
+        }
+        const physicianImg = p.physicianImage || `https://ui-avatars.com/api/?name=${encodeURIComponent(p.primaryPhysician)}&background=random`;
+
+        // Kiểm tra trạng thái Active từ dữ liệu trả về
+        const isUserActive = p.status === 'Active';
+
+        tbody.innerHTML += `
+            <tr class="hover:bg-slate-50 transition-colors border-b border-slate-100 last:border-none">
+                <td class="px-6 py-4 text-sm font-mono text-slate-500">#PT-${p.patientId.toString().padStart(4, '0')}</td>
+                <td class="px-6 py-4">
+                    <div class="flex items-center gap-3">
+                        <div class="w-8 h-8 rounded-full bg-primary/20 flex items-center justify-center text-primary text-xs font-bold">${p.fullName.charAt(0)}</div>
+                        <div>
+                            <p class="text-sm font-bold text-slate-900">${p.fullName}</p>
+                            <p class="text-xs text-slate-500">${p.email}</p>
+                        </div>
+                    </div>
+                </td>
+                <td class="px-6 py-4 text-sm font-medium text-slate-700">${dateDisplay}</td>
+                <td class="px-6 py-4">
+                    <div class="flex items-center gap-2">
+                        <img src="${physicianImg}" class="w-6 h-6 rounded-full object-cover">
+                        <span class="text-sm font-medium text-slate-600">${p.primaryPhysician || 'None'}</span>
+                    </div>
+                </td>
+                <td class="px-6 py-4">
+                    <div id="status-badge-${p.patientId}">
+                        <span class="px-2.5 py-0.5 rounded-full text-xs font-bold ${isUserActive ? 'bg-emerald-100 text-emerald-700' : 'bg-slate-100 text-slate-600'}">
+                            ${isUserActive ? 'Active' : 'Inactive'}
+                        </span>
+                    </div>
+                </td>
+                <td class="px-6 py-4 text-right">
+                        <label class="relative inline-flex items-center cursor-pointer">
+                            <input type="checkbox" value="" class="sr-only peer" ${isUserActive ? 'checked' : ''}
+                                   onchange="togglePatientActive(${p.patientId}, this)">
+                            <div class="w-11 h-6 bg-slate-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary"></div>
+                        </label>
+                    </td>
+            </tr>`;
+    });
+
+            renderPagination(result.totalPages, result.currentPage, search);
+
+            // Cập nhật text hiển thị số lượng
+            const startRange = result.totalRecords === 0 ? 0 : (page - 1) * pageSize + 1;
+            const endRange = Math.min(page * pageSize, result.totalRecords);
+            document.getElementById('showing-info').innerText = `Showing ${startRange} to ${endRange} of ${result.totalRecords} patients`;
+
+        } catch (e) { console.error("Error loading patients:", e); }
+    }
+
+    // HOÀN THIỆN PHÂN TRANG
+    function renderPagination(totalPages, current, search) {
+        const container = document.getElementById('pagination-controls');
+        container.innerHTML = '';
+        if (totalPages <= 1) return;
+
+        const btnClass = "px-3 py-1 rounded-md text-xs font-bold transition-all border ";
+        const activeClass = "bg-primary text-white border-primary shadow-sm";
+        const inactiveClass = "bg-white text-slate-600 border-slate-200 hover:bg-slate-50";
+
+        // Nút Previous
+        container.innerHTML += `
+            <button onclick="loadPatients(${current - 1}, '${search}')" ${current === 1 ? 'disabled' : ''}
+                    class="${btnClass} ${inactiveClass} disabled:opacity-30">
+                <span class="material-symbols-outlined text-sm">chevron_left</span>
+            </button>`;
+
+        // Thuật toán hiển thị số trang (1 ... 4 5 6 ... 10)
+        let pages = [];
+        if (totalPages <= 7) {
+            for (let i = 1; i <= totalPages; i++) pages.push(i);
+        } else {
+            if (current <= 4) {
+                pages = [1, 2, 3, 4, 5, '...', totalPages];
+            } else if (current >= totalPages - 3) {
+                pages = [1, '...', totalPages - 4, totalPages - 3, totalPages - 2, totalPages - 1, totalPages];
+            } else {
+                pages = [1, '...', current - 1, current, current + 1, '...', totalPages];
+            }
+        }
+
+        pages.forEach(p => {
+            if (p === '...') {
+                container.innerHTML += `<span class="text-slate-400 px-1 text-xs">...</span>`;
+            } else {
+                container.innerHTML += `
+                    <button onclick="loadPatients(${p}, '${search}')"
+                            class="${btnClass} ${p === current ? activeClass : inactiveClass}">
+                        ${p}
+                    </button>`;
+            }
+        });
+
+        // Nút Next
+        container.innerHTML += `
+            <button onclick="loadPatients(${current + 1}, '${search}')" ${current === totalPages ? 'disabled' : ''}
+                    class="${btnClass} ${inactiveClass} disabled:opacity-30">
+                <span class="material-symbols-outlined text-sm">chevron_right</span>
+            </button>`;
+    }
+
+        async function togglePatientActive(patientId, checkbox) {
+        const originalState = !checkbox.checked;
+
+        try {
+            const res = await fetch(`${BASE_URL}/users/${patientId}/toggle-status`, {
+                method: 'PATCH',
+                headers: { 'Content-Type': 'application/json' }
+            });
+
+            if (!res.ok) throw new Error("Update failed");
+
+            // Cập nhật Badge trạng thái ngay lập tức mà không load lại bảng
+            const badgeContainer = document.getElementById(`status-badge-${patientId}`);
+            const isActive = checkbox.checked;
+
+            badgeContainer.innerHTML = `
+                <span class="px-2.5 py-0.5 rounded-full text-xs font-bold ${isActive ? 'bg-emerald-100 text-emerald-700' : 'bg-slate-100 text-slate-600'}">
+                    ${isActive ? 'Active' : 'Inactive'}
+                </span>
+            `;
+
+            // Cập nhật lại các con số thống kê ở trên đầu
+            loadPatientStats();
+
+        } catch (e) {
+            console.error(e);
+            alert("Could not update patient status.");
+            checkbox.checked = originalState; // Hoàn tác nếu lỗi
+        }
+    }
+
+    function debounce(func, timeout = 300) {
+        let timer;
+        return (...args) => {
+            clearTimeout(timer);
+            timer = setTimeout(() => { func.apply(this, args); }, timeout);
+        };
+    }
+</script>

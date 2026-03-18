@@ -1,4 +1,6 @@
 ﻿using BussinessObjects.DTOs.admin;
+using BussinessObjects.DTOs.admin.dashboard;
+using BussinessObjects.DTOs.admin.patient_records;
 using DataAccess;
 using Microsoft.EntityFrameworkCore;
 using Repositories.Interfaces;
@@ -250,6 +252,81 @@ namespace Repositories
             // Đảo ngược trạng thái hiện tại
             doctor.IsAvailable = !doctor.IsAvailable;
             doctor.UpdatedAt = DateTime.Now;
+
+            return await _context.SaveChangesAsync() > 0;
+        }
+
+        public async Task<PatientManagementStatsDto> GetPatientManagementStatsAsync()
+        {
+            var now = DateTime.Now;
+            var startOfMonth = new DateTime(now.Year, now.Month, 1);
+            var startOfWeek = now.AddDays(-(int)now.DayOfWeek);
+
+            return new PatientManagementStatsDto
+            {
+                TotalPatients = await _context.Users.CountAsync(u => u.Role == "Patient"),
+                NewThisMonth = await _context.Users.CountAsync(u => u.Role == "Patient" && u.CreatedAt >= startOfMonth),
+                PendingFollowUp = await _context.Appointments.CountAsync(a => a.Status == "Confirmed" && a.AppointmentDate >= now),
+                ActiveThisWeek = await _context.Appointments.Where(a => a.AppointmentDate >= startOfWeek)
+                                                           .Select(a => a.PatientId).Distinct().CountAsync()
+            };
+        }
+
+        public async Task<PagedPatientResponse> GetPagedPatientsAsync(string? searchTerm, int page, int pageSize, string? sortBy = "Last Visit")
+        {
+            var query = _context.Users
+                .Where(u => u.Role == "Patient")
+                .Include(u => u.Appointments)
+                    .ThenInclude(a => a.Doctor)
+                    .ThenInclude(d => d.User)
+                .AsNoTracking()
+                .AsQueryable();
+
+            if (!string.IsNullOrWhiteSpace(searchTerm))
+            {
+                query = query.Where(u => u.FullName.Contains(searchTerm) || u.Email.Contains(searchTerm));
+            }
+
+            query = sortBy switch
+            {
+                "Name (A-Z)" => query.OrderBy(u => u.FullName),
+                "Patient ID" => query.OrderBy(u => u.UserId),
+                _ => query.OrderByDescending(u => u.Appointments.Max(a => a.AppointmentDate)) // Mặc định: Last Visit
+            };
+
+            int totalRecords = await query.CountAsync();
+            var data = await query
+                .Skip((page - 1) * pageSize)
+                .Take(pageSize)
+                .Select(u => new PatientRecordResponseDto
+                {
+                    PatientId = u.UserId,
+                    FullName = u.FullName,
+                    Email = u.Email,
+                    LastVisitDate = u.Appointments.OrderByDescending(a => a.AppointmentDate).Select(a => a.AppointmentDate).FirstOrDefault(),
+                    PrimaryPhysician = u.Appointments.OrderByDescending(a => a.AppointmentDate).Select(a => a.Doctor.User.FullName).FirstOrDefault() ?? "None",
+                    PhysicianImage = u.Appointments.OrderByDescending(a => a.AppointmentDate).Select(a => a.Doctor.ProfileImageUrl).FirstOrDefault() ?? "",
+                    Status = u.IsActive ? "Active" : "Inactive"
+                }).ToListAsync();
+
+            return new PagedPatientResponse
+            {
+                Data = data,
+                TotalRecords = totalRecords,
+                TotalPages = (int)Math.Ceiling(totalRecords / (double)pageSize),
+                CurrentPage = page
+            };
+        }
+        public async Task<bool> ToggleUserStatusAsync(int userId)
+        {
+            var user = await _context.Users.FindAsync(userId);
+            if (user == null)
+            {
+                return false;
+            }
+
+            user.IsActive = !user.IsActive;
+            user.UpdatedAt = DateTime.Now;
 
             return await _context.SaveChangesAsync() > 0;
         }

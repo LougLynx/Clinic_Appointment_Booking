@@ -37,6 +37,10 @@ namespace Clinic_Appointment_Booking_WebClient.Controllers
         // GET: /Admin/PatientRecords
         public IActionResult PatientRecords()
         {
+            var baseUrl = _configuration["ApiSettings:BaseUrl"];
+
+            // Truyền vào ViewData để bên HTML có thể lấy được
+            ViewData["ApiBaseUrl"] = baseUrl;
             // TODO: Implement patient records management
             return View();
         }

@@ -1,4 +1,4 @@
-﻿namespace BussinessObjects.DTOs.admin
+﻿namespace BussinessObjects.DTOs.admin.dashboard
 {
     public class DoctorOverviewDto
     {
