@@ -86,5 +86,34 @@ namespace Clinic_Appointment_Booking_WebAPI.Controllers
 
             return Ok();
         }
+        [HttpGet("financial-stats")]
+        public async Task<IActionResult> GetFinancialStats() => Ok(await _adminRepo.GetFinancialStatsAsync());
+
+        [HttpGet("transactions")]
+        public async Task<IActionResult> GetTransactions([FromQuery] int page = 1, [FromQuery] int pageSize = 5)
+            => Ok(await _adminRepo.GetTransactionsAsync(page, pageSize));
+
+        [HttpGet("financial-analytics")]
+        public async Task<IActionResult> GetFinancialAnalytics([FromQuery] string period = "last6months")
+     => Ok(await _adminRepo.GetFinancialAnalyticsAsync(period));
+
+        [HttpGet("export-financial-report")]
+        public async Task<IActionResult> ExportFinancialReport()
+        {
+            try
+            {
+                byte[] content = await _adminRepo.ExportFinancialReportAsync();
+
+                string fileName = $"Financial_Report_{DateTime.Now:yyyyMMdd_HHmm}.xlsx";
+                string contentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
+
+                return File(content, contentType, fileName);
+            }
+            catch (Exception ex)
+            {
+                // Log error here
+                return StatusCode(500, "Internal server error during export");
+            }
+        }
     }
 }

@@ -1,6 +1,8 @@
 ﻿using BussinessObjects.DTOs.admin;
 using BussinessObjects.DTOs.admin.dashboard;
+using BussinessObjects.DTOs.admin.financial;
 using BussinessObjects.DTOs.admin.patient_records;
+using ClosedXML.Excel;
 using DataAccess;
 using Microsoft.EntityFrameworkCore;
 using Repositories.Interfaces;
@@ -329,6 +331,239 @@ namespace Repositories
             user.UpdatedAt = DateTime.Now;
 
             return await _context.SaveChangesAsync() > 0;
+        }
+
+        public async Task<FinancialStatsDTO> GetFinancialStatsAsync()
+        {
+            var now = DateTime.Now;
+            var startOfMonth = new DateTime(now.Year, now.Month, 1);
+            var startOfPrevMonth = startOfMonth.AddMonths(-1);
+
+            // 1. Tính Doanh thu (Revenue)
+            var currentRevenue = await _context.Payments
+                .Where(p => p.PaymentStatus == "Completed" && p.PaymentDate >= startOfMonth)
+                .SumAsync(p => p.Amount);
+
+            var prevRevenue = await _context.Payments
+                .Where(p => p.PaymentStatus == "Completed" && p.PaymentDate >= startOfPrevMonth && p.PaymentDate < startOfMonth)
+                .SumAsync(p => p.Amount);
+
+            // 2. Tính Chi phí (Expenses) - Giả sử chi phí là 30% doanh thu hoặc lấy từ bảng chi phí nếu có
+            decimal currentExpenses = currentRevenue * 0.3m;
+            decimal prevExpenses = prevRevenue * 0.3m;
+
+            // 3. Tính Lợi nhuận (Net Profit)
+            decimal currentProfit = currentRevenue - currentExpenses;
+            decimal prevProfit = prevRevenue - prevExpenses;
+
+            // Hàm tính % tăng trưởng
+            double CalculateGrowth(decimal current, decimal prev)
+            {
+                if (prev == 0)
+                {
+                    return current > 0 ? 100 : 0;
+                }
+
+                return (double)Math.Round((current - prev) / prev * 100, 1);
+            }
+
+            return new FinancialStatsDTO
+            {
+                TotalRevenue = currentRevenue,
+                PrevRevenue = prevRevenue,
+                RevenueGrowth = CalculateGrowth(currentRevenue, prevRevenue),
+
+                OperationalExpenses = currentExpenses,
+                PrevExpenses = prevExpenses,
+                ExpensesGrowth = CalculateGrowth(currentExpenses, prevExpenses),
+
+                NetProfit = currentProfit,
+                PrevProfit = prevProfit,
+                ProfitGrowth = CalculateGrowth(currentProfit, prevProfit)
+            };
+        }
+
+        public async Task<PagedTransactionResponse> GetTransactionsAsync(int page, int pageSize)
+        {
+            var query = _context.Payments
+                .Include(p => p.Patient)
+                .Include(p => p.Appointment)
+                .OrderByDescending(p => p.PaymentDate)
+                .AsNoTracking();
+
+            int total = await query.CountAsync();
+            var data = await query.Skip((page - 1) * pageSize).Take(pageSize)
+                .Select(p => new TransactionResponseDTO
+                {
+                    TransactionId = p.TransactionId ?? $"#TRX-{p.PaymentId}",
+                    EntityName = p.Patient.FullName,
+                    Category = p.Appointment.ReasonForVisit,
+                    Date = p.PaymentDate ?? p.CreatedAt,
+                    Amount = p.Amount,
+                    Status = p.PaymentStatus.ToUpper(),
+                    Type = "Income"
+                }).ToListAsync();
+
+            return new PagedTransactionResponse
+            {
+                Data = data,
+                TotalRecords = total,
+                TotalPages = (int)Math.Ceiling(total / (double)pageSize)
+            };
+        }
+
+        public async Task<FinancialAnalyticsDTO> GetFinancialAnalyticsAsync(string period)
+        {
+            var now = DateTime.Now;
+            var startOfCurrentMonth = new DateTime(now.Year, now.Month, 1);
+
+            // Xác định số tháng cần lấy
+            int monthsCount = period == "lastyear" ? 12 : 6;
+            var startDate = startOfCurrentMonth.AddMonths(-(monthsCount - 1));
+
+            var allPayments = await _context.Payments
+                .Where(p => p.PaymentStatus == "Completed" && p.PaymentDate >= startDate)
+                .ToListAsync();
+
+            // 1. Dữ liệu cho biểu đồ đường SVG (6 tháng)
+            var trends = Enumerable.Range(0, monthsCount).Select(i =>
+            {
+                var monthDate = startDate.AddMonths(i);
+                return new ChartDataPoint
+                {
+                    Label = period == "lastyear" ? monthDate.ToString("MMM yy") : monthDate.ToString("MMM").ToUpper(),
+                    Value = allPayments
+                .Where(p => p.PaymentDate?.Month == monthDate.Month && p.PaymentDate?.Year == monthDate.Year)
+                .Sum(p => p.Amount)
+                };
+            }).ToList();
+
+            // 2. Dữ liệu cho danh sách chi phí (Lấy theo tháng hiện tại)
+            var currentMonthRev = trends.Last().Value;
+            decimal currentExpenses = currentMonthRev * 0.35m; // Giả định 35% doanh thu
+
+            var breakdown = new List<ExpenseBreakdownDTO>
+    {
+        new ExpenseBreakdownDTO { Name = "Staff Salaries", Amount = currentExpenses * 0.56m, Percentage = 56 },
+        new ExpenseBreakdownDTO { Name = "Medical Supplies", Amount = currentExpenses * 0.25m, Percentage = 25 },
+        new ExpenseBreakdownDTO { Name = "Facility Maintenance", Amount = currentExpenses * 0.11m, Percentage = 11 },
+        new ExpenseBreakdownDTO { Name = "Other Utilities", Amount = currentExpenses * 0.08m, Percentage = 8 }
+    };
+
+            return new FinancialAnalyticsDTO
+            {
+                RevenueTrends = trends,
+                ExpenseBreakdown = breakdown
+            };
+        }
+
+        public async Task<byte[]> ExportFinancialReportAsync()
+        {
+            // 1. Lấy dữ liệu chi tiết bằng cách Join qua các bảng Appointment và Doctor
+            var payments = await _context.Payments
+                .Include(p => p.Patient)
+                .Include(p => p.Appointment)
+                    .ThenInclude(a => a.Doctor)
+                        .ThenInclude(d => d.User) // Lấy tên bác sĩ từ bảng User
+                .OrderByDescending(p => p.PaymentDate)
+                .ToListAsync();
+
+            using (var workbook = new XLWorkbook())
+            {
+                var worksheet = workbook.Worksheets.Add("Detailed Financial Report");
+
+                // --- Định nghĩa Header ---
+                string[] headers = {
+            "Transaction ID",
+            "Payment Date",
+            "Patient Name",
+            "Doctor Name",
+            "Reason For Visit",
+            "Method",
+            "Amount ($)",
+            "Status",
+            "Notes"
+        };
+
+                for (int i = 0; i < headers.Length; i++)
+                {
+                    var cell = worksheet.Cell(1, i + 1);
+                    cell.Value = headers[i];
+
+                    // Style cho Header
+                    cell.Style.Font.Bold = true;
+                    cell.Style.Fill.BackgroundColor = XLColor.Teal;
+                    cell.Style.Font.FontColor = XLColor.White;
+                    cell.Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
+                    cell.Style.Border.OutsideBorder = XLBorderStyleValues.Thin;
+                }
+
+                // --- Điền dữ liệu Rows ---
+                int currentRow = 2;
+                foreach (var p in payments)
+                {
+                    worksheet.Cell(currentRow, 1).Value = p.TransactionId ?? $"#TRX-{p.PaymentId}";
+                    worksheet.Cell(currentRow, 2).Value = p.PaymentDate?.ToString("dd/MM/yyyy HH:mm") ?? p.CreatedAt.ToString("yyyy-MM-dd HH:mm");
+                    worksheet.Cell(currentRow, 3).Value = p.Patient?.FullName ?? "N/A";
+
+                    // Lấy tên bác sĩ từ Navigation Property
+                    worksheet.Cell(currentRow, 4).Value = p.Appointment?.Doctor?.User?.FullName ?? "N/A";
+
+                    worksheet.Cell(currentRow, 5).Value = p.Appointment?.ReasonForVisit ?? "N/A";
+                    worksheet.Cell(currentRow, 6).Value = p.PaymentMethod;
+
+                    // Cột số tiền
+                    var amountCell = worksheet.Cell(currentRow, 7);
+                    amountCell.Value = p.Amount;
+                    amountCell.Style.NumberFormat.Format = "$#,##0.00";
+
+                    // Cột trạng thái với màu sắc trực quan
+                    var statusCell = worksheet.Cell(currentRow, 8);
+                    statusCell.Value = p.PaymentStatus.ToUpper();
+                    if (p.PaymentStatus == "Completed")
+                    {
+                        statusCell.Style.Font.FontColor = XLColor.Green;
+                    }
+                    else if (p.PaymentStatus == "Pending")
+                    {
+                        statusCell.Style.Font.FontColor = XLColor.AirForceBlue;
+                    }
+                    else
+                    {
+                        statusCell.Style.Font.FontColor = XLColor.Red;
+                    }
+
+                    worksheet.Cell(currentRow, 9).Value = p.PaymentNotes ?? "";
+
+                    currentRow++;
+                }
+
+                // --- Căn chỉnh giao diện ---
+                // Tự động căn chỉnh độ rộng cột
+                worksheet.Columns().AdjustToContents();
+
+                // Kẻ khung cho toàn bộ bảng dữ liệu
+                var dataRange = worksheet.Range(1, 1, currentRow - 1, headers.Length);
+                dataRange.Style.Border.OutsideBorder = XLBorderStyleValues.Thin;
+                dataRange.Style.Border.InsideBorder = XLBorderStyleValues.Thin;
+
+                // Thêm dòng tổng cộng ở cuối
+                var lastRow = currentRow;
+                worksheet.Cell(lastRow, 6).Value = "TOTAL REVENUE:";
+                worksheet.Cell(lastRow, 6).Style.Font.Bold = true;
+
+                var totalCell = worksheet.Cell(lastRow, 7);
+                totalCell.FormulaA1 = $"=SUM(G2:G{currentRow - 1})";
+                totalCell.Style.Font.Bold = true;
+                totalCell.Style.NumberFormat.Format = "$#,##0.00";
+                totalCell.Style.Fill.BackgroundColor = XLColor.LightGray;
+
+                using (var stream = new MemoryStream())
+                {
+                    workbook.SaveAs(stream);
+                    return stream.ToArray();
+                }
+            }
         }
     }
 }
