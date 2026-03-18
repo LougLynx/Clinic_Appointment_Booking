@@ -172,5 +172,86 @@ namespace Repositories
                 .Take(4)
                 .ToListAsync();
         }
+
+        public async Task<PagedMedicalStaffResponse> GetAllDoctorsAsync(string? specialty = null, string? status = null, int page = 1, int pageSize = 5)
+        {
+            var query = _context.Doctors
+                .Include(d => d.User)
+                .Include(d => d.Specialty)
+                .AsNoTracking()
+                .AsQueryable();
+
+            // Lọc dữ liệu (giữ nguyên logic cũ)
+            if (!string.IsNullOrWhiteSpace(specialty) && !specialty.Equals("All Specialties", StringComparison.OrdinalIgnoreCase))
+            {
+                query = query.Where(d => d.Specialty.Name == specialty);
+            }
+
+            if (!string.IsNullOrWhiteSpace(status) && !status.Equals("Any Status", StringComparison.OrdinalIgnoreCase))
+            {
+                query = query.Where(d => d.IsAvailable == (status == "Active"));
+            }
+
+            // Đếm tổng số bản ghi trước khi cắt
+            int totalRecords = await query.CountAsync();
+            int totalPages = (int)Math.Ceiling(totalRecords / (double)pageSize);
+
+            // Cắt dữ liệu theo trang
+            var doctors = await query
+                .OrderByDescending(d => d.CreatedAt)
+                .Skip((page - 1) * pageSize)
+                .Take(pageSize)
+                .Select(d => new MedicalStaffResponseDTO
+                {
+                    DoctorId = d.DoctorId,
+                    FullName = d.User.FullName,
+                    Specialty = d.Specialty.Name,
+                    ProfileImage = d.ProfileImageUrl,
+                    Email = d.User.Email,
+                    PhoneNumber = d.User.PhoneNumber,
+                    Status = d.IsAvailable ? "Active" : "On Leave"
+                }).ToListAsync();
+
+            return new PagedMedicalStaffResponse
+            {
+                Data = doctors,
+                TotalRecords = totalRecords,
+                TotalPages = totalPages,
+                CurrentPage = page
+            };
+        }
+
+        public async Task<DoctorManagementStatsDto> GetDoctorManagementStatsAsync()
+        {
+            return new DoctorManagementStatsDto
+            {
+                // Tổng số bác sĩ trong hệ thống
+                TotalDoctors = await _context.Doctors.CountAsync(),
+
+                // Bác sĩ có IsAvailable = true
+                ActiveDoctors = await _context.Doctors.CountAsync(d => d.IsAvailable),
+
+                // Bác sĩ có IsAvailable = false (Đang nghỉ)
+                OnLeaveDoctors = await _context.Doctors.CountAsync(d => !d.IsAvailable),
+
+                // Tổng số chuyên khoa đang hoạt động
+                TotalSpecialties = await _context.Specialties.CountAsync(s => s.IsActive)
+            };
+        }
+
+        public async Task<bool> ToggleDoctorStatusAsync(int doctorId)
+        {
+            var doctor = await _context.Doctors.FindAsync(doctorId);
+            if (doctor == null)
+            {
+                return false;
+            }
+
+            // Đảo ngược trạng thái hiện tại
+            doctor.IsAvailable = !doctor.IsAvailable;
+            doctor.UpdatedAt = DateTime.Now;
+
+            return await _context.SaveChangesAsync() > 0;
+        }
     }
 }
