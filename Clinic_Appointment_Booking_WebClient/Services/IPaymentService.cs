@@ -2,7 +2,7 @@ namespace Clinic_Appointment_Booking_WebClient.Services
 {
     public interface IPaymentService
     {
-        string GenerateQRCodeUrl(decimal amount, string appointmentReference, string accountName = "MediClinic");
-        Task<bool> VerifyPaymentAsync(string transactionReference);
+        string CreatePaymentUrl(decimal amount, string appointmentReference, HttpContext httpContext);
+        bool ValidateSignature(IQueryCollection query);
     }
 }

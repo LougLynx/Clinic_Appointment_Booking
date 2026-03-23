@@ -19,4 +19,14 @@ html {
 
 body {
   margin-bottom: 60px;
+  background-attachment: fixed;
+}
+
+/* Subtle gradient for cards and sections */
+.premium-gradient {
+  background: linear-gradient(135deg, #ffffff 0%, #f9fbfb 100%);
+}
+
+.dark .premium-gradient {
+  background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
 }

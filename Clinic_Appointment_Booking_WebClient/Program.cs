@@ -23,15 +23,15 @@ namespace Clinic_Appointment_Booking_WebClient
                 builder.Configuration["GoogleAuth:ClientId"] = googleClientId;
             }
 
-            // Payment (VietQR) from .env
-            var paymentBankCode = Environment.GetEnvironmentVariable("PAYMENT_VIETQR_BANK_CODE");
-            var paymentAccountNumber = Environment.GetEnvironmentVariable("PAYMENT_VIETQR_ACCOUNT_NUMBER");
-            var paymentAccountName = Environment.GetEnvironmentVariable("PAYMENT_VIETQR_ACCOUNT_NAME");
-            var paymentTemplate = Environment.GetEnvironmentVariable("PAYMENT_VIETQR_TEMPLATE");
-            if (!string.IsNullOrEmpty(paymentBankCode)) builder.Configuration["Payment:VietQR:BankCode"] = paymentBankCode;
-            if (!string.IsNullOrEmpty(paymentAccountNumber)) builder.Configuration["Payment:VietQR:AccountNumber"] = paymentAccountNumber;
-            if (!string.IsNullOrEmpty(paymentAccountName)) builder.Configuration["Payment:VietQR:AccountName"] = paymentAccountName;
-            if (!string.IsNullOrEmpty(paymentTemplate)) builder.Configuration["Payment:VietQR:Template"] = paymentTemplate;
+            // VNPay from .env
+            var vnpTmnCode = Environment.GetEnvironmentVariable("VNPAY_TMN_CODE");
+            var vnpHashSecret = Environment.GetEnvironmentVariable("VNPAY_HASH_SECRET");
+            var vnpUrl = Environment.GetEnvironmentVariable("VNPAY_URL");
+            var vnpReturnUrl = Environment.GetEnvironmentVariable("VNPAY_RETURN_URL");
+            if (!string.IsNullOrEmpty(vnpTmnCode)) builder.Configuration["VNPAY_TMN_CODE"] = vnpTmnCode;
+            if (!string.IsNullOrEmpty(vnpHashSecret)) builder.Configuration["VNPAY_HASH_SECRET"] = vnpHashSecret;
+            if (!string.IsNullOrEmpty(vnpUrl)) builder.Configuration["VNPAY_URL"] = vnpUrl;
+            if (!string.IsNullOrEmpty(vnpReturnUrl)) builder.Configuration["VNPAY_RETURN_URL"] = vnpReturnUrl;
 
             // Add services to the container.
             var apiSettings = builder.Configuration.GetSection("ApiSettings");
@@ -62,7 +62,7 @@ namespace Clinic_Appointment_Booking_WebClient
             builder.Services.AddScoped<IAuthApiService, AuthApiService>();
             builder.Services.AddScoped<IDoctorApiService, DoctorApiService>();
             builder.Services.AddScoped<ISpecialtyApiService, SpecialtyApiService>();
-            builder.Services.AddScoped<IPaymentService, VietQRPaymentService>();
+            builder.Services.AddScoped<IPaymentService, VnPayService>();
             builder.Services.AddScoped<IAppointmentApiService, AppointmentApiService>();
             builder.Services.AddScoped<IUserApiService, UserApiService>();
             builder.Services.AddScoped<IContactApiService, ContactApiService>();

@@ -13,7 +13,6 @@ namespace Clinic_Appointment_Booking_WebClient.Models.ViewModels
         public string? PatientName { get; set; }
         public string? PatientEmail { get; set; }
         public string? PatientPhone { get; set; }
-        public string? QRCodeUrl { get; set; }
         public string? PaymentReference { get; set; }
     }
 }

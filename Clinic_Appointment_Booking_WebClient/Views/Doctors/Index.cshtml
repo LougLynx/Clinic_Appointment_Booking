@@ -42,7 +42,7 @@
             </div>
 
             <!-- Filters Panel -->
-            <div class="bg-white dark:bg-slate-900 rounded-xl p-5 border border-slate-200 dark:border-slate-700 shadow-sm">
+            <div class="bg-white dark:bg-slate-900 rounded-2xl p-6 border border-slate-100 dark:border-slate-800 premium-shadow">
                 <h3 class="font-bold text-slate-900 dark:text-white mb-4">Filters</h3>
 
                 <!-- Specialty Filter -->
@@ -152,7 +152,7 @@
     <!-- Main Content Area -->
     <div class="flex-1 flex flex-col gap-6">
         <!-- Results Header -->
-        <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 bg-white dark:bg-slate-900 p-4 rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm">
+        <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 bg-white dark:bg-slate-900 p-5 rounded-2xl border border-slate-100 dark:border-slate-800 premium-shadow mb-2">
             <p class="text-sm text-slate-500 dark:text-slate-400">
                 @if (Model?.Doctors != null && Model.Doctors.Any())
                 {
@@ -188,7 +188,7 @@
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-1 xl:grid-cols-2 gap-6">
                 @foreach (var doctor in Model.Doctors)
                 {
-                    <div class="flex flex-col lg:flex-row bg-white dark:bg-slate-900 rounded-xl overflow-hidden border border-slate-200 dark:border-slate-700 shadow-sm hover:shadow-md hover:border-primary/50 transition-all duration-300">
+                    <div class="flex flex-col lg:flex-row bg-white dark:bg-slate-900 rounded-2xl overflow-hidden border border-slate-100 dark:border-slate-800 premium-shadow transition-all duration-300">
                         <div class="w-full lg:w-48 h-48 lg:h-auto bg-slate-200 dark:bg-slate-800 relative">
                             @if (!string.IsNullOrEmpty(doctor.ProfilePictureUrl))
                             {

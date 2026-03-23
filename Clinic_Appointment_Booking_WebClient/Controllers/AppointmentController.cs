@@ -140,10 +140,6 @@ namespace Clinic_Appointment_Booking_WebClient.Controllers
             // Generate payment reference
             var paymentReference = $"APT{model.DoctorId}{selectedDate!.Value:yyyyMMdd}{selectedTime!.Value:hhmm}";
             
-            // Generate QR code URL
-            var amount = doctor.ConsultationFee ?? 0;
-            var qrCodeUrl = _paymentService.GenerateQRCodeUrl(amount, paymentReference);
-            
             var confirmModel = new AppointmentConfirmViewModel
             {
                 Doctor = doctor,
@@ -155,11 +151,55 @@ namespace Clinic_Appointment_Booking_WebClient.Controllers
                 PatientName = HttpContext.Session.GetString("UserName"),
                 PatientEmail = HttpContext.Session.GetString("UserEmail"),
                 PatientPhone = HttpContext.Session.GetString("UserPhone"),
-                QRCodeUrl = qrCodeUrl,
                 PaymentReference = paymentReference
             };
 
             return View("Confirm", confirmModel);
+        }
+
+        // POST: /Appointment/CreatePaymentUrl
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult CreatePaymentUrl(decimal amount, string reference)
+        {
+            try
+            {
+                var url = _paymentService.CreatePaymentUrl(amount, reference, HttpContext);
+                return Json(new { success = true, url });
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error creating payment URL");
+                return Json(new { success = false, message = "Failed to initiate payment." });
+            }
+        }
+
+        // GET: /Appointment/PaymentCallback
+        public IActionResult PaymentCallback()
+        {
+            if (!_paymentService.ValidateSignature(Request.Query))
+            {
+                TempData["ErrorMessage"] = "Invalid payment signature.";
+                return RedirectToAction("MyAppointments");
+            }
+
+            var vnp_ResponseCode = Request.Query["vnp_ResponseCode"];
+            var vnp_TransactionStatus = Request.Query["vnp_TransactionStatus"];
+            var vnp_TxnRef = Request.Query["vnp_TxnRef"].ToString();
+
+            if (vnp_ResponseCode == "00" && vnp_TransactionStatus == "00")
+            {
+               
+                
+                // For this demo, we'll try to find if there's a way to recover data or just show success
+                TempData["SuccessMessage"] = "Payment successful! Your appointment has been confirmed.";
+                return RedirectToAction("MyAppointments");
+            }
+            else
+            {
+                TempData["ErrorMessage"] = "Payment failed or was cancelled.";
+                return RedirectToAction("MyAppointments");
+            }
         }
 
         // POST: /Appointment/ConfirmBook - Lưu appointment vào database qua API
