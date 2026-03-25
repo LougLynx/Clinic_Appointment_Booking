@@ -21,6 +21,11 @@ namespace Clinic_Appointment_Booking_WebClient.Services
             return await _apiClient.GetAsync<List<AppointmentDTO>>("/api/Appointment/my");
         }
 
+        public async Task<ApiResponse<List<AppointmentDTO>>?> GetDoctorAppointmentsAsync(int doctorId)
+        {
+            return await _apiClient.GetAsync<List<AppointmentDTO>>($"/api/Appointment/doctor/{doctorId}");
+        }
+
         public async Task<ApiResponse<AppointmentDTO>?> GetAppointmentByIdAsync(int appointmentId)
         {
             return await _apiClient.GetAsync<AppointmentDTO>($"/api/Appointment/{appointmentId}");

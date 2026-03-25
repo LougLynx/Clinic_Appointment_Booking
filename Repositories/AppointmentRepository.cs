@@ -24,6 +24,16 @@ namespace Repositories
                 .ToListAsync();
         }
 
+        public async Task<IEnumerable<Appointment>> GetByDoctorIdAsync(int doctorId)
+        {
+            return await _dbSet
+                .Include(a => a.Patient)
+                .Where(a => a.DoctorId == doctorId)
+                .OrderByDescending(a => a.AppointmentDate)
+                .ThenByDescending(a => a.AppointmentTime)
+                .ToListAsync();
+        }
+
         public async Task<Appointment?> GetByIdWithDetailsAsync(int appointmentId)
         {
             return await _dbSet

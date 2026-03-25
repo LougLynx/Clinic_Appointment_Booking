@@ -107,15 +107,27 @@ namespace Clinic_Appointment_Booking.Controllers
             {
                 var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value
                     ?? User.FindFirst("sub")?.Value;
-                if (string.IsNullOrEmpty(userIdClaim) || !int.TryParse(userIdClaim, out int patientId))
+                if (string.IsNullOrEmpty(userIdClaim) || !int.TryParse(userIdClaim, out int userId))
                 {
                     return Unauthorized(ApiResponse<AppointmentDTO>.ErrorResponse("Invalid user token"));
                 }
 
                 var appointment = await _appointmentRepository.GetByIdWithDetailsAsync(id);
-                if (appointment == null || appointment.PatientId != patientId)
+                if (appointment == null)
                 {
                     return NotFound(ApiResponse<AppointmentDTO>.ErrorResponse("Appointment not found"));
+                }
+
+                // Check if user is either the patient or the doctor of this appointment
+                var isPatient = appointment.PatientId == userId;
+                
+                // For doctors, we need to check if they are the assigned doctor
+                var doctor = await _doctorRepository.GetDoctorByUserIdAsync(userId);
+                var isDoctor = doctor != null && appointment.DoctorId == doctor.DoctorId;
+
+                if (!isPatient && !isDoctor)
+                {
+                    return Forbid();
                 }
 
                 var dto = new AppointmentDTO
@@ -123,6 +135,7 @@ namespace Clinic_Appointment_Booking.Controllers
                     AppointmentId = appointment.AppointmentId,
                     DoctorId = appointment.DoctorId,
                     DoctorName = appointment.Doctor?.User?.FullName ?? "",
+                    PatientName = appointment.Patient?.FullName ?? "",
                     SpecialtyName = appointment.Doctor?.Specialty?.Name ?? "",
                     AppointmentDate = appointment.AppointmentDate,
                     AppointmentTime = appointment.AppointmentTime,
@@ -309,6 +322,52 @@ namespace Clinic_Appointment_Booking.Controllers
             {
                 _logger.LogError(ex, "Error retrieving appointments");
                 return StatusCode(500, ApiResponse<List<AppointmentDTO>>.ErrorResponse("An error occurred while retrieving appointments"));
+            }
+        }
+
+        [HttpGet("doctor/{doctorId}")]
+        public async Task<ActionResult<ApiResponse<List<AppointmentDTO>>>> GetByDoctorId(int doctorId)
+        {
+            try
+            {
+                var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value
+                    ?? User.FindFirst("sub")?.Value;
+                if (string.IsNullOrEmpty(userIdClaim) || !int.TryParse(userIdClaim, out int userId))
+                {
+                    return Unauthorized(ApiResponse<List<AppointmentDTO>>.ErrorResponse("Invalid user token"));
+                }
+
+                // Verify the doctor is requesting their own appointments
+                var doctor = await _doctorRepository.GetDoctorByUserIdAsync(userId);
+                if (doctor == null || doctor.DoctorId != doctorId)
+                {
+                    return Forbid();
+                }
+
+                var appointments = await _appointmentRepository.GetByDoctorIdAsync(doctorId);
+                var dtos = appointments.Select(a => new AppointmentDTO
+                {
+                    AppointmentId = a.AppointmentId,
+                    DoctorId = a.DoctorId,
+                    DoctorName = a.Doctor?.User?.FullName ?? "",
+                    PatientName = a.Patient?.FullName ?? "Unknown",
+                    SpecialtyName = a.Doctor?.Specialty?.Name ?? "",
+                    AppointmentDate = a.AppointmentDate,
+                    AppointmentTime = a.AppointmentTime,
+                    Status = a.Status,
+                    ReasonForVisit = a.ReasonForVisit,
+                    AdditionalNotes = a.AdditionalNotes,
+                    IsFirstTime = a.IsFirstTime,
+                    ConsultationFee = a.ConsultationFee,
+                    CreatedAt = a.CreatedAt
+                }).ToList();
+
+                return Ok(ApiResponse<List<AppointmentDTO>>.SuccessResponse(dtos, "Doctor appointments retrieved successfully"));
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error retrieving doctor appointments");
+                return StatusCode(500, ApiResponse<List<AppointmentDTO>>.ErrorResponse("An error occurred while retrieving doctor appointments"));
             }
         }
     }

@@ -116,6 +116,26 @@ namespace Clinic_Appointment_Booking.Controllers
             }
         }
 
+        [HttpGet("user/{userId}")]
+        public async Task<ActionResult<ApiResponse<DoctorDTO>>> GetDoctorByUserId(int userId)
+        {
+            try
+            {
+                var doctor = await _doctorRepository.GetDoctorByUserIdAsync(userId);
+                if (doctor == null)
+                {
+                    return NotFound(ApiResponse<DoctorDTO>.ErrorResponse("Doctor not found for this user"));
+                }
+
+                return Ok(ApiResponse<DoctorDTO>.SuccessResponse(MapToDoctorDTO(doctor), "Doctor retrieved successfully"));
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error retrieving doctor for user ID {UserId}", userId);
+                return StatusCode(500, ApiResponse<DoctorDTO>.ErrorResponse("An error occurred while retrieving doctor"));
+            }
+        }
+
         private static DoctorDTO MapToDoctorDTO(Doctor doctor)
         {
             return new DoctorDTO

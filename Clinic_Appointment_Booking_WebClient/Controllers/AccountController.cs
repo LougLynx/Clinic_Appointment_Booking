@@ -75,10 +75,19 @@ namespace Clinic_Appointment_Booking_WebClient.Controllers
                     HttpContext.Session.SetString("UserRole", response.Data.User.Role);
                     HttpContext.Session.SetString("UserName", response.Data.User.FullName);
                     HttpContext.Session.SetString("UserPhone", response.Data.User.PhoneNumber ?? string.Empty);
+                    HttpContext.Session.SetString("UserId", response.Data.User.UserId.ToString());
 
                     TempData["SuccessMessage"] = "Login successful!";
+                    
                     if (!string.IsNullOrEmpty(returnUrl) && Url.IsLocalUrl(returnUrl))
                         return Redirect(returnUrl);
+
+                    // Role-based redirection
+                    if (response.Data.User.Role == "Admin")
+                        return RedirectToAction("Dashboard", "Admin");
+                    if (response.Data.User.Role == "Doctor")
+                        return RedirectToAction("Schedule", "Doctor");
+
                     return RedirectToAction("Index", "Home");
                 }
                 else
@@ -486,8 +495,9 @@ namespace Clinic_Appointment_Booking_WebClient.Controllers
                     HttpContext.Session.SetString("UserRole", response.Data.User.Role);
                     HttpContext.Session.SetString("UserName", response.Data.User.FullName);
                     HttpContext.Session.SetString("UserPhone", response.Data.User.PhoneNumber ?? string.Empty);
+                    HttpContext.Session.SetString("UserId", response.Data.User.UserId.ToString());
 
-                    return Ok(new { success = true, message = "Google login successful" });
+                    return Ok(new { success = true, message = "Google login successful", role = response.Data.User.Role });
                 }
                 else
                 {

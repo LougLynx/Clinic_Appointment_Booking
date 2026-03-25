@@ -54,5 +54,10 @@ namespace Clinic_Appointment_Booking_WebClient.Services
         {
             return await _apiClient.GetAsync<List<DoctorDTO>>($"/api/doctor/specialty/{specialtyId}");
         }
+
+        public async Task<ApiResponse<DoctorDTO>?> GetDoctorByUserIdAsync(int userId)
+        {
+            return await _apiClient.GetAsync<DoctorDTO>($"/api/doctor/user/{userId}");
+        }
     }
 }

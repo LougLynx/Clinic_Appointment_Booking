@@ -14,5 +14,6 @@ namespace Clinic_Appointment_Booking_WebClient.Services
             int pageNumber = 1,
             int pageSize = 10);
         Task<ApiResponse<List<DoctorDTO>>?> GetDoctorsBySpecialtyAsync(int specialtyId);
+        Task<ApiResponse<DoctorDTO>?> GetDoctorByUserIdAsync(int userId);
     }
 }
