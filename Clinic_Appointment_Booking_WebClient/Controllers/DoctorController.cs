@@ -1,7 +1,7 @@
-using Microsoft.AspNetCore.Mvc;
-using Clinic_Appointment_Booking_WebClient.Services;
+﻿using BussinessObjects.DTOs;
 using Clinic_Appointment_Booking_WebClient.Models.ViewModels;
-using BussinessObjects.DTOs;
+using Clinic_Appointment_Booking_WebClient.Services;
+using Microsoft.AspNetCore.Mvc;
 
 namespace Clinic_Appointment_Booking_WebClient.Controllers
 {
@@ -10,15 +10,18 @@ namespace Clinic_Appointment_Booking_WebClient.Controllers
         private readonly ILogger<DoctorController> _logger;
         private readonly IDoctorApiService _doctorApiService;
         private readonly IAppointmentApiService _appointmentApiService;
+        private readonly IConfiguration _configuration;
 
         public DoctorController(
             ILogger<DoctorController> logger,
             IDoctorApiService doctorApiService,
-            IAppointmentApiService appointmentApiService)
+            IAppointmentApiService appointmentApiService,
+            IConfiguration configuration)
         {
             _logger = logger;
             _doctorApiService = doctorApiService;
             _appointmentApiService = appointmentApiService;
+            _configuration = configuration;
         }
 
         private async Task<DoctorDTO?> GetCurrentDoctorAsync()
@@ -45,13 +48,16 @@ namespace Clinic_Appointment_Booking_WebClient.Controllers
         public async Task<IActionResult> Schedule(DateTime? month, string viewType = "Month")
         {
             var doctor = await GetCurrentDoctorAsync();
-            if (doctor == null) return RedirectToAction("Login", "Account");
+            if (doctor == null)
+            {
+                return RedirectToAction("Login", "Account");
+            }
 
             var targetMonth = month ?? new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1);
-            
+
             var firstDayOfMonth = new DateTime(targetMonth.Year, targetMonth.Month, 1);
             var lastDayOfMonth = firstDayOfMonth.AddMonths(1).AddDays(-1);
-            
+
             DateTime startDay, endDay;
             // Reference day logic: 
             // 1. If 'month' is provided and is NOT the first of a month, it's likely a specific day selected for Week/Day view.
@@ -62,7 +68,7 @@ namespace Clinic_Appointment_Booking_WebClient.Controllers
             {
                 refDay = DateTime.Today;
             }
-            
+
             // For Month view, targetMonth should be the first of that month
             var targetMonthStart = new DateTime(targetMonth.Year, targetMonth.Month, 1);
             var targetMonthEnd = targetMonthStart.AddMonths(1).AddDays(-1);
@@ -116,7 +122,16 @@ namespace Clinic_Appointment_Booking_WebClient.Controllers
         public async Task<IActionResult> Patients()
         {
             var doctor = await GetCurrentDoctorAsync();
-            if (doctor == null) return RedirectToAction("Login", "Account");
+            if (doctor == null)
+            {
+                return RedirectToAction("Login", "Account");
+            }
+
+            var baseUrl = _configuration["ApiSettings:BaseUrl"];
+
+            // Truyền vào ViewData để bên HTML có thể lấy được
+            ViewData["ApiBaseUrl"] = baseUrl;
+            ViewData["DoctorID"] = doctor.DoctorId;
 
             return View();
         }
