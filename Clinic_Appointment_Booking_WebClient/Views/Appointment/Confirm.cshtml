@@ -4,8 +4,8 @@
     ViewData["Title"] = "Confirm Appointment";
     Layout = "_LayoutMediClinic";
 
-    var dateText = Model.AppointmentDate.ToString("dddd, MMMM dd, yyyy");
-    var timeText = DateTime.Today.Add(Model.AppointmentTime).ToString("hh:mm tt");
+    var dateText = Model.AppointmentDate.ToString("dddd, MMMM dd, yyyy", System.Globalization.CultureInfo.InvariantCulture);
+    var timeText = DateTime.Today.Add(Model.AppointmentTime).ToString("hh:mm tt", System.Globalization.CultureInfo.InvariantCulture);
     var feeText = Model.Doctor.ConsultationFee.HasValue ? $"${Model.Doctor.ConsultationFee.Value:N2}" : "Contact for pricing";
     var patientName = string.IsNullOrWhiteSpace(Model.PatientName) ? "Patient" : Model.PatientName;
     

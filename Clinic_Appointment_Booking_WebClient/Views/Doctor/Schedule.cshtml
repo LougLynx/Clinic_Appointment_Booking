@@ -156,7 +156,7 @@
                                                 class="appearance-none border-none bg-transparent font-bold text-slate-800 text-lg cursor-pointer focus:ring-0 pl-0 pr-6 py-0">
                                             @for (int i = 1; i <= 12; i++)
                                             {
-                                                <option value="@(i.ToString("D2"))" selected="@(Model.ReferenceDate.Month == i)">@CultureInfo.CurrentCulture.DateTimeFormat.GetMonthName(i)</option>
+                                                <option value="@(i.ToString("D2"))" selected="@(Model.ReferenceDate.Month == i)">@CultureInfo.GetCultureInfo("en-US").DateTimeFormat.GetMonthName(i)</option>
                                             }
                                         </select>
                                         <span class="material-symbols-outlined absolute right-0 top-1/2 -translate-y-1/2 text-slate-400 text-sm pointer-events-none">expand_more</span>
@@ -217,7 +217,7 @@
                             }
                             else
                             {
-                                <div class="bg-white p-4 text-center text-lg font-black text-slate-800 uppercase tracking-widest border-b border-slate-100">@Model.ReferenceDate.ToString("dddd, MMMM dd, yyyy")</div>
+                                <div class="bg-white p-4 text-center text-lg font-black text-slate-800 uppercase tracking-widest border-b border-slate-100">@Model.ReferenceDate.ToString("dddd, MMMM dd, yyyy", CultureInfo.InvariantCulture)</div>
                             }
 
                             @foreach (var day in Model.DaysInCalendar)
@@ -332,7 +332,7 @@
             document.getElementById('modalPatientName').textContent = appt.PatientName;
             document.getElementById('modalTime').textContent = appt.AppointmentTime.substring(0, 5); // hh:mm
             document.getElementById('modalStatus').textContent = appt.Status;
-            document.getElementById('modalDate').textContent = new Date(appt.AppointmentDate).toLocaleDateString(undefined, { month: 'long', day: 'numeric', year: 'numeric' });
+            document.getElementById('modalDate').textContent = new Date(appt.AppointmentDate).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' });
             document.getElementById('modalReason').textContent = appt.ReasonForVisit;
             document.getElementById('modalNotes').textContent = appt.AdditionalNotes || "No additional notes.";
 

@@ -55,8 +55,8 @@
         <div class="grid gap-4">
             @foreach (var appointment in appointments.OrderByDescending(a => a.AppointmentDate).ThenByDescending(a => a.AppointmentTime))
             {
-                var dateText = appointment.AppointmentDate.ToString("dddd, MMMM dd, yyyy");
-                var timeText = DateTime.Today.Add(appointment.AppointmentTime).ToString("hh:mm tt");
+                var dateText = appointment.AppointmentDate.ToString("dddd, MMMM dd, yyyy", System.Globalization.CultureInfo.InvariantCulture);
+                var timeText = DateTime.Today.Add(appointment.AppointmentTime).ToString("hh:mm tt", System.Globalization.CultureInfo.InvariantCulture);
                 var status = appointment.Status ?? "Unknown";
                 var statusClass = status.ToLowerInvariant() switch
                 {
@@ -91,7 +91,7 @@
                         <div class="flex flex-col items-start md:items-end gap-3">
                             <span class="px-3 py-1 rounded-full text-xs font-semibold @statusClass">@status</span>
                             <div class="text-sm text-slate-600 dark:text-slate-400">
-                                Fee: @appointment.ConsultationFee.ToString("C2")
+                                Fee: @appointment.ConsultationFee.ToString("C2", System.Globalization.CultureInfo.GetCultureInfo("en-US"))
                             </div>
                             <div class="flex flex-wrap gap-2">
                                 <a asp-area="" asp-controller="Appointment" asp-action="Details" asp-route-id="@appointment.AppointmentId"

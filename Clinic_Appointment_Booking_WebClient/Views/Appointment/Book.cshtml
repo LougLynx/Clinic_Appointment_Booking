@@ -22,10 +22,10 @@
     }
 
     var summaryDateText = selectedDateValue.HasValue
-        ? selectedDateValue.Value.ToString("dddd, MMMM dd, yyyy")
+        ? selectedDateValue.Value.ToString("dddd, MMMM dd, yyyy", CultureInfo.InvariantCulture)
         : "Select a date";
     var summaryTimeText = selectedTimeValue.HasValue
-        ? DateTime.Today.Add(selectedTimeValue.Value).ToString("hh:mm tt")
+        ? DateTime.Today.Add(selectedTimeValue.Value).ToString("hh:mm tt", CultureInfo.InvariantCulture)
         : "Select a time";
 
     var appointmentData = new
@@ -354,7 +354,7 @@
             function formatDateLabel(dateStr) {
                 if (!dateStr) return 'Select a date';
                 const date = new Date(dateStr + 'T00:00:00');
-                return date.toLocaleDateString(undefined, {
+                return date.toLocaleDateString('en-US', {
                     weekday: 'long',
                     month: 'long',
                     day: '2-digit',
@@ -367,7 +367,7 @@
                 const [hour, minute] = timeStr.split(':').map(Number);
                 const date = new Date();
                 date.setHours(hour, minute, 0, 0);
-                return date.toLocaleTimeString(undefined, {
+                return date.toLocaleTimeString('en-US', {
                     hour: '2-digit',
                     minute: '2-digit'
                 });
@@ -452,7 +452,7 @@
             function renderCalendar() {
                 if (!calendarGrid || !calendarMonthLabel) return;
                 calendarGrid.innerHTML = '';
-                calendarMonthLabel.textContent = currentMonth.toLocaleDateString(undefined, { month: 'long', year: 'numeric' });
+                calendarMonthLabel.textContent = currentMonth.toLocaleDateString('en-US', { month: 'long', year: 'numeric' });
 
                 const firstDay = new Date(currentMonth.getFullYear(), currentMonth.getMonth(), 1);
                 const startDay = firstDay.getDay();
