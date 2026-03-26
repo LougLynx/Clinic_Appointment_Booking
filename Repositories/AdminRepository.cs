@@ -88,29 +88,71 @@ namespace Repositories
 
         public async Task<IEnumerable<ChartDataDTO>> GetRevenueTrendsAsync(string period)
         {
-            DateTime startDate = period.ToLower() switch
+            var now = DateTime.Now;
+            var p = period.ToLower();
+            DateTime dbStartDate = p switch
             {
-                "this month" => new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1),
-                "this year" => new DateTime(DateTime.Now.Year, 1, 1),
-                _ => DateTime.Now.AddDays(-7) // default last 7 days
+                "this month" => now.Date.AddDays(-27),
+                "this year" => new DateTime(now.Year, 1, 1),
+                _ => now.Date.AddDays(-6)
             };
 
             var appointments = await _context.Appointments
-                .Where(a => a.AppointmentDate >= startDate)
+                .Where(a => a.AppointmentDate >= dbStartDate && a.AppointmentDate <= now)
                 .Include(a => a.Payment)
                 .ToListAsync();
 
-            // Group theo ngày, tuần hoặc tháng tùy vào độ dài của period
-            return appointments
-                .GroupBy(a => a.AppointmentDate.Date)
-                .Select(g => new ChartDataDTO
-                {
-                    Label = period == "this year" ? g.Key.ToString("MMM") : g.Key.ToString("dd/MM"),
-                    Appointments = g.Count(),
-                    Revenue = g.Where(x => x.Payment != null).Sum(x => x.Payment.Amount)
-                })
-                .OrderBy(x => x.Label)
-                .ToList();
+            if (p == "this year")
+            {
+                return Enumerable.Range(1, now.Month)
+                    .Select(m =>
+                    {
+                        var monthDate = new DateTime(now.Year, m, 1);
+                        var group = appointments.Where(a => a.AppointmentDate.Month == m);
+                        return new ChartDataDTO
+                        {
+                            Label = monthDate.ToString("MMM"),
+                            Appointments = group.Count(),
+                            Revenue = group.Sum(x => x.Payment?.Amount ?? 0)
+                        };
+                    }).ToList();
+            }
+            else if (p == "this month")
+            {
+                // Chạy i từ 3 xuống 0 (3 là xa nhất, 0 là hôm nay)
+                return Enumerable.Range(0, 4)
+                    .OrderByDescending(i => i)
+                    .Select((i, index) =>
+                    { // Dùng index để đặt tên Week từ 1 đến 4
+                        var weekEndDate = now.Date.AddDays(-i * 7);
+                        var weekStartDate = weekEndDate.AddDays(-6);
+
+                        var group = appointments.Where(a => a.AppointmentDate.Date >= weekStartDate && a.AppointmentDate.Date <= weekEndDate);
+
+                        return new ChartDataDTO
+                        {
+                            // index chạy từ 0 đến 3 tương ứng với dữ liệu từ cũ nhất đến mới nhất
+                            Label = $"Week {index + 1}",
+                            Appointments = group.Count(),
+                            Revenue = group.Sum(x => x.Payment?.Amount ?? 0)
+                        };
+                    }).ToList();
+            }
+            else
+            {
+                return Enumerable.Range(0, 7)
+                    .Select(d => now.Date.AddDays(-6 + d))
+                    .Select(date =>
+                    {
+                        var group = appointments.Where(a => a.AppointmentDate.Date == date);
+                        return new ChartDataDTO
+                        {
+                            Label = date.ToString("dd/MM"),
+                            Appointments = group.Count(),
+                            Revenue = group.Sum(x => x.Payment?.Amount ?? 0)
+                        };
+                    }).ToList();
+            }
         }
 
         public async Task<IEnumerable<DoctorOverviewDto>> GetStaffOverviewAsync()
