@@ -15,6 +15,15 @@
     
     <!-- Anti-FOUC & Page Transition Styles -->
     <style>
+        /* Modern Anti-FOUC */
+        body { 
+            opacity: 0; 
+            transition: opacity 0.4s ease-out; 
+        }
+        body.ready { 
+            opacity: 1; 
+        }
+
         /* Ensure Material Icons render as blocks to prevent layout shift */
         .material-symbols-outlined {
             display: inline-block;
@@ -57,6 +66,17 @@
             transform: translateY(-2px);
         }
     </style>
+    
+    <!-- Reveal Script -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+             // Let tailwind run its check
+             setTimeout(() => { document.body.classList.add('ready'); }, 50);
+        });
+        window.addEventListener('load', () => {
+             document.body.classList.add('ready');
+        });
+    </script>
     
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>

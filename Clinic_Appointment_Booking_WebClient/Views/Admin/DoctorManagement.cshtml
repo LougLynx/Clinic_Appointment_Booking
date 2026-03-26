@@ -1,281 +1,135 @@
 @{
     ViewData["Title"] = "Doctor Management";
-    Layout = null;
+    Layout = "_AdminLayout";
 }
 
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - MediClinic</title>
-    
-    <!-- Tailwind CSS -->
-    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
-    
-    <!-- Material Symbols -->
-    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet" />
-    
-    <!-- Inter Font -->
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
-    
-    <!-- Tailwind Config -->
-    <script>
-        tailwind.config = {
-            darkMode: "class",
-            theme: {
-                extend: {
-                    colors: {
-                        "primary": "#0d9488",
-                        "primary-hover": "#0f766e",
-                        "accent-blue": "#3b82f6",
-                        "background-light": "#f0fdfa",
-                        "surface-light": "#ffffff",
-                    },
-                    fontFamily: {
-                        "display": ["Inter", "Noto Sans", "sans-serif"]
-                    },
-                },
-            },
-        }
-    </script>
-    <style>
-        .material-symbols-outlined {
-            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
-        }
-        body {
-            font-family: 'Inter', sans-serif;
-        }
-    </style>
-</head>
-<body class="bg-background-light text-slate-800 font-display">
-    <div class="flex h-screen overflow-hidden">
-        <!-- Sidebar -->
-        <aside class="w-64 bg-slate-900 text-slate-300 flex flex-col transition-all duration-300 flex-shrink-0 border-r border-slate-800">
-            <!-- Logo -->
-            <div class="h-16 flex items-center px-6 border-b border-slate-800 bg-slate-950/50">
-                <span class="material-symbols-outlined text-primary text-3xl mr-3">admin_panel_settings</span>
-                <h1 class="text-white font-bold text-lg tracking-wide">MediAdmin</h1>
+<div class="max-w-7xl mx-auto space-y-8">
+    <!-- Page Heading -->
+    <div class="flex flex-col md:flex-row md:items-end justify-between gap-4">
+        <div class="space-y-1">
+            <h2 class="text-3xl font-extrabold tracking-tight text-slate-900">Doctor Management</h2>
+            <p class="text-slate-500">View and manage your clinic's medical professionals.</p>
+        </div>
+        <button class="flex items-center justify-center gap-2 bg-primary hover:bg-primary/90 text-white px-5 py-2.5 rounded-lg font-bold text-sm transition-all shadow-lg shadow-primary/20">
+            <span class="material-symbols-outlined">add</span>
+            Add New Doctor
+        </button>
+    </div>
+
+    <!-- Statistics Bar -->
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        <!-- Total Doctors -->
+        <div class="bg-white p-4 rounded-xl border border-slate-200 flex items-center gap-4">
+            <div class="w-12 h-12 rounded-lg bg-blue-50 flex items-center justify-center text-blue-600">
+                <span class="material-symbols-outlined">groups</span>
             </div>
-
-            <!-- Navigation -->
-            <nav class="flex-1 overflow-y-auto py-6 flex flex-col gap-2 px-3">
-                <a asp-area="" asp-controller="Admin" asp-action="Dashboard" 
-                   class="flex items-center gap-3 px-4 py-3 hover:bg-slate-800 rounded-lg transition-colors text-slate-400 hover:text-white border-l-4 border-transparent no-underline">
-                    <span class="material-symbols-outlined text-[20px]">dashboard</span>
-                    <span class="font-medium">Dashboard</span>
-                </a>
-                <a asp-area="" asp-controller="Admin" asp-action="DoctorManagement" 
-                   class="flex items-center gap-3 px-4 py-3 bg-primary/20 text-white rounded-lg transition-colors border-l-4 border-primary no-underline">
-                    <span class="material-symbols-outlined text-[20px]">stethoscope</span>
-                    <span class="font-medium">Doctor Management</span>
-                </a>
-                <a asp-area="" asp-controller="Admin" asp-action="PatientRecords" 
-                   class="flex items-center gap-3 px-4 py-3 hover:bg-slate-800 rounded-lg transition-colors text-slate-400 hover:text-white border-l-4 border-transparent no-underline">
-                    <span class="material-symbols-outlined text-[20px]">folder_shared</span>
-                    <span class="font-medium">Patient Records</span>
-                </a>
-                <a asp-area="" asp-controller="Admin" asp-action="Financials" 
-                   class="flex items-center gap-3 px-4 py-3 hover:bg-slate-800 rounded-lg transition-colors text-slate-400 hover:text-white border-l-4 border-transparent no-underline">
-                    <span class="material-symbols-outlined text-[20px]">account_balance_wallet</span>
-                    <span class="font-medium">Financials</span>
-                </a>
-                <a asp-area="" asp-controller="Admin" asp-action="Settings" 
-                   class="flex items-center gap-3 px-4 py-3 hover:bg-slate-800 rounded-lg transition-colors text-slate-400 hover:text-white border-l-4 border-transparent no-underline">
-                    <span class="material-symbols-outlined text-[20px]">settings</span>
-                    <span class="font-medium">System Settings</span>
-                </a>
-            </nav>
-
-            <!-- User Profile -->
-            <div class="p-4 border-t border-slate-800">
-                <div class="flex items-center gap-3 px-2 mb-3">
-                    <div class="w-10 h-10 rounded-full bg-slate-700 flex items-center justify-center text-white font-bold">
-                        SA
-                    </div>
-                    <div>
-                        <p class="text-white text-sm font-medium">System Admin</p>
-                        <p class="text-xs text-slate-500">admin@mediclinic.com</p>
-                    </div>
-                </div>
-                <!-- Back to Home Button -->
-                <a asp-area="" asp-controller="Home" asp-action="Index" 
-                   class="flex items-center gap-2 px-4 py-2 text-slate-400 hover:text-white hover:bg-slate-800 rounded-lg transition-colors text-sm no-underline">
-                    <span class="material-symbols-outlined text-[18px]">home</span>
-                    <span>Back to Home</span>
-                </a>
+            <div>
+                <p class="text-xs text-slate-500">Total Doctors</p>
+                <p id="stat-total-doctors" class="text-xl font-bold text-slate-900">42</p>
             </div>
-        </aside>
+        </div>
 
-        <!-- Main Content Area -->
-        <div class="flex-1 flex flex-col overflow-hidden">
-            <!-- Top Header -->
-            <header class="h-16 bg-surface-light border-b border-slate-200 flex items-center justify-between px-8 shadow-sm flex-shrink-0 z-10">
-                <!-- Search Bar -->
-                <div class="flex items-center bg-slate-100 rounded-lg px-3 py-2 w-96 border border-slate-200 focus-within:border-primary focus-within:ring-1 focus-within:ring-primary transition-all">
-                    <svg class="h-5 w-5 text-slate-400 mr-2" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-                        <path d="M10 2a8 8 0 0 1 6.32 12.9l3.39 3.39a1 1 0 1 1-1.42 1.42l-3.39-3.39A8 8 0 1 1 10 2Zm0 2a6 6 0 1 0 0 12 6 6 0 0 0 0-12Z"/>
-                    </svg>
-                    <input class="bg-transparent border-none outline-none text-sm w-full text-slate-700 placeholder-slate-400 focus:ring-0 p-0" 
-                           placeholder="Search records, doctors..." 
-                           type="text" />
-                </div>
+        <!-- Active Now -->
+        <div class="bg-white p-4 rounded-xl border border-slate-200 flex items-center gap-4">
+            <div class="w-12 h-12 rounded-lg bg-green-50 flex items-center justify-center text-green-600">
+                <span class="material-symbols-outlined">task_alt</span>
+            </div>
+            <div>
+                <p class="text-xs text-slate-500">Active Now</p>
+                <p id="stat-active-doctors" class="text-xl font-bold text-slate-900">38</p>
+            </div>
+        </div>
 
-                <!-- Header Actions -->
-                <div class="flex items-center gap-5">
-                    <button class="relative text-slate-500 hover:text-primary transition-colors">
-                        <span class="material-symbols-outlined">notifications</span>
-                        <span class="absolute top-0 right-0 w-2 h-2 bg-red-500 rounded-full border border-white"></span>
-                    </button>
-                    <div class="h-8 w-px bg-slate-200"></div>
-                    <button class="flex items-center gap-2 text-slate-600 hover:text-slate-900 font-medium text-sm">
-                        <span>Export Report</span>
-                        <span class="material-symbols-outlined text-[18px]">download</span>
-                    </button>
-                </div>
-            </header>
+        <!-- On Leave -->
+        <div class="bg-white p-4 rounded-xl border border-slate-200 flex items-center gap-4">
+            <div class="w-12 h-12 rounded-lg bg-amber-50 flex items-center justify-center text-amber-600">
+                <span class="material-symbols-outlined">event_busy</span>
+            </div>
+            <div>
+                <p class="text-xs text-slate-500">On Leave</p>
+                <p id="stat-on-leave" class="text-xl font-bold text-slate-900">4</p>
+            </div>
+        </div>
 
-            <!-- Main Dashboard Content -->
-            <main class="flex-1 overflow-y-auto p-8 bg-slate-50/50">
-                <div class="max-w-7xl mx-auto space-y-8">
-                    <!-- Page Heading -->
-                    <div class="flex flex-col md:flex-row md:items-end justify-between gap-4">
-                        <div class="space-y-1">
-                            <h2 class="text-3xl font-extrabold tracking-tight">Doctor Management</h2>
-                            <p class="text-slate-500 dark:text-slate-400">View and manage your clinic's medical professionals.</p>
-                        </div>
-                        <button class="flex items-center justify-center gap-2 bg-primary hover:bg-primary/90 text-white px-5 py-2.5 rounded-lg font-bold text-sm transition-all shadow-lg shadow-primary/20">
-                            <span class="material-symbols-outlined">add</span>
-                            Add New Doctor
-                        </button>
-                    </div>
-
-                    <!-- Statistics Bar -->
-                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-                        <!-- Total Doctors -->
-                        <div class="bg-white dark:bg-slate-900 p-4 rounded-xl border border-slate-200 dark:border-slate-800 flex items-center gap-4">
-                            <div class="w-12 h-12 rounded-lg bg-blue-50 dark:bg-blue-900/20 flex items-center justify-center text-blue-600">
-                                <span class="material-symbols-outlined">groups</span>
-                            </div>
-                            <div>
-                                <p class="text-xs text-slate-500">Total Doctors</p>
-                                <p id="stat-total-doctors" class="text-xl font-bold">42</p>
-                            </div>
-                        </div>
-
-                        <!-- Active Now -->
-                        <div class="bg-white dark:bg-slate-900 p-4 rounded-xl border border-slate-200 dark:border-slate-800 flex items-center gap-4">
-                            <div class="w-12 h-12 rounded-lg bg-green-50 dark:bg-green-900/20 flex items-center justify-center text-green-600">
-                                <span class="material-symbols-outlined">task_alt</span>
-                            </div>
-                            <div>
-                                <p class="text-xs text-slate-500">Active Now</p>
-                                <p id="stat-active-doctors" class="text-xl font-bold">38</p>
-                            </div>
-                        </div>
-
-                        <!-- On Leave -->
-                        <div class="bg-white dark:bg-slate-900 p-4 rounded-xl border border-slate-200 dark:border-slate-800 flex items-center gap-4">
-                            <div class="w-12 h-12 rounded-lg bg-amber-50 dark:bg-amber-900/20 flex items-center justify-center text-amber-600">
-                                <span class="material-symbols-outlined">event_busy</span>
-                            </div>
-                            <div>
-                                <p class="text-xs text-slate-500">On Leave</p>
-                                <p id="stat-on-leave" class="text-xl font-bold">4</p>
-                            </div>
-                        </div>
-
-                        <!-- Specialties -->
-                        <div class="bg-white dark:bg-slate-900 p-4 rounded-xl border border-slate-200 dark:border-slate-800 flex items-center gap-4">
-                            <div class="w-12 h-12 rounded-lg bg-primary/10 flex items-center justify-center text-primary">
-                                <span class="material-symbols-outlined">medical_information</span>
-                            </div>
-                            <div>
-                                <p class="text-xs text-slate-500">Specialties</p>
-                                <p id="stat-specialties"     class="text-xl font-bold">12</p>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Filters and Table -->
-                    <div class="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 overflow-hidden shadow-sm">
-                        <!-- Table Filters -->
-                        <div class="p-4 border-b border-slate-200 dark:border-slate-800 flex flex-wrap items-center gap-3">
-                            <div class="flex items-center gap-2 px-3 py-1.5 bg-slate-50 dark:bg-slate-800 rounded-lg text-sm font-medium border border-slate-200 dark:border-slate-700">
-                                <span class="text-slate-500">Specialty:</span>
-                                <select class="bg-transparent border-none p-0 pr-6 text-sm focus:ring-0">
-                                    <option>All Specialties</option>
-                                    <option>Cardiology</option>
-                                    <option>Neurology</option>
-                                    <option>Pediatrics</option>
-                                </select>
-                            </div>
-                            <div class="flex items-center gap-2 px-3 py-1.5 bg-slate-50 dark:bg-slate-800 rounded-lg text-sm font-medium border border-slate-200 dark:border-slate-700">
-                                <span class="text-slate-500">Status:</span>
-                                <select class="bg-transparent border-none p-0 pr-6 text-sm focus:ring-0">
-                                    <option>Any Status</option>
-                                    <option>Active</option>
-                                    <option>On Leave</option>
-                                </select>
-                            </div>
-                            <button class="ml-auto text-sm font-semibold text-primary flex items-center gap-1">
-                                <span class="material-symbols-outlined text-lg">filter_list</span>
-                                More Filters
-                            </button>
-                        </div>
-
-                        <!-- Table -->
-                        <div class="overflow-x-auto">
-                            <table class="w-full text-left border-collapse">
-                                <thead>
-                                    <tr class="bg-slate-50 dark:bg-slate-800/50">
-                                        <th class="px-6 py-4 text-xs font-bold uppercase tracking-wider text-slate-500">Doctor Name</th>
-                                        <th class="px-6 py-4 text-xs font-bold uppercase tracking-wider text-slate-500">Specialty</th>
-                                        <th class="px-6 py-4 text-xs font-bold uppercase tracking-wider text-slate-500">Status</th>
-                                        <th class="px-6 py-4 text-xs font-bold uppercase tracking-wider text-slate-500">Contact</th>
-                                        <th class="px-6 py-4 text-xs font-bold uppercase tracking-wider text-slate-500 text-right">Actions</th>
-                                    </tr>
-                                </thead>
-                                <tbody id="doctorTableBody" class="divide-y divide-slate-200 dark:divide-slate-800">
-                                    <tr>
-                                        <td colspan="5" class="text-center py-10 text-slate-400">
-                                            <span class="animate-pulse">Loading medical staff...</span>
-                                        </td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
-
-                        <!-- Pagination -->
-                        <div class="px-6 py-4 bg-slate-50 dark:bg-slate-800/50 flex items-center justify-between border-t border-slate-200 dark:border-slate-800">
-                            <p id="showing-info" class="text-xs text-slate-500 font-medium">Showing 1 to 4 of 42 results</p>
-                            <div id="pagination-controls" class="flex gap-2">
-                                <button class="px-3 py-1 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded text-xs font-semibold text-slate-600 dark:text-slate-400 hover:bg-slate-50 transition-colors">Previous</button>
-                                <button class="px-3 py-1 bg-primary text-white border border-primary rounded text-xs font-semibold">1</button>
-                                <button class="px-3 py-1 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded text-xs font-semibold text-slate-600 dark:text-slate-400 hover:bg-slate-50 transition-colors">2</button>
-                                <button class="px-3 py-1 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded text-xs font-semibold text-slate-600 dark:text-slate-400 hover:bg-slate-50 transition-colors">Next</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </main>
+        <!-- Specialties -->
+        <div class="bg-white p-4 rounded-xl border border-slate-200 flex items-center gap-4">
+            <div class="w-12 h-12 rounded-lg bg-primary/10 flex items-center justify-center text-primary">
+                <span class="material-symbols-outlined">medical_information</span>
+            </div>
+            <div>
+                <p class="text-xs text-slate-500">Specialties</p>
+                <p id="stat-specialties" class="text-xl font-bold text-slate-900">12</p>
+            </div>
         </div>
     </div>
-</body>
-</html>
 
+    <!-- Filters and Table -->
+    <div class="bg-white rounded-xl border border-slate-200 overflow-hidden shadow-sm">
+        <!-- Table Filters -->
+        <div class="p-4 border-b border-slate-200 flex flex-wrap items-center gap-3">
+            <div class="flex items-center gap-2 px-3 py-1.5 bg-slate-50 rounded-lg text-sm font-medium border border-slate-200">
+                <span class="text-slate-500">Specialty:</span>
+                <select class="bg-transparent border-none p-0 pr-6 text-sm focus:ring-0">
+                    <option>All Specialties</option>
+                    <option>Cardiology</option>
+                    <option>Neurology</option>
+                    <option>Pediatrics</option>
+                </select>
+            </div>
+            <div class="flex items-center gap-2 px-3 py-1.5 bg-slate-50 rounded-lg text-sm font-medium border border-slate-200">
+                <span class="text-slate-500">Status:</span>
+                <select class="bg-transparent border-none p-0 pr-6 text-sm focus:ring-0">
+                    <option>Any Status</option>
+                    <option>Active</option>
+                    <option>On Leave</option>
+                </select>
+            </div>
+            <button class="ml-auto text-sm font-semibold text-primary flex items-center gap-1">
+                <span class="material-symbols-outlined text-lg">filter_list</span>
+                More Filters
+            </button>
+        </div>
+
+        <!-- Table -->
+        <div class="overflow-x-auto">
+            <table class="w-full text-left border-collapse">
+                <thead>
+                    <tr class="bg-slate-50">
+                        <th class="px-6 py-4 text-xs font-bold uppercase tracking-wider text-slate-500">Doctor Name</th>
+                        <th class="px-6 py-4 text-xs font-bold uppercase tracking-wider text-slate-500">Specialty</th>
+                        <th class="px-6 py-4 text-xs font-bold uppercase tracking-wider text-slate-500">Status</th>
+                        <th class="px-6 py-4 text-xs font-bold uppercase tracking-wider text-slate-500">Contact</th>
+                        <th class="px-6 py-4 text-xs font-bold uppercase tracking-wider text-slate-500 text-right">Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="doctorTableBody" class="divide-y divide-slate-200">
+                    <tr>
+                        <td colspan="5" class="text-center py-10 text-slate-400">
+                            <span class="animate-pulse">Loading medical staff...</span>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Pagination -->
+        <div class="px-6 py-4 bg-slate-50 flex items-center justify-between border-t border-slate-200">
+            <p id="showing-info" class="text-xs text-slate-500 font-medium">Showing 1 to 4 of 42 results</p>
+            <div id="pagination-controls" class="flex gap-2">
+                <!-- Controls will be rendered via script -->
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
 <script>
-    // 1. Cấu hình đường dẫn API (Dùng đường dẫn tương đối để an toàn nhất)
     const API_BASE = "@ViewData["ApiBaseUrl"]";
     const BASE_URL = `${API_BASE}/api/Admin`;
     let currentPage = 1;
     const pageSize = 5;
 
-    // 2. Sự kiện khởi tạo khi trang load xong
     document.addEventListener("DOMContentLoaded", function () {
-        console.log("DOM fully loaded. Initializing Dashboard...");
-
-        // Gọi dữ liệu ban đầu
         loadManagementStats();
         loadDoctors(1);
 
@@ -283,45 +137,28 @@
             select.addEventListener('change', () => loadDoctors(1));
         });
 
-        // Gắn sự kiện cho các bộ lọc (Dropdowns)
-        const filterSelects = document.querySelectorAll('select');
-        filterSelects.forEach(select => {
-            select.addEventListener('change', () => {
-                console.log("Filter changed, reloading doctors...");
-                loadDoctors();
-            });
-        });
-
-        // Gắn sự kiện tìm kiếm cho ô input ở header
         const searchInput = document.querySelector('header input');
         if (searchInput) {
             searchInput.addEventListener('input', debounce(() => {
-                loadDoctors(searchInput.value);
+                loadDoctors(1, searchInput.value);
             }, 500));
         }
     });
 
-    // 3. Hàm lấy các con số thống kê hàng đầu
     async function loadManagementStats() {
         try {
-            console.log("Fetching management stats...");
             const response = await fetch(`${BASE_URL}/management-stats`);
             if (!response.ok) throw new Error("Failed to fetch stats");
-
             const stats = await response.json();
-
-            // Đổ dữ liệu vào các thẻ ID đã thiết lập trong HTML
             document.getElementById('stat-total-doctors').innerText = stats.totalDoctors || 0;
             document.getElementById('stat-active-doctors').innerText = stats.activeDoctors || 0;
             document.getElementById('stat-on-leave').innerText = stats.onLeaveDoctors || 0;
             document.getElementById('stat-specialties').innerText = stats.totalSpecialties || 0;
-
         } catch (error) {
             console.error("Error in loadManagementStats:", error);
         }
     }
 
-    // 4. Hàm lấy danh sách bác sĩ và hiển thị lên bảng
     async function loadDoctors(page = 1, searchName = "") {
         currentPage = page;
         const tbody = document.getElementById('doctorTableBody');
@@ -332,9 +169,9 @@
         tbody.innerHTML = '<tr><td colspan="5" class="text-center py-10 text-slate-400">Loading...</td></tr>';
 
         try {
-            const url = `${BASE_URL}/doctors?specialty=${encodeURIComponent(specialty)}&status=${encodeURIComponent(status)}&page=${page}&pageSize=${pageSize}`;
+            const url = `${BASE_URL}/doctors?specialty=${encodeURIComponent(specialty)}&status=${encodeURIComponent(status)}&page=${page}&pageSize=${pageSize}&search=${encodeURIComponent(searchName)}`;
             const response = await fetch(url);
-            const result = await response.json(); // Bây giờ result chứa { data, totalPages, totalRecords, currentPage }
+            const result = await response.json();
 
             renderTable(result.data);
             renderPagination(result.totalPages, result.currentPage);
@@ -381,7 +218,7 @@
                         </div>
                     </td>
                     <td class="px-6 py-4">
-                        <div class="text-sm">${safeEmail}</div>
+                        <div class="text-sm text-slate-700">${safeEmail}</div>
                         <div class="text-xs text-slate-500">${safePhone}</div>
                     </td>
                     <td class="px-6 py-4 text-right">
@@ -403,13 +240,10 @@
     function renderPagination(totalPages, current) {
         const container = document.getElementById('pagination-controls');
         container.innerHTML = '';
-
         if (totalPages <= 1) return;
 
-        // Nút Previous
         container.innerHTML += `<button onclick="loadDoctors(${current - 1})" ${current === 1 ? 'disabled' : ''} class="px-3 py-1 bg-white border border-slate-200 rounded text-xs font-semibold hover:bg-slate-50 disabled:opacity-50">Previous</button>`;
 
-        // Các nút số trang
         for (let i = 1; i <= totalPages; i++) {
             container.innerHTML += `
                 <button onclick="loadDoctors(${i})" class="px-3 py-1 border rounded text-xs font-semibold ${i === current ? 'bg-primary text-white border-primary' : 'bg-white border-slate-200 hover:bg-slate-50'}">
@@ -417,7 +251,6 @@
                 </button>`;
         }
 
-        // Nút Next
         container.innerHTML += `<button onclick="loadDoctors(${current + 1})" ${current === totalPages ? 'disabled' : ''} class="px-3 py-1 bg-white border border-slate-200 rounded text-xs font-semibold hover:bg-slate-50 disabled:opacity-50">Next</button>`;
     }
 
@@ -427,7 +260,6 @@
         document.getElementById('showing-info').innerText = `Showing ${total === 0 ? 0 : start} to ${end} of ${total} results`;
     }
 
-    // 5. Hàm phụ: Phân loại màu sắc chuyên khoa
     function getSpecialtyBadgeClass(specialty) {
         const maps = {
             'Cardiology': 'bg-blue-100 text-blue-600',
@@ -440,41 +272,29 @@
         return maps[specialty] || 'bg-slate-100 text-slate-600';
     }
 
-    // (removed duplicated renderTable implementation)
-
-        async function toggleDoctorStatus(doctorId, checkboxElement) {
-        // Lưu lại trạng thái cũ để nếu lỗi thì quay lại
+    async function toggleDoctorStatus(doctorId, checkboxElement) {
         const originalState = !checkboxElement.checked;
-
         try {
             const response = await fetch(`${BASE_URL}/doctors/${doctorId}/toggle-status`, {
                 method: 'PATCH',
                 headers: { 'Content-Type': 'application/json' }
             });
-
             if (!response.ok) throw new Error("Update failed");
-
-            // Cập nhật lại UI ngay lập tức (Badge và số liệu) mà không cần load lại cả bảng
             const statusBadge = document.getElementById(`status-badge-${doctorId}`);
             const isNowActive = checkboxElement.checked;
-
             statusBadge.className = `flex items-center gap-1.5 ${isNowActive ? 'text-green-600' : 'text-slate-500'}`;
             statusBadge.innerHTML = `
                 <span class="w-2 h-2 rounded-full ${isNowActive ? 'bg-green-500' : 'bg-slate-400'}"></span>
                 <span class="text-sm font-medium">${isNowActive ? 'Active' : 'On Leave'}</span>
             `;
-
-            // Load lại stats trên cùng để cập nhật số lượng Active/On Leave
             loadManagementStats();
-
         } catch (error) {
             console.error("Error:", error);
             alert("Could not update status. Please try again.");
-            checkboxElement.checked = originalState; // Hoàn tác checkbox nếu lỗi
+            checkboxElement.checked = originalState;
         }
     }
 
-    // 6. Hàm chống rung (Debounce) để tìm kiếm không bị giật
     function debounce(func, timeout = 300) {
         let timer;
         return (...args) => {
@@ -483,3 +303,4 @@
         };
     }
 </script>
+}

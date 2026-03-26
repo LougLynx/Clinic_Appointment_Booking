@@ -325,8 +325,17 @@
             // Hero autoplay
             setInterval(nextHeroSlide, 5000);
             
-            // Facilities scroll sync
+            // Facilities autoplay
+            let facilityInterval = setInterval(nextFacility, 4000);
+            
+            // Stop autoplay on hover
             if (facilitiesCarousel) {
+                facilitiesCarousel.parentElement.addEventListener('mouseenter', () => clearInterval(facilityInterval));
+                facilitiesCarousel.parentElement.addEventListener('mouseleave', () => {
+                    facilityInterval = setInterval(nextFacility, 4000);
+                });
+
+                // Facilities scroll sync
                 facilitiesCarousel.addEventListener('scroll', () => {
                     const item = facilitiesCarousel.children[0];
                     if (item) {
@@ -335,7 +344,7 @@
                             currentFacilitySlide = newIdx;
                             // Update dots locally for smoother scroll response
                             facilityDots.forEach((dot, index) => {
-                                const isActive = index === currentFacilitySlide;
+                                const isActive = index === (currentFacilitySlide % facilityItemsCount);
                                 dot.className = isActive 
                                     ? 'facility-dot w-8 h-1.5 rounded-full bg-primary transition-all duration-300'
                                     : 'facility-dot w-3 h-1.5 rounded-full bg-slate-200 dark:bg-slate-700 transition-all duration-300';

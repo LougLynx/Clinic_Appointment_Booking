@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - MediAdmin</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    
+    <!-- Material Symbols -->
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet" />
+    
+    <!-- Inter Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
+    
+    <!-- Tailwind Config -->
+    <script>
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#0d9488",
+                        "primary-hover": "#0f766e",
+                        "accent-blue": "#3b82f6",
+                        "background-light": "#f0fdfa",
+                        "surface-light": "#ffffff",
+                    },
+                    fontFamily: {
+                        "display": ["Inter", "Noto Sans", "sans-serif"]
+                    },
+                },
+            },
+        }
+    </script>
+    
+    <style>
+        /* Modern Anti-FOUC */
+        html { 
+            background: #f0fdfa; /* Matches bg-background-light */
+        }
+        body { 
+            opacity: 0; 
+            transition: opacity 0.4s ease-out; 
+            font-family: 'Inter', sans-serif;
+        }
+        body.ready { 
+            opacity: 1; 
+        }
+        
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+
+        /* Ensure sidebar doesn't jump */
+        aside { width: 256px; }
+    </style>
+
+    <!-- Reveal Script -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            setTimeout(() => {
+                document.body.classList.add('ready');
+            }, 50);
+        });
+        window.addEventListener('load', () => {
+            document.body.classList.add('ready');
+        });
+    </script>
+    
+    @RenderSection("Styles", required: false)
+</head>
+<body class="bg-background-light text-slate-800 font-display flex h-screen overflow-hidden">
+    <!-- Sidebar -->
+    <aside class="w-64 bg-slate-900 text-slate-300 flex flex-col transition-all duration-300 flex-shrink-0 border-r border-slate-800">
+        <!-- Logo -->
+        <div class="h-16 flex items-center px-6 border-b border-slate-800 bg-slate-950/50">
+            <span class="material-symbols-outlined text-primary text-3xl mr-3">admin_panel_settings</span>
+            <h1 class="text-white font-bold text-lg tracking-wide">MediAdmin</h1>
+        </div>
+
+        <!-- Navigation -->
+        @{
+            var controller = ViewContext.RouteData.Values["controller"]?.ToString();
+            var action = ViewContext.RouteData.Values["action"]?.ToString();
+        }
+        <nav class="flex-1 overflow-y-auto py-6 flex flex-col gap-2 px-3">
+            <a asp-area="" asp-controller="Admin" asp-action="Dashboard" 
+               class="flex items-center gap-3 px-4 py-3 @(action == "Dashboard" ? "bg-primary/20 text-white border-l-4 border-primary" : "hover:bg-slate-800 text-slate-400 hover:text-white border-l-4 border-transparent") rounded-lg transition-colors no-underline">
+                <span class="material-symbols-outlined text-[20px]">dashboard</span>
+                <span class="font-medium">Dashboard</span>
+            </a>
+            <a asp-area="" asp-controller="Admin" asp-action="DoctorManagement" 
+               class="flex items-center gap-3 px-4 py-3 @(action == "DoctorManagement" ? "bg-primary/20 text-white border-l-4 border-primary" : "hover:bg-slate-800 text-slate-400 hover:text-white border-l-4 border-transparent") rounded-lg transition-colors no-underline">
+                <span class="material-symbols-outlined text-[20px]">stethoscope</span>
+                <span class="font-medium">Doctor Management</span>
+            </a>
+            <a asp-area="" asp-controller="Admin" asp-action="PatientRecords" 
+               class="flex items-center gap-3 px-4 py-3 @(action == "PatientRecords" ? "bg-primary/20 text-white border-l-4 border-primary" : "hover:bg-slate-800 text-slate-400 hover:text-white border-l-4 border-transparent") rounded-lg transition-colors no-underline">
+                <span class="material-symbols-outlined text-[20px]">folder_shared</span>
+                <span class="font-medium">Patient Records</span>
+            </a>
+            <a asp-area="" asp-controller="Admin" asp-action="Financials" 
+               class="flex items-center gap-3 px-4 py-3 @(action == "Financials" ? "bg-primary/20 text-white border-l-4 border-primary" : "hover:bg-slate-800 text-slate-400 hover:text-white border-l-4 border-transparent") rounded-lg transition-colors no-underline">
+                <span class="material-symbols-outlined text-[20px]">account_balance_wallet</span>
+                <span class="font-medium">Financials</span>
+            </a>
+        </nav>
+
+        <!-- User Profile -->
+        <div class="p-4 border-t border-slate-800">
+            <div class="flex items-center gap-3 px-2 mb-3">
+                <div class="w-10 h-10 rounded-full bg-slate-700 flex items-center justify-center text-white font-bold">
+                    SA
+                </div>
+                <div>
+                    <p class="text-white text-sm font-medium">System Admin</p>
+                    <p class="text-xs text-slate-500">admin@mediclinic.com</p>
+                </div>
+            </div>
+            <!-- Logout Button -->
+            <a asp-area="" asp-controller="Account" asp-action="Logout" 
+               class="flex items-center gap-2 px-4 py-2 text-slate-400 hover:text-rose-400 hover:bg-slate-800 rounded-lg transition-colors text-sm no-underline">
+                <span class="material-symbols-outlined text-[18px]">logout</span>
+                <span>Logout</span>
+            </a>
+        </div>
+    </aside>
+
+    <!-- Main Content Area -->
+    <div class="flex-1 flex flex-col overflow-hidden">
+        <!-- Main Content -->
+        <main class="flex-1 overflow-y-auto p-8 bg-slate-50/50">
+            @RenderBody()
+        </main>
+    </div>
+
+    @RenderSection("Scripts", required: false)
+</body>
+</html>
