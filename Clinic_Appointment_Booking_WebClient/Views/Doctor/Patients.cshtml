@@ -1,4 +1,4 @@
-@{
+﻿@{
     ViewData["Title"] = "My Patients";
     Layout = null;
 }
@@ -9,123 +9,79 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"] - MediClinic</title>
-    
-    <!-- Tailwind CSS -->
+
     <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
-    
-    <!-- Material Symbols -->
-    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet" />
-    
-    <!-- Inter Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght@100..700&display=swap" rel="stylesheet" />
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&display=swap" rel="stylesheet" />
-    
+
     <style>
-        body { opacity: 0; transition: opacity 0.4s ease-in-out; }
-        body.ready { opacity: 1; }
+        body {
+            opacity: 0;
+            transition: opacity 0.4s ease-in-out;
+        }
+
+            body.ready {
+                opacity: 1;
+            }
+
+        .font-display {
+            font-family: 'Inter', sans-serif;
+        }
     </style>
-    <!-- Tailwind Config -->
+
     <script>
         tailwind.config = {
-            darkMode: "class",
             theme: {
                 extend: {
                     colors: {
                         "primary": "#13b6ec",
-                        "primary-dark": "#1e3a8a",
-                        "primary-light": "#3b82f6",
                         "background-light": "#f8fafc",
-                    },
-                    fontFamily: {
-                        "display": ["Inter", "Noto Sans", "sans-serif"]
-                    },
-                },
-            },
+                    }
+                }
+            }
         }
-    </script>
-    <script>
-        window.addEventListener('load', () => {
-            document.body.classList.add('ready');
-        });
     </script>
 </head>
 <body class="bg-background-light text-slate-800 font-display">
     <div class="flex h-screen w-full overflow-hidden">
-        <!-- Sidebar -->
         <aside class="w-64 bg-slate-900 text-white flex flex-col h-full flex-shrink-0">
-            <!-- Logo -->
             <div class="h-16 flex items-center px-6 border-b border-slate-800">
                 <span class="material-symbols-outlined text-2xl mr-3 text-primary">local_hospital</span>
                 <span class="text-xl font-bold tracking-wide">MediClinic</span>
             </div>
-
-            <!-- Navigation Menu -->
             <div class="p-6 pb-2 flex-1 overflow-y-auto">
-                <p class="text-xs text-slate-400 uppercase tracking-wider font-semibold mb-4">Main Menu</p>
                 <nav class="space-y-2">
-                    <a asp-area="" asp-controller="Doctor" asp-action="Schedule" 
-                       class="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-slate-800 text-slate-300 transition-colors no-underline">
+                    <a href="#" class="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-slate-800 text-slate-300 transition-colors no-underline">
                         <span class="material-symbols-outlined text-xl">calendar_month</span> Schedule
                     </a>
-                    <a asp-area="" asp-controller="Doctor" asp-action="Patients" 
-                       class="flex items-center gap-3 px-3 py-2.5 rounded-lg bg-primary/20 text-white font-medium no-underline">
+                    <a href="#" class="flex items-center gap-3 px-3 py-2.5 rounded-lg bg-primary/20 text-white font-medium no-underline">
                         <span class="material-symbols-outlined text-xl">groups</span> My Patients
                     </a>
                 </nav>
             </div>
-
-            <!-- User Profile -->
-            <div class="mt-auto p-6 border-t border-slate-800">
-                <div class="flex items-center gap-3">
-                    <div class="w-10 h-10 rounded-full bg-primary flex items-center justify-center text-white font-bold">
-                        DR
-                    </div>
-                    <div>
-                        <p class="font-medium text-sm">@Context.Session.GetString("UserName")</p>
-                        <p class="text-xs text-slate-400">@Context.Session.GetString("UserRole")</p>
-                    </div>
-                </div>
-                <a asp-area="" asp-controller="Account" asp-action="Logout" 
-                   class="mt-4 flex items-center gap-2 px-3 py-2 rounded-lg hover:bg-slate-800 text-slate-300 transition-colors text-sm no-underline">
-                    <span class="material-symbols-outlined text-lg">logout</span> Logout
-                </a>
-            </div>
         </aside>
 
-        <!-- Main Content -->
-        <main class="flex-1 flex flex-col h-full overflow-hidden bg-background-light">
-
-            <!-- Patients Content -->
+        <main class="flex-1 flex flex-col h-full overflow-hidden">
             <div class="flex-1 overflow-y-auto p-8">
                 <div class="max-w-7xl mx-auto">
-                    <!-- Page Header -->
                     <div class="flex justify-between items-center mb-6">
                         <h2 class="text-xl font-bold text-slate-800">Patient Directory</h2>
-                        <button class="bg-primary hover:bg-primary/90 text-white px-4 py-2 rounded-lg text-sm font-medium flex items-center gap-2 transition-colors shadow-sm">
-                            <span class="material-symbols-outlined text-[18px]">add</span> Add New Patient
-                        </button>
+                        <div class="relative w-72">
+                            <span class="material-symbols-outlined absolute left-3 top-2.5 text-slate-400 text-xl">search</span>
+                            <input id="patient-search" type="text" placeholder="Search name or ID..."
+                                   class="w-full pl-10 pr-4 py-2 border border-slate-200 rounded-lg text-sm focus:ring-primary focus:border-primary">
+                        </div>
                     </div>
 
-                    <!-- Patients Table -->
                     <div class="bg-white border border-slate-200 rounded-xl shadow-sm overflow-hidden">
-                        <!-- Filters -->
                         <div class="p-4 border-b border-slate-200 flex gap-4 bg-slate-50/50">
-                            <div class="flex items-center gap-2">
-                                <span class="material-symbols-outlined text-slate-400 text-sm">filter_list</span>
-                                <span class="text-sm font-medium text-slate-600">Filters:</span>
-                            </div>
-                            <select class="text-sm border-slate-200 rounded-md text-slate-600 focus:ring-primary py-1.5 pl-3 pr-8">
-                                <option>All Statuses</option>
-                                <option>Active</option>
-                                <option>Inactive</option>
-                            </select>
-                            <select class="text-sm border-slate-200 rounded-md text-slate-600 focus:ring-primary py-1.5 pl-3 pr-8">
-                                <option>Sort by: Name (A-Z)</option>
-                                <option>Sort by: Recent Visit</option>
-                                <option>Sort by: Upcoming Appointment</option>
+                            <select id="status-filter" class="text-sm border-slate-200 rounded-md text-slate-600 focus:ring-primary py-1.5">
+                                <option value="All Statuses">All Statuses</option>
+                                <option value="Active">Active</option>
+                                <option value="Inactive">Inactive</option>
                             </select>
                         </div>
 
-                        <!-- Table -->
                         <div class="overflow-x-auto">
                             <table class="w-full text-left text-sm text-slate-600 whitespace-nowrap">
                                 <thead class="bg-slate-50 text-slate-500 font-medium border-b border-slate-200">
@@ -134,196 +90,19 @@
                                         <th class="px-6 py-4">Last Visit</th>
                                         <th class="px-6 py-4">Next Appointment</th>
                                         <th class="px-6 py-4">Status</th>
-                                        <th class="px-6 py-4 text-right">Actions</th>
+                                        <th class="px-6 py-4">Reason for Visit</th>
                                     </tr>
                                 </thead>
-                                <tbody class="divide-y divide-slate-100">
-                                    <!-- Patient 1 -->
-                                    <tr class="hover:bg-slate-50 transition-colors">
-                                        <td class="px-6 py-4">
-                                            <div class="flex items-center gap-3">
-                                                <div class="w-8 h-8 rounded-full bg-blue-100 text-primary flex items-center justify-center font-bold text-xs">
-                                                    MJ
-                                                </div>
-                                                <div>
-                                                    <p class="font-bold text-slate-800">Michael Johnson</p>
-                                                    <p class="text-xs text-slate-500">ID: #PT-1042</p>
-                                                </div>
-                                            </div>
-                                        </td>
-                                        <td class="px-6 py-4">Oct 12, 2023</td>
-                                        <td class="px-6 py-4">Nov 15, 2023 <span class="text-xs text-slate-400 block">09:00 AM</span></td>
-                                        <td class="px-6 py-4">
-                                            <span class="px-2.5 py-1 text-xs font-medium rounded-full bg-green-100 text-green-700">Active</span>
-                                        </td>
-                                        <td class="px-6 py-4 text-right space-x-2">
-                                            <button class="text-slate-400 hover:text-primary transition-colors" title="View Records">
-                                                <span class="material-symbols-outlined text-[20px]">folder_shared</span>
-                                            </button>
-                                            <button class="text-slate-400 hover:text-primary transition-colors" title="Add Note">
-                                                <span class="material-symbols-outlined text-[20px]">note_add</span>
-                                            </button>
-                                        </td>
-                                    </tr>
-
-                                    <!-- Patient 2 -->
-                                    <tr class="hover:bg-slate-50 transition-colors">
-                                        <td class="px-6 py-4">
-                                            <div class="flex items-center gap-3">
-                                                <div class="w-8 h-8 rounded-full bg-purple-100 text-purple-700 flex items-center justify-center font-bold text-xs">
-                                                    ED
-                                                </div>
-                                                <div>
-                                                    <p class="font-bold text-slate-800">Emily Davis</p>
-                                                    <p class="text-xs text-slate-500">ID: #PT-1088</p>
-                                                </div>
-                                            </div>
-                                        </td>
-                                        <td class="px-6 py-4">Oct 05, 2023</td>
-                                        <td class="px-6 py-4">Oct 26, 2023 <span class="text-xs text-slate-400 block">10:30 AM</span></td>
-                                        <td class="px-6 py-4">
-                                            <span class="px-2.5 py-1 text-xs font-medium rounded-full bg-green-100 text-green-700">Active</span>
-                                        </td>
-                                        <td class="px-6 py-4 text-right space-x-2">
-                                            <button class="text-slate-400 hover:text-primary transition-colors" title="View Records">
-                                                <span class="material-symbols-outlined text-[20px]">folder_shared</span>
-                                            </button>
-                                            <button class="text-slate-400 hover:text-primary transition-colors" title="Add Note">
-                                                <span class="material-symbols-outlined text-[20px]">note_add</span>
-                                            </button>
-                                        </td>
-                                    </tr>
-
-                                    <!-- Patient 3 -->
-                                    <tr class="hover:bg-slate-50 transition-colors">
-                                        <td class="px-6 py-4">
-                                            <div class="flex items-center gap-3">
-                                                <div class="w-8 h-8 rounded-full bg-slate-200 text-slate-600 flex items-center justify-center font-bold text-xs">
-                                                    RS
-                                                </div>
-                                                <div>
-                                                    <p class="font-bold text-slate-800">Robert Smith</p>
-                                                    <p class="text-xs text-slate-500">ID: #PT-0931</p>
-                                                </div>
-                                            </div>
-                                        </td>
-                                        <td class="px-6 py-4">Jan 14, 2023</td>
-                                        <td class="px-6 py-4 text-slate-400">Not scheduled</td>
-                                        <td class="px-6 py-4">
-                                            <span class="px-2.5 py-1 text-xs font-medium rounded-full bg-slate-100 text-slate-600">Inactive</span>
-                                        </td>
-                                        <td class="px-6 py-4 text-right space-x-2">
-                                            <button class="text-slate-400 hover:text-primary transition-colors" title="View Records">
-                                                <span class="material-symbols-outlined text-[20px]">folder_shared</span>
-                                            </button>
-                                            <button class="text-slate-400 hover:text-primary transition-colors" title="Add Note">
-                                                <span class="material-symbols-outlined text-[20px]">note_add</span>
-                                            </button>
-                                        </td>
-                                    </tr>
-
-                                    <!-- Patient 4 -->
-                                    <tr class="hover:bg-slate-50 transition-colors">
-                                        <td class="px-6 py-4">
-                                            <div class="flex items-center gap-3">
-                                                <div class="w-8 h-8 rounded-full bg-pink-100 text-pink-700 flex items-center justify-center font-bold text-xs">
-                                                    AL
-                                                </div>
-                                                <div>
-                                                    <p class="font-bold text-slate-800">Amanda Lee</p>
-                                                    <p class="text-xs text-slate-500">ID: #PT-1105</p>
-                                                </div>
-                                            </div>
-                                        </td>
-                                        <td class="px-6 py-4">Sep 28, 2023</td>
-                                        <td class="px-6 py-4">Oct 26, 2023 <span class="text-xs text-slate-400 block">02:00 PM</span></td>
-                                        <td class="px-6 py-4">
-                                            <span class="px-2.5 py-1 text-xs font-medium rounded-full bg-green-100 text-green-700">Active</span>
-                                        </td>
-                                        <td class="px-6 py-4 text-right space-x-2">
-                                            <button class="text-slate-400 hover:text-primary transition-colors" title="View Records">
-                                                <span class="material-symbols-outlined text-[20px]">folder_shared</span>
-                                            </button>
-                                            <button class="text-slate-400 hover:text-primary transition-colors" title="Add Note">
-                                                <span class="material-symbols-outlined text-[20px]">note_add</span>
-                                            </button>
-                                        </td>
-                                    </tr>
-
-                                    <!-- Patient 5 -->
-                                    <tr class="hover:bg-slate-50 transition-colors">
-                                        <td class="px-6 py-4">
-                                            <div class="flex items-center gap-3">
-                                                <div class="w-8 h-8 rounded-full bg-emerald-100 text-emerald-700 flex items-center justify-center font-bold text-xs">
-                                                    JD
-                                                </div>
-                                                <div>
-                                                    <p class="font-bold text-slate-800">John Doe</p>
-                                                    <p class="text-xs text-slate-500">ID: #PT-0822</p>
-                                                </div>
-                                            </div>
-                                        </td>
-                                        <td class="px-6 py-4">May 10, 2023</td>
-                                        <td class="px-6 py-4 text-slate-400">Not scheduled</td>
-                                        <td class="px-6 py-4">
-                                            <span class="px-2.5 py-1 text-xs font-medium rounded-full bg-slate-100 text-slate-600">Inactive</span>
-                                        </td>
-                                        <td class="px-6 py-4 text-right space-x-2">
-                                            <button class="text-slate-400 hover:text-primary transition-colors" title="View Records">
-                                                <span class="material-symbols-outlined text-[20px]">folder_shared</span>
-                                            </button>
-                                            <button class="text-slate-400 hover:text-primary transition-colors" title="Add Note">
-                                                <span class="material-symbols-outlined text-[20px]">note_add</span>
-                                            </button>
-                                        </td>
-                                    </tr>
-
-                                    <!-- Patient 6 -->
-                                    <tr class="hover:bg-slate-50 transition-colors">
-                                        <td class="px-6 py-4">
-                                            <div class="flex items-center gap-3">
-                                                <div class="w-8 h-8 rounded-full bg-amber-100 text-amber-700 flex items-center justify-center font-bold text-xs">
-                                                    SC
-                                                </div>
-                                                <div>
-                                                    <p class="font-bold text-slate-800">Sarah Connor</p>
-                                                    <p class="text-xs text-slate-500">ID: #PT-1150</p>
-                                                </div>
-                                            </div>
-                                        </td>
-                                        <td class="px-6 py-4">Oct 20, 2023</td>
-                                        <td class="px-6 py-4">Nov 02, 2023 <span class="text-xs text-slate-400 block">11:15 AM</span></td>
-                                        <td class="px-6 py-4">
-                                            <span class="px-2.5 py-1 text-xs font-medium rounded-full bg-green-100 text-green-700">Active</span>
-                                        </td>
-                                        <td class="px-6 py-4 text-right space-x-2">
-                                            <button class="text-slate-400 hover:text-primary transition-colors" title="View Records">
-                                                <span class="material-symbols-outlined text-[20px]">folder_shared</span>
-                                            </button>
-                                            <button class="text-slate-400 hover:text-primary transition-colors" title="Add Note">
-                                                <span class="material-symbols-outlined text-[20px]">note_add</span>
-                                            </button>
-                                        </td>
-                                    </tr>
+                                <tbody id="patient-table-body" class="divide-y divide-slate-100">
                                 </tbody>
                             </table>
                         </div>
 
-                        <!-- Pagination -->
                         <div class="p-4 border-t border-slate-200 flex items-center justify-between text-sm">
-                            <p class="text-slate-500">
-                                Showing <span class="font-medium text-slate-700">1</span> to 
-                                <span class="font-medium text-slate-700">6</span> of 
-                                <span class="font-medium text-slate-700">45</span> patients
+                            <p id="pagination-info" class="text-slate-500">
+                                Showing <span class="font-medium">0</span> to <span class="font-medium">0</span> of <span class="font-medium">0</span> patients
                             </p>
-                            <div class="flex gap-1">
-                                <button class="px-3 py-1.5 border border-slate-200 rounded text-slate-400 hover:bg-slate-50 disabled:opacity-50 transition-colors" disabled>Prev</button>
-                                <button class="px-3 py-1.5 bg-primary text-white rounded font-medium shadow-sm">1</button>
-                                <button class="px-3 py-1.5 border border-slate-200 rounded text-slate-600 hover:bg-slate-50 transition-colors">2</button>
-                                <button class="px-3 py-1.5 border border-slate-200 rounded text-slate-600 hover:bg-slate-50 transition-colors">3</button>
-                                <button class="px-3 py-1.5 border border-slate-200 rounded text-slate-600 hover:bg-slate-50 transition-colors">...</button>
-                                <button class="px-3 py-1.5 border border-slate-200 rounded text-slate-600 hover:bg-slate-50 transition-colors">8</button>
-                                <button class="px-3 py-1.5 border border-slate-200 rounded text-slate-600 hover:bg-slate-50 transition-colors">Next</button>
+                            <div id="pagination-buttons" class="flex gap-1">
                             </div>
                         </div>
                     </div>
@@ -331,5 +110,129 @@
             </div>
         </main>
     </div>
+
+    <script>
+        const API_BASE = "@ViewData["ApiBaseUrl"]";
+        const DOCTOR_ID = "@ViewData["DoctorID"]";
+        const BASE_URL = `${API_BASE}/api/PatientsApi`;
+
+        let currentPage = 1;
+        const pageSize = 6;
+        let searchTimer; // Dùng cho debounce
+
+        // 1. Hàm Load dữ liệu chính
+        async function fetchPatients(page = 1) {
+            currentPage = page;
+            const tbody = document.getElementById('patient-table-body');
+
+            // Lấy giá trị hiện tại của search và filter
+            const searchVal = document.getElementById('patient-search').value;
+            const statusVal = document.getElementById('status-filter').value;
+
+            try {
+                tbody.innerHTML = `<tr><td colspan="5" class="px-6 py-10 text-center text-slate-400 italic">Loading...</td></tr>`;
+
+                // Xây dựng URL với đầy đủ tham số lọc
+                const params = new URLSearchParams({
+                    page: page,
+                    pageSize: pageSize,
+                    search: searchVal,
+                    status: statusVal
+                });
+
+                const response = await fetch(`${BASE_URL}/${DOCTOR_ID}?${params.toString()}`);
+                if (!response.ok) throw new Error("API Error");
+
+                const result = await response.json();
+
+                renderTable(result.items);
+                renderPagination(result.totalPages, result.page, result.totalItems);
+            } catch (error) {
+                console.error("Fetch error:", error);
+                tbody.innerHTML = `<tr><td colspan="5" class="px-6 py-10 text-center text-red-500">Error loading data.</td></tr>`;
+            }
+        }
+
+        // 2. Render Table (Giữ nguyên logic của bạn nhưng tối ưu hiển thị)
+        function renderTable(items) {
+            const tbody = document.getElementById('patient-table-body');
+            if (!items || items.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="5" class="px-6 py-10 text-center text-slate-400">No records found.</td></tr>`;
+                return;
+            }
+
+            tbody.innerHTML = items.map(p => {
+                const initials = p.fullName ? p.fullName.split(' ').map(n => n[0]).join('').toUpperCase().substring(0, 2) : "??";
+                const lastVisit = p.lastVisit ? new Date(p.lastVisit).toLocaleDateString('en-GB') : 'N/A';
+                const statusClass = p.status === 'Active' ? 'bg-green-100 text-green-700' : 'bg-slate-100 text-slate-600';
+
+                    return `
+        <tr class="hover:bg-slate-50 transition-colors">
+            <td class="px-6 py-4">
+                <div class="flex items-center gap-3">
+                    <div class="w-8 h-8 rounded-full bg-blue-100 text-primary flex items-center justify-center font-bold text-xs">${initials}</div>
+                    <div>
+                        <p class="font-bold text-slate-800">${p.fullName}</p>
+                        <p class="text-xs text-slate-500">ID: #PT-${p.patientId}</p>
+                    </div>
+                </div>
+            </td>
+            <td class="px-6 py-4">${lastVisit}</td>
+            <td class="px-6 py-4">
+                ${p.nextAppointment
+                    ? `${new Date(p.nextAppointment.appointmentDate).toLocaleDateString()} <span class="text-xs text-slate-400 block">${p.nextAppointment.appointmentTime}</span>`
+                    : '<span class="text-slate-400 italic">Not scheduled</span>'}
+            </td>
+            <td class="px-6 py-4">
+                <span class="px-2.5 py-1 text-xs font-medium rounded-full ${statusClass}">${p.status}</span>
+            </td>
+            <td class="px-6 py-4">
+                <div class="max-w-[200px] truncate text-slate-600" title="${p.reason}">
+                    ${p.reason || 'No reason provided'}
+                </div>
+            </td>
+        </tr>`;
+            }).join('');
+        }
+
+        // 3. Render Pagination (Giữ nguyên bộ nút của bạn)
+        function renderPagination(totalPages, page, totalItems) {
+            const container = document.getElementById('pagination-buttons');
+            const info = document.getElementById('pagination-info');
+
+            const start = totalItems > 0 ? (page - 1) * pageSize + 1 : 0;
+            const end = Math.min(page * pageSize, totalItems);
+            info.innerHTML = `Showing <span class="font-medium text-slate-700">${start}</span> to <span class="font-medium text-slate-700">${end}</span> of <span class="font-medium text-slate-700">${totalItems}</span> patients`;
+
+            let html = '';
+            html += `<button onclick="fetchPatients(${page - 1})" ${page <= 1 ? 'disabled' : ''} class="px-3 py-1.5 border border-slate-200 rounded text-slate-600 hover:bg-slate-50 disabled:opacity-50">Prev</button>`;
+
+            for (let i = 1; i <= totalPages; i++) {
+                html += `<button onclick="fetchPatients(${i})" class="px-3 py-1.5 rounded font-medium ${i === page ? 'bg-primary text-white' : 'border border-slate-200 text-slate-600 hover:bg-slate-50'}">${i}</button>`;
+            }
+
+            html += `<button onclick="fetchPatients(${page + 1})" ${page >= totalPages || totalPages === 0 ? 'disabled' : ''} class="px-3 py-1.5 border border-slate-200 rounded text-slate-600 hover:bg-slate-50 disabled:opacity-50">Next</button>`;
+            container.innerHTML = html;
+        }
+
+        // --- LOGIC SEARCH VỚI DEBOUNCE ---
+        document.getElementById('patient-search').addEventListener('input', () => {
+            clearTimeout(searchTimer);
+            // Đợi người dùng dừng gõ 500ms mới gọi API
+            searchTimer = setTimeout(() => {
+                fetchPatients(1);
+            }, 500);
+        });
+
+        // --- LOGIC FILTER THAY ĐỔI LÀ GỌI LUÔN ---
+        document.getElementById('status-filter').addEventListener('change', () => {
+            fetchPatients(1);
+        });
+
+        window.addEventListener('load', () => {
+            document.body.classList.add('ready');
+            fetchPatients(1);
+        });
+    </script>
 </body>
 </html>
