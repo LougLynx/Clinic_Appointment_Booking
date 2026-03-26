@@ -1,4 +1,4 @@
-﻿using BussinessObjects.DTOs.admin;
+using BussinessObjects.DTOs.admin;
 using BussinessObjects.DTOs.admin.dashboard;
 using BussinessObjects.DTOs.admin.financial;
 using BussinessObjects.DTOs.admin.patient_records;
@@ -606,6 +606,65 @@ namespace Repositories
                     return stream.ToArray();
                 }
             }
+        }
+        public async Task<bool> CreateDoctorAsync(BussinessObjects.DTOs.admin.doctor_management.CreateDoctorDto doctorDto)
+        {
+            var strategy = _context.Database.CreateExecutionStrategy();
+
+            return await strategy.ExecuteAsync(async () =>
+            {
+                using var transaction = await _context.Database.BeginTransactionAsync();
+                try
+                {
+                    // Check if email already exists
+                    var existingUser = await _context.Users.AnyAsync(u => u.Email == doctorDto.Email);
+                    if (existingUser)
+                    {
+                        throw new InvalidOperationException("Email already exists");
+                    }
+
+                    // 1. Create User
+                    var user = new BussinessObjects.Models.User
+                    {
+                        FullName = doctorDto.FullName,
+                        Email = doctorDto.Email,
+                        PhoneNumber = doctorDto.PhoneNumber,
+                        PasswordHash = BCrypt.Net.BCrypt.HashPassword(doctorDto.Password),
+                        Role = "Doctor",
+                        IsActive = true,
+                        CreatedAt = DateTime.Now
+                    };
+
+                    _context.Users.Add(user);
+                    await _context.SaveChangesAsync();
+
+                    // 2. Create Doctor
+                    var doctor = new BussinessObjects.Models.Doctor
+                    {
+                        UserId = user.UserId,
+                        SpecialtyId = doctorDto.SpecialtyId,
+                        ConsultationFee = doctorDto.ConsultationFee,
+                        YearsOfExperience = doctorDto.YearsOfExperience,
+                        Qualifications = doctorDto.Qualifications,
+                        Location = doctorDto.Location,
+                        Bio = doctorDto.Bio,
+                        ProfileImageUrl = doctorDto.ProfileImageUrl,
+                        IsAvailable = true,
+                        CreatedAt = DateTime.Now
+                    };
+
+                    _context.Doctors.Add(doctor);
+                    await _context.SaveChangesAsync();
+
+                    await transaction.CommitAsync();
+                    return true;
+                }
+                catch (Exception)
+                {
+                    await transaction.RollbackAsync();
+                    throw;
+                }
+            });
         }
     }
 }

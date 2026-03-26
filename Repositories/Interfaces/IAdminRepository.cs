@@ -1,4 +1,4 @@
-﻿using BussinessObjects.DTOs.admin;
+using BussinessObjects.DTOs.admin;
 using BussinessObjects.DTOs.admin.dashboard;
 using BussinessObjects.DTOs.admin.financial;
 using BussinessObjects.DTOs.admin.patient_records;
@@ -24,5 +24,6 @@ namespace Repositories.Interfaces
         Task<PagedTransactionResponse> GetTransactionsAsync(int page, int pageSize);
         Task<FinancialAnalyticsDTO> GetFinancialAnalyticsAsync(string period);
         Task<byte[]> ExportFinancialReportAsync();
+        Task<bool> CreateDoctorAsync(BussinessObjects.DTOs.admin.doctor_management.CreateDoctorDto doctorDto);
     }
 }

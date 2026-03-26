@@ -223,12 +223,18 @@
 
             tbody.innerHTML = '';
             staff.forEach(doc => {
-                const initials = doc.fullName.split(' ').map(n => n[0]).join('').toUpperCase().substring(0, 2);
+                let safeImage = doc.profileImage || `https://ui-avatars.com/api/?name=${encodeURIComponent(doc.fullName)}&background=random`;
+                if (safeImage && !safeImage.startsWith('http')) {
+                    const path = safeImage.startsWith('/') ? safeImage : `/${safeImage}`;
+                    safeImage = `${API_BASE}${path}`;
+                }
+                
                 const statusColor = doc.status === 'Active' ? 'emerald' : 'amber';
                 tbody.innerHTML += `
                     <tr class="hover:bg-slate-50 transition-colors">
                         <td class="px-6 py-4 flex items-center gap-3">
-                            <div class="w-8 h-8 rounded-full bg-teal-100 text-teal-700 flex items-center justify-center font-bold text-xs">${initials}</div>
+                            <img src="${safeImage}" class="w-8 h-8 rounded-full object-cover border border-slate-100" 
+                                 onerror="this.onerror=null; this.src='https://ui-avatars.com/api/?name=${encodeURIComponent(doc.fullName)}&background=random';" />
                             <span class="font-medium text-slate-800">${doc.fullName}</span>
                         </td>
                         <td class="px-6 py-4">${doc.specialty}</td>

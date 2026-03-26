@@ -5,20 +5,26 @@ namespace Clinic_Appointment_Booking_WebClient.Services
     public class DoctorApiService : IDoctorApiService
     {
         private readonly IApiClient _apiClient;
+        private readonly string _apiBaseUrl;
 
-        public DoctorApiService(IApiClient apiClient)
+        public DoctorApiService(IApiClient apiClient, IConfiguration configuration)
         {
             _apiClient = apiClient;
+            _apiBaseUrl = configuration["ApiSettings:BaseUrl"]?.TrimEnd('/') ?? "";
         }
 
         public async Task<ApiResponse<List<DoctorDTO>>?> GetAllDoctorsAsync()
         {
-            return await _apiClient.GetAsync<List<DoctorDTO>>("/api/doctor");
+            var response = await _apiClient.GetAsync<List<DoctorDTO>>("/api/doctor");
+            FixDoctorUrls(response?.Data);
+            return response;
         }
 
         public async Task<ApiResponse<DoctorDetailDTO>?> GetDoctorByIdAsync(int id)
         {
-            return await _apiClient.GetAsync<DoctorDetailDTO>($"/api/doctor/{id}");
+            var response = await _apiClient.GetAsync<DoctorDetailDTO>($"/api/doctor/{id}");
+            FixDoctorUrls(response?.Data);
+            return response;
         }
 
         public async Task<ApiResponse<DoctorSearchResponseDTO>?> SearchDoctorsAsync(
@@ -47,17 +53,38 @@ namespace Clinic_Appointment_Booking_WebClient.Services
             queryParams.Add($"pageSize={pageSize}");
 
             var queryString = string.Join("&", queryParams);
-            return await _apiClient.GetAsync<DoctorSearchResponseDTO>($"/api/doctor/search?{queryString}");
+            var response = await _apiClient.GetAsync<DoctorSearchResponseDTO>($"/api/doctor/search?{queryString}");
+            FixDoctorUrls(response?.Data?.Doctors);
+            return response;
         }
 
         public async Task<ApiResponse<List<DoctorDTO>>?> GetDoctorsBySpecialtyAsync(int specialtyId)
         {
-            return await _apiClient.GetAsync<List<DoctorDTO>>($"/api/doctor/specialty/{specialtyId}");
+            var response = await _apiClient.GetAsync<List<DoctorDTO>>($"/api/doctor/specialty/{specialtyId}");
+            FixDoctorUrls(response?.Data);
+            return response;
         }
 
         public async Task<ApiResponse<DoctorDTO>?> GetDoctorByUserIdAsync(int userId)
         {
-            return await _apiClient.GetAsync<DoctorDTO>($"/api/doctor/user/{userId}");
+            var response = await _apiClient.GetAsync<DoctorDTO>($"/api/doctor/user/{userId}");
+            FixDoctorUrls(response?.Data);
+            return response;
+        }
+
+        private void FixDoctorUrls(IEnumerable<DoctorDTO>? doctors)
+        {
+            if (doctors == null) return;
+            foreach (var doc in doctors) FixDoctorUrls(doc);
+        }
+
+        private void FixDoctorUrls(DoctorDTO? doc)
+        {
+            if (doc == null || string.IsNullOrEmpty(doc.ProfilePictureUrl)) return;
+            if (!doc.ProfilePictureUrl.StartsWith("http") && !string.IsNullOrEmpty(_apiBaseUrl))
+            {
+                doc.ProfilePictureUrl = _apiBaseUrl + (doc.ProfilePictureUrl.StartsWith("/") ? "" : "/") + doc.ProfilePictureUrl;
+            }
         }
     }
 }

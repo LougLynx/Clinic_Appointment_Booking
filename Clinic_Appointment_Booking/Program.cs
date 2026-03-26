@@ -167,6 +167,7 @@ namespace Clinic_Appointment_Booking
             }
 
             app.UseHttpsRedirection();
+            app.UseStaticFiles();
 
             app.UseCors("AllowWebClient");
 

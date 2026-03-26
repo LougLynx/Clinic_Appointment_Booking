@@ -100,12 +100,21 @@
                 </nav>
             </div>
 
-            <!-- User Profile -->
             <div class="mt-auto p-6 border-t border-slate-800">
                 <div class="flex items-center gap-3">
-                    <div class="w-10 h-10 rounded-full bg-primary flex items-center justify-center text-white font-bold">
-                        DR
-                    </div>
+                    @if (ViewData["DoctorProfilePicture"] != null && !string.IsNullOrEmpty(ViewData["DoctorProfilePicture"].ToString()))
+                    {
+                        <img src="@ViewData["DoctorProfilePicture"]" 
+                             class="w-10 h-10 rounded-full object-cover border-2 border-primary shadow-sm" 
+                             alt="Profile"
+                             onerror="this.onerror=null; this.innerHTML='<div class=\'w-10 h-10 rounded-full bg-primary flex items-center justify-center text-white font-bold\'>DR</div>'; this.outerHTML=this.innerHTML;" />
+                    }
+                    else
+                    {
+                        <div class="w-10 h-10 rounded-full bg-primary flex items-center justify-center text-white font-bold">
+                            DR
+                        </div>
+                    }
                     <div>
                         <p class="font-medium text-sm">@Context.Session.GetString("UserName")</p>
                         <p class="text-xs text-slate-400">@Context.Session.GetString("UserRole")</p>

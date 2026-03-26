@@ -10,7 +10,7 @@
             <h2 class="text-3xl font-extrabold tracking-tight text-slate-900">Doctor Management</h2>
             <p class="text-slate-500">View and manage your clinic's medical professionals.</p>
         </div>
-        <button class="flex items-center justify-center gap-2 bg-primary hover:bg-primary/90 text-white px-5 py-2.5 rounded-lg font-bold text-sm transition-all shadow-lg shadow-primary/20">
+        <button onclick="openAddDoctorModal()" class="flex items-center justify-center gap-2 bg-primary hover:bg-primary/90 text-white px-5 py-2.5 rounded-lg font-bold text-sm transition-all shadow-lg shadow-primary/20">
             <span class="material-symbols-outlined">add</span>
             Add New Doctor
         </button>
@@ -122,6 +122,92 @@
     </div>
 </div>
 
+<!-- Add Doctor Modal -->
+<div id="addDoctorModal" class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+    <div class="bg-white rounded-2xl shadow-2xl w-full max-w-2xl overflow-hidden animate-in fade-in zoom-in duration-200">
+        <!-- Modal Header -->
+        <div class="px-6 py-4 border-b border-slate-100 flex items-center justify-between bg-slate-50/50">
+            <h3 class="text-xl font-bold text-slate-900">Add New Doctor</h3>
+            <button onclick="closeAddDoctorModal()" class="p-2 hover:bg-slate-200 rounded-lg transition-colors">
+                <span class="material-symbols-outlined">close</span>
+            </button>
+        </div>
+
+        <!-- Modal Body -->
+        <form id="addDoctorForm" class="p-6 space-y-4">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div class="space-y-1.5">
+                    <label class="text-sm font-bold text-slate-700">Full Name</label>
+                    <input type="text" name="fullName" required class="w-full px-4 py-2 rounded-lg border border-slate-200 focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none transition-all placeholder:text-slate-400" placeholder="Dr. John Doe">
+                </div>
+                <div class="space-y-1.5">
+                    <label class="text-sm font-bold text-slate-700">Email Address</label>
+                    <input type="email" name="email" required class="w-full px-4 py-2 rounded-lg border border-slate-200 focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none transition-all placeholder:text-slate-400" placeholder="john.doe@clinic.com">
+                </div>
+                <div class="space-y-1.5">
+                    <label class="text-sm font-bold text-slate-700">Password</label>
+                    <input type="password" name="password" required minlength="6" class="w-full px-4 py-2 rounded-lg border border-slate-200 focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none transition-all placeholder:text-slate-400" placeholder="••••••••">
+                </div>
+                <div class="space-y-1.5">
+                    <label class="text-sm font-bold text-slate-700">Phone Number</label>
+                    <input type="tel" name="phoneNumber" required class="w-full px-4 py-2 rounded-lg border border-slate-200 focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none transition-all placeholder:text-slate-400" placeholder="+1 (555) 000-0000">
+                </div>
+                <div class="space-y-1.5">
+                    <label class="text-sm font-bold text-slate-700">Specialty</label>
+                    <select id="specialtySelect" name="specialtyId" required class="w-full px-4 py-2 rounded-lg border border-slate-200 focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none transition-all">
+                        <option value="">Select Specialty</option>
+                    </select>
+                </div>
+                <div class="space-y-1.5">
+                    <label class="text-sm font-bold text-slate-700">Consultation Fee ($)</label>
+                    <input type="number" name="consultationFee" required step="0.01" class="w-full px-4 py-2 rounded-lg border border-slate-200 focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none transition-all placeholder:text-slate-400" placeholder="150.00">
+                </div>
+                <div class="space-y-1.5">
+                    <label class="text-sm font-bold text-slate-700">Years of Experience</label>
+                    <input type="number" name="yearsOfExperience" required class="w-full px-4 py-2 rounded-lg border border-slate-200 focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none transition-all placeholder:text-slate-400" placeholder="10">
+                </div>
+                <div class="space-y-1.5">
+                    <label class="text-sm font-bold text-slate-700">Location</label>
+                    <input type="text" name="location" class="w-full px-4 py-2 rounded-lg border border-slate-200 focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none transition-all placeholder:text-slate-400" placeholder="Building A, Room 302">
+                </div>
+            </div>
+
+            <div class="space-y-1.5">
+                <label class="text-sm font-bold text-slate-700">Profile Image</label>
+                <div class="flex items-center gap-4">
+                    <div id="imagePreview" class="w-16 h-16 rounded-full bg-slate-100 flex items-center justify-center text-slate-400 border border-slate-200 overflow-hidden">
+                        <span class="material-symbols-outlined text-2xl">person</span>
+                    </div>
+                    <label class="px-4 py-2 bg-white border border-slate-200 rounded-lg text-sm font-bold text-slate-700 hover:bg-slate-50 cursor-pointer transition-all">
+                        Browse Image
+                        <input type="file" name="profileImage" accept="image/*" class="hidden" onchange="previewProfileImage(this)">
+                    </label>
+                    <p class="text-xs text-slate-500">JPG, PNG or GIF. Max 2MB.</p>
+                </div>
+            </div>
+            
+            <div class="space-y-1.5">
+                <label class="text-sm font-bold text-slate-700">Qualifications</label>
+                <input type="text" name="qualifications" class="w-full px-4 py-2 rounded-lg border border-slate-200 focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none transition-all placeholder:text-slate-400" placeholder="MD, PhD in Cardiology">
+            </div>
+
+            <div class="space-y-1.5">
+                <label class="text-sm font-bold text-slate-700">Short Bio</label>
+                <textarea name="bio" rows="3" class="w-full px-4 py-2 rounded-lg border border-slate-200 focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none transition-all placeholder:text-slate-400 resize-none" placeholder="Brief description of the doctor's expertise..."></textarea>
+            </div>
+
+            <!-- Modal Footer -->
+            <div class="pt-4 flex items-center justify-end gap-3">
+                <button type="button" onclick="closeAddDoctorModal()" class="px-5 py-2.5 rounded-lg font-bold text-sm text-slate-600 hover:bg-slate-100 transition-all">Cancel</button>
+                <button type="submit" class="px-5 py-2.5 rounded-lg bg-primary hover:bg-primary/90 text-white font-bold text-sm transition-all shadow-lg shadow-primary/20 flex items-center gap-2">
+                    <span id="submitBtnText">Create Account</span>
+                    <span id="submitBtnLoader" class="material-symbols-outlined animate-spin hidden">sync</span>
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
 @section Scripts {
 <script>
     const API_BASE = "@ViewData["ApiBaseUrl"]";
@@ -196,13 +282,22 @@
             const detailsUrl = `/Admin/DoctorDetails/${doc.doctorId}`;
             const safePhone = doc.phoneNumber || '';
             const safeEmail = doc.email || '';
-            const safeImage = doc.profileImage || 'https://via.placeholder.com/100';
+            let safeImage = doc.profileImage || 'https://via.placeholder.com/100';
+            if (safeImage && !safeImage.startsWith('http')) {
+                // Ensure it starts with / for relative paths
+                const path = safeImage.startsWith('/') ? safeImage : `/${safeImage}`;
+                safeImage = `${API_BASE}${path}`;
+            }
+
             const row = `
                 <tr class="hover:bg-slate-50/50 transition-colors border-b border-slate-100 last:border-none">
                     <td class="px-6 py-4">
                         <div class="flex items-center gap-3">
                             <a href="${detailsUrl}" class="no-underline">
-                                <img class="w-10 h-10 rounded-full object-cover border border-slate-200" src="${safeImage}" alt="${doc.fullName}" />
+                                <img class="w-10 h-10 rounded-full object-cover border border-slate-200" 
+                                     src="${safeImage}" 
+                                     alt="${doc.fullName}"
+                                     onerror="this.onerror=null; this.src='https://via.placeholder.com/100';" />
                             </a>
                             <div>
                                 <a href="${detailsUrl}" class="font-bold text-sm text-slate-900 hover:text-primary no-underline">${doc.fullName}</a>
@@ -302,5 +397,93 @@
             timer = setTimeout(() => { func.apply(this, args); }, timeout);
         };
     }
+
+    // Modal Logic
+    function openAddDoctorModal() {
+        document.getElementById('addDoctorModal').classList.remove('hidden');
+        document.getElementById('addDoctorModal').classList.add('flex');
+        loadSpecialties();
+    }
+
+    function closeAddDoctorModal() {
+        document.getElementById('addDoctorModal').classList.add('hidden');
+        document.getElementById('addDoctorModal').classList.remove('flex');
+        document.getElementById('addDoctorForm').reset();
+        document.getElementById('imagePreview').innerHTML = '<span class="material-symbols-outlined text-2xl">person</span>';
+    }
+
+    function previewProfileImage(input) {
+        const preview = document.getElementById('imagePreview');
+        if (input.files && input.files[0]) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                preview.innerHTML = `<img src="${e.target.result}" class="w-full h-full object-cover">`;
+            }
+            reader.readAsDataURL(input.files[0]);
+        }
+    }
+
+    async function loadSpecialties() {
+        const specialtySelect = document.getElementById('specialtySelect');
+        if (specialtySelect.options.length > 1) return; // Already loaded
+
+        try {
+            const response = await fetch(`${API_BASE}/api/Specialty`);
+            const result = await response.json();
+            
+            if (result.success && result.data) {
+                result.data.forEach(s => {
+                    const option = document.createElement('option');
+                    option.value = s.specialtyId;
+                    option.textContent = s.name;
+                    specialtySelect.appendChild(option);
+                });
+            }
+        } catch (error) {
+            console.error("Error loading specialties:", error);
+        }
+    }
+
+    document.getElementById('addDoctorForm').addEventListener('submit', async function(e) {
+        e.preventDefault();
+        
+        const submitBtnText = document.getElementById('submitBtnText');
+        const submitBtnLoader = document.getElementById('submitBtnLoader');
+        const submitBtn = e.target.querySelector('button[type="submit"]');
+
+        // Show loading state
+        submitBtnText.textContent = "Creating...";
+        submitBtnLoader.classList.remove('hidden');
+        submitBtn.disabled = true;
+
+        const formData = new FormData(this);
+
+        try {
+            const response = await fetch(`${BASE_URL}/doctors`, {
+                method: 'POST',
+                // Important: Don't set Content-Type header when using FormData
+                body: formData
+            });
+
+            if (response.ok) {
+                alert("Doctor created successfully!");
+                closeAddDoctorModal();
+                loadDoctors(1); // Refresh the table
+                loadManagementStats(); // Refresh stats
+            } else {
+                const errorData = await response.json();
+                console.error("Creation failed:", errorData);
+                alert("Failed to create doctor. Please check the data and try again.");
+            }
+        } catch (error) {
+            console.error("Error:", error);
+            alert("An unexpected error occurred.");
+        } finally {
+            // Restore button state
+            submitBtnText.textContent = "Create Account";
+            submitBtnLoader.classList.add('hidden');
+            submitBtn.disabled = false;
+        }
+    });
 </script>
 }

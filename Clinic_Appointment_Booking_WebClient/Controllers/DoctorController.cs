@@ -1,4 +1,4 @@
-﻿using BussinessObjects.DTOs;
+using BussinessObjects.DTOs;
 using Clinic_Appointment_Booking_WebClient.Models.ViewModels;
 using Clinic_Appointment_Booking_WebClient.Services;
 using Microsoft.AspNetCore.Mvc;
@@ -115,6 +115,8 @@ namespace Clinic_Appointment_Booking_WebClient.Controllers
                 WorkingHours = doctorDetail?.Schedules ?? new List<DoctorScheduleDTO>()
             };
 
+            ViewData["DoctorProfilePicture"] = doctor.ProfilePictureUrl;
+
             return View(viewModel);
         }
 
@@ -131,6 +133,7 @@ namespace Clinic_Appointment_Booking_WebClient.Controllers
 
             // Truyền vào ViewData để bên HTML có thể lấy được
             ViewData["ApiBaseUrl"] = baseUrl;
+            ViewData["DoctorProfilePicture"] = doctor.ProfilePictureUrl;
             ViewData["DoctorID"] = doctor.DoctorId;
 
             return View();

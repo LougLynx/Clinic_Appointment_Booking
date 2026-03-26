@@ -1,6 +1,7 @@
-﻿using BussinessObjects.DTOs.admin.dashboard;
+using BussinessObjects.DTOs.admin.dashboard;
 using Microsoft.AspNetCore.Mvc;
 using Repositories.Interfaces;
+using System.IO;
 
 namespace Clinic_Appointment_Booking_WebAPI.Controllers
 {
@@ -9,6 +10,7 @@ namespace Clinic_Appointment_Booking_WebAPI.Controllers
     public class AdminController : ControllerBase
     {
         private readonly IAdminRepository _adminRepo;
+        //private readonly Microsoft.AspNetCore.Hosting.IWebHostEnvironment _env;
 
         public AdminController(IAdminRepository adminRepo)
         {
@@ -113,6 +115,53 @@ namespace Clinic_Appointment_Booking_WebAPI.Controllers
             {
                 // Log error here
                 return StatusCode(500, "Internal server error during export");
+            }
+        }
+        [HttpPost("doctors")]
+        public async Task<IActionResult> CreateDoctor([FromForm] Clinic_Appointment_Booking.Models.CreateDoctorRequest request)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            if (request.ProfileImage != null)
+            {
+                string webRootPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot");
+                string uploadsFolder = Path.Combine(webRootPath, "uploads", "doctors");
+                if (!Directory.Exists(uploadsFolder))
+                {
+                    Directory.CreateDirectory(uploadsFolder);
+                }
+
+                string uniqueFileName = Guid.NewGuid().ToString() + "_" + request.ProfileImage.FileName;
+                string filePath = Path.Combine(uploadsFolder, uniqueFileName);
+
+                using (var fileStream = new FileStream(filePath, FileMode.Create))
+                {
+                    await request.ProfileImage.CopyToAsync(fileStream);
+                }
+
+                request.ProfileImageUrl = $"/uploads/doctors/{uniqueFileName}";
+            }
+
+            try
+            {
+                var success = await _adminRepo.CreateDoctorAsync(request);
+                if (!success)
+                {
+                    return StatusCode(500, new { message = "An error occurred while creating the doctor." });
+                }
+
+                return Ok(new { message = "Doctor created successfully" });
+            }
+            catch (InvalidOperationException ex)
+            {
+                return BadRequest(new { message = ex.Message });
+            }
+            catch (Exception)
+            {
+                return StatusCode(500, new { message = "An unexpected error occurred." });
             }
         }
     }
