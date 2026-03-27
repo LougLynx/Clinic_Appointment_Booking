@@ -1,4 +1,5 @@
 using BussinessObjects.DTOs;
+using System.Net;
 
 namespace Clinic_Appointment_Booking_WebClient.Services
 {
@@ -38,7 +39,7 @@ namespace Clinic_Appointment_Booking_WebClient.Services
 
         public async Task<ApiResponse<object>?> VerifyEmailAsync(string token)
         {
-            return await _apiClient.GetAsync<object>($"/api/auth/verify-email?token={token}");
+            return await _apiClient.GetAsync<object>($"/api/auth/verify-email?token={WebUtility.UrlEncode(token)}");
         }
 
         public async Task<ApiResponse<LoginResponseDTO>?> GoogleLoginAsync(GoogleLoginRequestDTO request)

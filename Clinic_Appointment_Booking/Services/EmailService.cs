@@ -19,7 +19,7 @@ namespace Clinic_Appointment_Booking.Services
         public async Task SendEmailVerificationAsync(User user, string token)
         {
             var appSettings = _configuration.GetSection("AppSettings");
-            var verificationUrl = $"{appSettings["EmailVerificationUrl"]}?token={token}";
+            var verificationUrl = $"{appSettings["EmailVerificationUrl"]}?token={WebUtility.UrlEncode(token)}";
 
             var subject = "Verify Your Email - Clinic Appointment Booking";
             var body = $@"
@@ -63,7 +63,7 @@ namespace Clinic_Appointment_Booking.Services
         public async Task SendPasswordResetEmailAsync(User user, string token)
         {
             var appSettings = _configuration.GetSection("AppSettings");
-            var resetUrl = $"{appSettings["PasswordResetUrl"]}?token={token}";
+            var resetUrl = $"{appSettings["PasswordResetUrl"]}?token={WebUtility.UrlEncode(token)}";
 
             var subject = "Password Reset Request - Clinic Appointment Booking";
             var body = $@"

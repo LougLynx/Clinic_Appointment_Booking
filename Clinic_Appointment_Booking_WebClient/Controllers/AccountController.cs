@@ -248,6 +248,8 @@ namespace Clinic_Appointment_Booking_WebClient.Controllers
             TempData.Remove("SuccessMessage");
             TempData.Remove("ErrorMessage");
 
+            // Defensive: replace spaces with + in Base64 token (common URL decoding issue)
+            token = token.Replace(" ", "+");
             var model = new ResetPasswordViewModel { Token = token };
             return View(model);
         }
@@ -302,6 +304,8 @@ namespace Clinic_Appointment_Booking_WebClient.Controllers
 
             try
             {
+                // Defensive: replace spaces with + in Base64 token (common URL decoding issue)
+                token = token.Replace(" ", "+");
                 var response = await _authApiService.VerifyEmailAsync(token);
 
                 if (response != null && response.Success)
