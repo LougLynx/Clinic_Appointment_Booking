@@ -10,5 +10,6 @@ namespace Clinic_Appointment_Booking_WebClient.Services
         Task<ApiResponse<AppointmentDTO>?> GetAppointmentByIdAsync(int appointmentId);
         Task<ApiResponse<AppointmentDTO>?> UpdateAppointmentAsync(int appointmentId, UpdateAppointmentRequestDTO request);
         Task<ApiResponse<AppointmentDTO>?> CancelAppointmentAsync(int appointmentId, CancelAppointmentRequestDTO request);
+        Task<ApiResponse<AppointmentDTO>?> ConfirmPaymentAsync(int appointmentId);
     }
 }

@@ -300,6 +300,17 @@
                     </div>
                 </div>
 
+                <div class="grid grid-cols-2 gap-6">
+                    <div class="space-y-1">
+                        <p class="text-[10px] font-black text-slate-400 uppercase tracking-widest">Fee</p>
+                        <span class="text-lg font-extrabold text-slate-800" id="modalFee">$0.00</span>
+                    </div>
+                    <div class="space-y-1">
+                        <p class="text-[10px] font-black text-slate-400 uppercase tracking-widest">Payment Status</p>
+                        <span class="px-3 py-1 text-[10px] font-black uppercase rounded-full bg-slate-100 text-slate-600 border border-slate-200" id="modalPaymentStatus">Pending</span>
+                    </div>
+                </div>
+
                 <div class="space-y-2">
                     <p class="text-[10px] font-black text-slate-400 uppercase tracking-widest">Reason for Visit</p>
                     <div class="p-5 bg-slate-50 rounded-2xl border border-slate-100 flex items-start gap-4">
@@ -314,6 +325,9 @@
                 </div>
 
                 <div class="flex gap-4 pt-4">
+                    <button id="paymentBtn" class="flex-1 py-4 bg-primary hover:bg-primary-600 text-white font-black rounded-2xl active:scale-[0.98] transition-all hidden" onclick="handlePayment()">
+                        Payment
+                    </button>
                     <button class="flex-1 py-4 bg-slate-100 hover:bg-slate-200 text-slate-600 font-black rounded-2xl active:scale-[0.98] transition-all" onclick="closeModal()">
                         Close
                     </button>
@@ -335,6 +349,25 @@
             document.getElementById('modalDate').textContent = new Date(appt.AppointmentDate).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' });
             document.getElementById('modalReason').textContent = appt.ReasonForVisit;
             document.getElementById('modalNotes').textContent = appt.AdditionalNotes || "No additional notes.";
+            document.getElementById('modalFee').textContent = `$${appt.ConsultationFee.toFixed(2)}`;
+            
+            const paymentStatusSpan = document.getElementById('modalPaymentStatus');
+            paymentStatusSpan.textContent = appt.PaymentStatus || "Pending";
+            
+            if (appt.PaymentStatus === 'Completed') {
+                paymentStatusSpan.className = 'px-3 py-1 text-[10px] font-black uppercase rounded-full bg-emerald-50 text-emerald-600 border border-emerald-100';
+            } else {
+                paymentStatusSpan.className = 'px-3 py-1 text-[10px] font-black uppercase rounded-full bg-amber-50 text-amber-600 border border-amber-100';
+            }
+
+            const paymentBtn = document.getElementById('paymentBtn');
+            const currentAppointmentId = id;
+            if (appt.PaymentStatus !== 'Completed') {
+                paymentBtn.classList.remove('hidden');
+                paymentBtn.setAttribute('data-id', id);
+            } else {
+                paymentBtn.classList.add('hidden');
+            }
 
             const modal = document.getElementById('appointmentModal');
             const content = document.getElementById('modalContent');
@@ -360,6 +393,49 @@
                 modal.classList.add('hidden');
                 modal.classList.remove('flex', 'opacity-100');
             }, 300);
+        }
+
+        async function handlePayment() {
+            const id = document.getElementById('paymentBtn').getAttribute('data-id');
+            if (!id) return;
+
+            const btn = document.getElementById('paymentBtn');
+            const originalText = btn.innerHTML;
+            btn.disabled = true;
+            btn.innerHTML = '<span class="material-symbols-outlined animate-spin">sync</span>';
+
+            try {
+                const response = await fetch(`/Doctor/ConfirmPayment?appointmentId=${id}`, {
+                    method: 'POST',
+                    headers: {
+                        'X-Requested-With': 'XMLHttpRequest'
+                    }
+                });
+
+                const result = await response.json();
+                if (result.success) {
+                    // Update UI locally
+                    const appt = allAppointments.find(a => a.AppointmentId === parseInt(id));
+                    if (appt) {
+                        appt.PaymentStatus = 'Completed';
+                        if (appt.Status === 'Pending') appt.Status = 'Confirmed';
+                        
+                        // Close modal and show success
+                        closeModal();
+                        
+                        // Optional: Show notification or reload
+                        window.location.reload();
+                    }
+                } else {
+                    alert(result.message || "Failed to confirm payment");
+                }
+            } catch (err) {
+                console.error(err);
+                alert("An error occurred. Please try again.");
+            } finally {
+                btn.disabled = false;
+                btn.innerHTML = originalText;
+            }
         }
 
         // Close on escape key

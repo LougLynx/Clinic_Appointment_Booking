@@ -34,14 +34,14 @@ namespace Clinic_Appointment_Booking_WebClient.Controllers
                     return Redirect(returnUrl);
                 return RedirectToAction("Index", "Home");
             }
-            
+
             // Clear any success messages when accessing login page directly
             TempData.Remove("SuccessMessage");
-            
+
             // Pass Google Client ID and returnUrl to view
             ViewBag.GoogleClientId = _configuration["GoogleAuth:ClientId"];
             ViewBag.ReturnUrl = returnUrl;
-            
+
             return View();
         }
 
@@ -78,7 +78,7 @@ namespace Clinic_Appointment_Booking_WebClient.Controllers
                     HttpContext.Session.SetString("UserId", response.Data.User.UserId.ToString());
 
                     TempData["SuccessMessage"] = "Login successful!";
-                    
+
                     if (!string.IsNullOrEmpty(returnUrl) && Url.IsLocalUrl(returnUrl))
                         return Redirect(returnUrl);
 
@@ -112,7 +112,7 @@ namespace Clinic_Appointment_Booking_WebClient.Controllers
             // Clear any success messages when accessing register page directly
             TempData.Remove("SuccessMessage");
             TempData.Remove("ErrorMessage");
-            
+
             return View();
         }
 
@@ -199,7 +199,7 @@ namespace Clinic_Appointment_Booking_WebClient.Controllers
             // Clear any success messages when accessing forgot password page directly
             TempData.Remove("SuccessMessage");
             TempData.Remove("ErrorMessage");
-            
+
             return View();
         }
 

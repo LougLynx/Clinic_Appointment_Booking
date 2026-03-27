@@ -40,5 +40,10 @@ namespace Clinic_Appointment_Booking_WebClient.Services
         {
             return await _apiClient.PutAsync<AppointmentDTO>($"/api/Appointment/{appointmentId}/cancel", request);
         }
+
+        public async Task<ApiResponse<AppointmentDTO>?> ConfirmPaymentAsync(int appointmentId)
+        {
+            return await _apiClient.PutAsync<AppointmentDTO>($"/api/Appointment/{appointmentId}/confirm-payment", null);
+        }
     }
 }

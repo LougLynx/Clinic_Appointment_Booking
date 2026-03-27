@@ -138,5 +138,23 @@ namespace Clinic_Appointment_Booking_WebClient.Controllers
 
             return View();
         }
+
+        [HttpPost]
+        public async Task<IActionResult> ConfirmPayment(int appointmentId)
+        {
+            var doctor = await GetCurrentDoctorAsync();
+            if (doctor == null)
+            {
+                return Json(new { success = false, message = "Unauthorized" });
+            }
+
+            var response = await _appointmentApiService.ConfirmPaymentAsync(appointmentId);
+            if (response?.Success == true)
+            {
+                return Json(new { success = true, message = "Payment confirmed successfully" });
+            }
+
+            return Json(new { success = false, message = response?.Message ?? "Failed to confirm payment" });
+        }
     }
 }

@@ -50,6 +50,7 @@ namespace Clinic_Appointment_Booking.Controllers
                     return BadRequest(ApiResponse<AppointmentDTO>.ErrorResponse("Doctor not found"));
                 }
 
+
                 var slotExists = await _appointmentRepository.ExistsSlotAsync(
                     request.DoctorId, request.AppointmentDate, request.AppointmentTime);
                 if (slotExists)
@@ -88,6 +89,7 @@ namespace Clinic_Appointment_Booking.Controllers
                     AdditionalNotes = appointment.AdditionalNotes,
                     IsFirstTime = appointment.IsFirstTime,
                     ConsultationFee = appointment.ConsultationFee,
+                    PaymentStatus = appointment.Payment?.PaymentStatus ?? "Pending",
                     CreatedAt = appointment.CreatedAt
                 };
 
@@ -120,7 +122,7 @@ namespace Clinic_Appointment_Booking.Controllers
 
                 // Check if user is either the patient or the doctor of this appointment
                 var isPatient = appointment.PatientId == userId;
-                
+
                 // For doctors, we need to check if they are the assigned doctor
                 var doctor = await _doctorRepository.GetDoctorByUserIdAsync(userId);
                 var isDoctor = doctor != null && appointment.DoctorId == doctor.DoctorId;
@@ -144,6 +146,7 @@ namespace Clinic_Appointment_Booking.Controllers
                     AdditionalNotes = appointment.AdditionalNotes,
                     IsFirstTime = appointment.IsFirstTime,
                     ConsultationFee = appointment.ConsultationFee,
+                    PaymentStatus = appointment.Payment?.PaymentStatus ?? "Pending",
                     CreatedAt = appointment.CreatedAt
                 };
 
@@ -219,6 +222,7 @@ namespace Clinic_Appointment_Booking.Controllers
                     AdditionalNotes = appointment.AdditionalNotes,
                     IsFirstTime = appointment.IsFirstTime,
                     ConsultationFee = appointment.ConsultationFee,
+                    PaymentStatus = appointment.Payment?.PaymentStatus ?? "Pending",
                     CreatedAt = appointment.CreatedAt
                 };
 
@@ -275,6 +279,7 @@ namespace Clinic_Appointment_Booking.Controllers
                     AdditionalNotes = appointment.AdditionalNotes,
                     IsFirstTime = appointment.IsFirstTime,
                     ConsultationFee = appointment.ConsultationFee,
+                    PaymentStatus = appointment.Payment?.PaymentStatus ?? "Pending",
                     CreatedAt = appointment.CreatedAt
                 };
 
@@ -313,6 +318,7 @@ namespace Clinic_Appointment_Booking.Controllers
                     AdditionalNotes = a.AdditionalNotes,
                     IsFirstTime = a.IsFirstTime,
                     ConsultationFee = a.ConsultationFee,
+                    PaymentStatus = a.Payment?.PaymentStatus ?? "Pending",
                     CreatedAt = a.CreatedAt
                 }).ToList();
 
@@ -359,6 +365,7 @@ namespace Clinic_Appointment_Booking.Controllers
                     AdditionalNotes = a.AdditionalNotes,
                     IsFirstTime = a.IsFirstTime,
                     ConsultationFee = a.ConsultationFee,
+                    PaymentStatus = a.Payment?.PaymentStatus ?? "Pending",
                     CreatedAt = a.CreatedAt
                 }).ToList();
 
@@ -368,6 +375,88 @@ namespace Clinic_Appointment_Booking.Controllers
             {
                 _logger.LogError(ex, "Error retrieving doctor appointments");
                 return StatusCode(500, ApiResponse<List<AppointmentDTO>>.ErrorResponse("An error occurred while retrieving doctor appointments"));
+            }
+        }
+
+        [HttpPut("{id}/confirm-payment")]
+        public async Task<ActionResult<ApiResponse<AppointmentDTO>>> ConfirmPayment(int id)
+        {
+            try
+            {
+                var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value
+                    ?? User.FindFirst("sub")?.Value;
+                if (string.IsNullOrEmpty(userIdClaim) || !int.TryParse(userIdClaim, out int userId))
+                {
+                    return Unauthorized(ApiResponse<AppointmentDTO>.ErrorResponse("Invalid user token"));
+                }
+
+                var appointment = await _appointmentRepository.GetByIdWithDetailsAsync(id);
+                if (appointment == null)
+                {
+                    return NotFound(ApiResponse<AppointmentDTO>.ErrorResponse("Appointment not found"));
+                }
+
+                // Verify the doctor is confirming payment for their own appointment
+                var doctor = await _doctorRepository.GetDoctorByUserIdAsync(userId);
+                if (doctor == null || appointment.DoctorId != doctor.DoctorId)
+                {
+                    return Forbid();
+                }
+
+                if (appointment.Payment == null)
+                {
+                    appointment.Payment = new Payment
+                    {
+                        AppointmentId = appointment.AppointmentId,
+                        PatientId = appointment.PatientId,
+                        Amount = appointment.ConsultationFee,
+                        PaymentMethod = "Cash",
+                        PaymentStatus = "Completed",
+                        PaymentDate = DateTime.Now,
+                        CreatedAt = DateTime.Now
+                    };
+                }
+                else
+                {
+                    appointment.Payment.PaymentStatus = "Completed";
+                    appointment.Payment.PaymentDate = DateTime.Now;
+                    appointment.Payment.UpdatedAt = DateTime.Now;
+                }
+
+                // If payment is completed, also mark the appointment as Confirmed/Completed or stay same
+                // Typically, if payment is confirmed, appointment is confirmed
+                if (appointment.Status == "Pending")
+                {
+                    appointment.Status = "Confirmed";
+                }
+
+                await _appointmentRepository.UpdateAsync(appointment);
+                await _appointmentRepository.SaveChangesAsync();
+
+                var dto = new AppointmentDTO
+                {
+                    AppointmentId = appointment.AppointmentId,
+                    DoctorId = appointment.DoctorId,
+                    DoctorName = appointment.Doctor?.User?.FullName ?? "",
+                    PatientName = appointment.Patient?.FullName ?? "",
+                    SpecialtyName = appointment.Doctor?.Specialty?.Name ?? "",
+                    AppointmentDate = appointment.AppointmentDate,
+                    AppointmentTime = appointment.AppointmentTime,
+                    Status = appointment.Status,
+                    ReasonForVisit = appointment.ReasonForVisit,
+                    AdditionalNotes = appointment.AdditionalNotes,
+                    IsFirstTime = appointment.IsFirstTime,
+                    ConsultationFee = appointment.ConsultationFee,
+                    PaymentStatus = appointment.Payment.PaymentStatus,
+                    CreatedAt = appointment.CreatedAt
+                };
+
+                return Ok(ApiResponse<AppointmentDTO>.SuccessResponse(dto, "Payment confirmed successfully"));
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error confirming payment");
+                return StatusCode(500, ApiResponse<AppointmentDTO>.ErrorResponse("An error occurred while confirming payment"));
             }
         }
     }

@@ -136,10 +136,10 @@ namespace Clinic_Appointment_Booking_WebClient.Controllers
             }
 
             var reasonLabel = MapReasonLabel(model.Reason);
-            
+
             // Generate payment reference
             var paymentReference = $"APT{model.DoctorId}{selectedDate!.Value:yyyyMMdd}{selectedTime!.Value:hhmm}";
-            
+
             var confirmModel = new AppointmentConfirmViewModel
             {
                 Doctor = doctor,
@@ -189,8 +189,8 @@ namespace Clinic_Appointment_Booking_WebClient.Controllers
 
             if (vnp_ResponseCode == "00" && vnp_TransactionStatus == "00")
             {
-               
-                
+
+
                 // For this demo, we'll try to find if there's a way to recover data or just show success
                 TempData["SuccessMessage"] = "Payment successful! Your appointment has been confirmed.";
                 return RedirectToAction("MyAppointments");
@@ -486,12 +486,12 @@ namespace Clinic_Appointment_Booking_WebClient.Controllers
             }
 
             var schedules = doctor.Schedules?.Where(s => s.IsAvailable).ToList() ?? new List<DoctorScheduleDTO>();
-            
+
             if (schedules.Count == 0)
             {
                 schedules = GenerateDefaultSchedule();
             }
-            
+
             var days = new List<AppointmentDayViewModel>();
 
             for (var i = 0; i < daysToGenerate; i++)
@@ -548,9 +548,9 @@ namespace Clinic_Appointment_Booking_WebClient.Controllers
         private static List<DoctorScheduleDTO> GenerateDefaultSchedule()
         {
             var defaultSchedules = new List<DoctorScheduleDTO>();
-            
+
             var workingDays = new[] { DayOfWeek.Monday, DayOfWeek.Tuesday, DayOfWeek.Wednesday, DayOfWeek.Thursday, DayOfWeek.Friday };
-            
+
             foreach (var day in workingDays)
             {
                 defaultSchedules.Add(new DoctorScheduleDTO
@@ -563,7 +563,7 @@ namespace Clinic_Appointment_Booking_WebClient.Controllers
                     IsAvailable = true,
                     SpecificDate = null
                 });
-                
+
                 defaultSchedules.Add(new DoctorScheduleDTO
                 {
                     ScheduleId = 0,
@@ -575,7 +575,7 @@ namespace Clinic_Appointment_Booking_WebClient.Controllers
                     SpecificDate = null
                 });
             }
-            
+
             return defaultSchedules;
         }
 
