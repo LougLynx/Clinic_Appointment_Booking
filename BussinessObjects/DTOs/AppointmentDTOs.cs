@@ -39,6 +39,7 @@ namespace BussinessObjects.DTOs
         public string? AdditionalNotes { get; set; }
         public bool IsFirstTime { get; set; }
         public decimal ConsultationFee { get; set; }
+        public string PaymentStatus { get; set; } = "Pending";
         public DateTime CreatedAt { get; set; }
     }
 }

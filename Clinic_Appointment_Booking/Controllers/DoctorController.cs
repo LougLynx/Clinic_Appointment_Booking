@@ -163,12 +163,12 @@ namespace Clinic_Appointment_Booking.Controllers
 
         private static DoctorDetailDTO MapToDoctorDetailDTO(Doctor doctor)
         {
-            var languages = !string.IsNullOrEmpty(doctor.Languages) 
-                ? doctor.Languages.Split(',').Select(l => l.Trim()).ToList() 
+            var languages = !string.IsNullOrEmpty(doctor.Languages)
+                ? doctor.Languages.Split(',').Select(l => l.Trim()).ToList()
                 : new List<string>();
 
-            var specializations = !string.IsNullOrEmpty(doctor.Qualifications) 
-                ? doctor.Qualifications.Split(',').Select(q => q.Trim()).ToList() 
+            var specializations = !string.IsNullOrEmpty(doctor.Qualifications)
+                ? doctor.Qualifications.Split(',').Select(q => q.Trim()).ToList()
                 : new List<string>();
 
             return new DoctorDetailDTO

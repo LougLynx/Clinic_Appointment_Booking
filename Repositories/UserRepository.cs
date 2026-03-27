@@ -21,7 +21,7 @@ namespace Repositories
         {
             return await _dbSet
                 .AsNoTracking()
-                .FirstOrDefaultAsync(u => u.EmailVerificationToken == token 
+                .FirstOrDefaultAsync(u => u.EmailVerificationToken == token
                     && u.EmailVerificationExpiry > DateTime.Now);
         }
 
@@ -29,7 +29,7 @@ namespace Repositories
         {
             return await _dbSet
                 .AsNoTracking()
-                .FirstOrDefaultAsync(u => u.PasswordResetToken == token 
+                .FirstOrDefaultAsync(u => u.PasswordResetToken == token
                     && u.PasswordResetExpiry > DateTime.Now);
         }
 
@@ -42,7 +42,7 @@ namespace Repositories
                 user.PasswordResetToken = null;
                 user.PasswordResetExpiry = null;
                 user.UpdatedAt = DateTime.Now;
-                
+
                 _context.Entry(user).State = EntityState.Modified;
                 await _context.SaveChangesAsync();
             }

@@ -10,7 +10,6 @@ namespace Clinic_Appointment_Booking_WebAPI.Controllers
     public class AdminController : ControllerBase
     {
         private readonly IAdminRepository _adminRepo;
-        //private readonly Microsoft.AspNetCore.Hosting.IWebHostEnvironment _env;
 
         public AdminController(IAdminRepository adminRepo)
         {

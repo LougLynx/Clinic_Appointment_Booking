@@ -18,6 +18,7 @@ namespace Repositories
                 .ThenInclude(d => d!.User)
                 .Include(a => a.Doctor)
                 .ThenInclude(d => d!.Specialty)
+                .Include(a => a.Payment)
                 .Where(a => a.PatientId == patientId)
                 .OrderByDescending(a => a.AppointmentDate)
                 .ThenByDescending(a => a.AppointmentTime)
@@ -28,6 +29,7 @@ namespace Repositories
         {
             return await _dbSet
                 .Include(a => a.Patient)
+                .Include(a => a.Payment)
                 .Where(a => a.DoctorId == doctorId)
                 .OrderByDescending(a => a.AppointmentDate)
                 .ThenByDescending(a => a.AppointmentTime)
@@ -38,9 +40,9 @@ namespace Repositories
         {
             return await _dbSet
                 .Include(a => a.Doctor)
-                .ThenInclude(d => d!.User)
-                .Include(a => a.Doctor)
                 .ThenInclude(d => d!.Specialty)
+                .Include(a => a.Payment)
+                .Include(a => a.Patient)
                 .FirstOrDefaultAsync(a => a.AppointmentId == appointmentId);
         }
 

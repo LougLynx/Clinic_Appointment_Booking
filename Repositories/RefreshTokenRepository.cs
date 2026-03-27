@@ -21,8 +21,8 @@ namespace Repositories
         public async Task<IEnumerable<RefreshToken>> GetActiveTokensByUserIdAsync(int userId)
         {
             return await _dbSet
-                .Where(rt => rt.UserId == userId 
-                    && rt.RevokedAt == null 
+                .Where(rt => rt.UserId == userId
+                    && rt.RevokedAt == null
                     && rt.ExpiresAt > DateTime.Now)
                 .ToListAsync();
         }
