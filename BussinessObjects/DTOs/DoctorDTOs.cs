@@ -28,6 +28,7 @@ namespace BussinessObjects.DTOs
         public List<string> Specializations { get; set; } = new();
         public new List<string> Languages { get; set; } = new();
         public List<TimeSlotDTO> AvailableTimeSlots { get; set; } = new();
+        public List<TimeSlotDTO> BusySlots { get; set; } = new();
         public string? Education { get; set; }
     }
 

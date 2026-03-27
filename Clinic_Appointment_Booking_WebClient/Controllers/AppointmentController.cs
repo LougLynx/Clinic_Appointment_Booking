@@ -520,11 +520,14 @@ namespace Clinic_Appointment_Booking_WebClient.Controllers
                         {
                             if (!slots.Any(s => s.StartTime == cursor))
                             {
+                                // Check if this slot is busy
+                                var isBusy = doctor.BusySlots?.Any(b => b.Date.Date == date.Date && b.StartTime == cursor) == true;
+
                                 slots.Add(new AppointmentTimeSlotViewModel
                                 {
                                     StartTime = cursor,
                                     EndTime = cursor.Add(TimeSpan.FromMinutes(slotMinutes)),
-                                    IsAvailable = true
+                                    IsAvailable = !isBusy
                                 });
                             }
                         }

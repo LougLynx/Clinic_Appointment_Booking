@@ -11,13 +11,16 @@ namespace Clinic_Appointment_Booking.Controllers
     public class DoctorController : ControllerBase
     {
         private readonly IDoctorRepository _doctorRepository;
+        private readonly IAppointmentRepository _appointmentRepository;
         private readonly ILogger<DoctorController> _logger;
 
         public DoctorController(
             IDoctorRepository doctorRepository,
+            IAppointmentRepository appointmentRepository,
             ILogger<DoctorController> logger)
         {
             _doctorRepository = doctorRepository;
+            _appointmentRepository = appointmentRepository;
             _logger = logger;
         }
 
@@ -51,6 +54,19 @@ namespace Clinic_Appointment_Booking.Controllers
                 }
 
                 var doctorDetailDTO = MapToDoctorDetailDTO(doctor);
+
+                // Fetch busy slots for the next 30 days to hide them from availability
+                var startDate = DateTime.Today;
+                var endDate = startDate.AddDays(30);
+                var busyAppointments = await _appointmentRepository.GetBusySlotsAsync(id, startDate, endDate);
+
+                doctorDetailDTO.BusySlots = busyAppointments.Select(a => new TimeSlotDTO
+                {
+                    Date = a.AppointmentDate,
+                    StartTime = a.AppointmentTime,
+                    EndTime = a.AppointmentTime.Add(TimeSpan.FromMinutes(30)), // Default 30 min duration
+                    IsAvailable = false
+                }).ToList();
 
                 return Ok(ApiResponse<DoctorDetailDTO>.SuccessResponse(doctorDetailDTO, "Doctor retrieved successfully"));
             }

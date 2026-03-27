@@ -54,5 +54,15 @@ namespace Repositories
                               a.AppointmentTime == time &&
                               a.Status != "Cancelled");
         }
+    
+        public async Task<IEnumerable<Appointment>> GetBusySlotsAsync(int doctorId, DateTime startDate, DateTime endDate)
+        {
+            return await _dbSet
+                .Where(a => a.DoctorId == doctorId &&
+                            a.AppointmentDate.Date >= startDate.Date &&
+                            a.AppointmentDate.Date <= endDate.Date &&
+                            a.Status != "Cancelled")
+                .ToListAsync();
+        }
     }
 }

@@ -8,5 +8,6 @@ namespace Repositories.Interfaces
         Task<IEnumerable<Appointment>> GetByDoctorIdAsync(int doctorId);
         Task<Appointment?> GetByIdWithDetailsAsync(int appointmentId);
         Task<bool> ExistsSlotAsync(int doctorId, DateTime date, TimeSpan time);
+        Task<IEnumerable<Appointment>> GetBusySlotsAsync(int doctorId, DateTime startDate, DateTime endDate);
     }
 }
